@@ -526,48 +526,8 @@ function renderSupplyDemand(orders) {
       </div>
     </div>
   `;
-
-
-  const regionOrders = orders.filter(o => o.regionName === region);
-  const sells = regionOrders.filter(o => o.orderType === 'sell');
-  const buys = regionOrders.filter(o => o.orderType === 'buy');
-
-  const lowestSell = sells.length > 0
-    ? sells.reduce((min, o) => Number(o.priceThreshold) < Number(min.priceThreshold) ? o : min)
-    : null;
-  const highestBuy = buys.length > 0
-    ? buys.reduce((max, o) => Number(o.priceThreshold) > Number(max.priceThreshold) ? o : max)
-    : null;
-  const highestSell = sells.length > 0
-    ? sells.reduce((max, o) => Number(o.priceThreshold) > Number(max.priceThreshold) ? o : max)
-    : null;
-
-  document.getElementById('regionStats').innerHTML = `
-    <h3 class="section-title">🌍 ${region} (R${regionOrders[0]?.regionId || ''}) の市場</h3>
-    <div class="region-cards">
-      <div class="region-card sell">
-        <div class="rc-label">最安売値</div>
-        <div class="rc-val">${lowestSell ? formatPrice(lowestSell.priceThreshold) : '—'}</div>
-        <div class="rc-claim">${lowestSell?.claimName || ''}</div>
-      </div>
-      <div class="region-card sell-high">
-        <div class="rc-label">最高売値</div>
-        <div class="rc-val">${highestSell ? formatPrice(highestSell.priceThreshold) : '—'}</div>
-        <div class="rc-claim">${highestSell?.claimName || ''}</div>
-      </div>
-      <div class="region-card buy">
-        <div class="rc-label">最高買値</div>
-        <div class="rc-val">${highestBuy ? formatPrice(highestBuy.priceThreshold) : '—'}</div>
-        <div class="rc-claim">${highestBuy?.claimName || ''}</div>
-      </div>
-      <div class="region-card count">
-        <div class="rc-label">注文件数</div>
-        <div class="rc-val">${regionOrders.length}件</div>
-        <div class="rc-claim">売り${sells.length} / 買い${buys.length}</div>
-      </div>
-    </div>
-  `;
 }
+
 
 function renderOrders(orders, orderType) {
   let filtered = orders;
