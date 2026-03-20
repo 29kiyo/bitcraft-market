@@ -8,7 +8,7 @@ const API_BASE = 'https://bitcraft-proxy.29kiyo.workers.dev/api';
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
 // BitCraft Map用のベースURL（座標→マップリンク）
-const MAP_BASE = 'https://map.bitcraft.gg';
+const MAP_BASE = 'https://map.bitcraft.com';
 
 // DOM要素
 const searchInput = document.getElementById('searchInput');
