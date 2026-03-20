@@ -77,20 +77,13 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-    // 日本語が含まれている場合は変換後の値を使う
-    // ただし変換中（読み仮名のみ）の場合はスキップ
-    const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
-    const hasKanji = /[\u4e00-\u9faf]/.test(q);
-    const hasKatakana = /[\u30a0-\u30ff]/.test(q);
-    
-    // ひらがなのみ（変換中）の場合はスキップ
-    if (hasJapanese && !hasKanji && !hasKatakana) return;
-    
     const enQuery = translateQuery(q).toLowerCase();
+    console.log('fetchSuggestions q:', q, '→', enQuery);
     const allItems = await fetchAllMarketItems();
     const filtered = allItems
       .filter(item => item.name.toLowerCase().includes(enQuery))
       .slice(0, 8);
+    console.log('filtered:', filtered.length);
     if (filtered.length === 0) { hideSuggestions(); return; }
     showSuggestions(filtered);
   } catch(err) { 
