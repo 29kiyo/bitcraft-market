@@ -526,7 +526,7 @@ function renderSupplyDemand(orders) {
       </div>
     </div>
   `;
-}
+
 
   const regionOrders = orders.filter(o => o.regionName === region);
   const sells = regionOrders.filter(o => o.orderType === 'sell');
