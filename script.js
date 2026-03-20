@@ -77,10 +77,13 @@ async function onSearchInput() {
 async function fetchSuggestions(q) {
   try {
     const enQuery = translateQuery(q).toLowerCase();
+    console.log('enQuery:', enQuery);
     const allItems = await fetchAllMarketItems();
+    console.log('allItems:', allItems.length);
     const filtered = allItems
       .filter(item => item.name.toLowerCase().includes(enQuery))
       .slice(0, 8);
+    console.log('filtered:', filtered.length);
     if (filtered.length === 0) { hideSuggestions(); return; }
     showSuggestions(filtered);
   } catch(err) { 
