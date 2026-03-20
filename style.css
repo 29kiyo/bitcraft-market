@@ -1020,3 +1020,10 @@ footer a:hover { color: var(--accent); }
   border-color: #00c896;
   color: #00c896;
 }
+
+.chart-orders-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
