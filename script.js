@@ -61,7 +61,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 tierFilter.addEventListener('change', applyFilters);
-categoryFilter.addEventListener('change', applyFilters);
+rarityFilter.addEventListener('change', applyFilters);
 orderTypeFilter.addEventListener('change', applyFilters);
 
 // ============================================
