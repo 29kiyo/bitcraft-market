@@ -310,6 +310,11 @@ function translateQuery(query) {
     if (q.includes(ja)) return en;
   }
 
+  // 逆方向：入力がキーに含まれる場合（「パイ」→「ピュレライト」など）
+  for (const [ja, en] of sorted) {
+    if (ja.includes(q)) return en;
+  }
+
   return q;
 }
 
