@@ -1025,5 +1025,18 @@ footer a:hover { color: var(--accent); }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
+}
+
+.price-chart-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.orders-list {
+  min-width: 0;
+  overflow-y: auto;
+  max-height: 600px;
 }
