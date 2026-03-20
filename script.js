@@ -313,6 +313,10 @@ function applyFilters() {
   if (searchInput.value.trim()) {
     doSearch();
   }
+  if (currentOrders.length > 0) {
+    renderRegionStats(currentOrders);
+    renderOrders(currentOrders, orderTypeFilter.value);
+  }
 }
 
 // ============================================
@@ -323,6 +327,8 @@ function renderResult(item, priceData, orders, orderType) {
   renderPriceSummary(item, priceData);
   renderPriceChart(priceData);
   renderSupplyDemand(orders);
+  updateRegionFilter(orders);
+  renderRegionStats(orders);
   renderOrders(orders, orderType);
 
   resultSection.classList.remove('hidden');
