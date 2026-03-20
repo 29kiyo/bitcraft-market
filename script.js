@@ -318,20 +318,6 @@ function applyFilters() {
 // ============================================
 // 描画
 // ============================================
-function renderResult(item, priceData, orders, orderType) {
-  // アイテムヘッダー
-  renderItemHeader(item);
-  // 価格サマリー
-  renderPriceSummary(item, priceData);
-  // 需要・供給
-  renderSupplyDemand(orders);
-  // 注文一覧 + マップ
-  renderOrders(orders, orderType);
-  renderMap(orders, orderType);
-
-  resultSection.classList.remove('hidden');
-  emptyState.classList.add('hidden');
-}
 
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
