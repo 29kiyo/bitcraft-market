@@ -80,13 +80,38 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-    const enQuery = translateQuery(q).toLowerCase();
-    console.log('fetchSuggestions q:', q, '→', enQuery);
     const allItems = await fetchAllMarketItems();
-    const filtered = allItems
-      .filter(item => item.name.toLowerCase().includes(enQuery))
-      .slice(0, 8);
-    console.log('filtered:', filtered.length);
+    const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
+    
+    let filtered = [];
+    
+    if (hasJapanese) {
+      // 日本語の場合：マッチする全ての翻訳候補で検索
+      const matchedEn = new Set();
+      const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+      for (const [ja, en] of sorted) {
+        if (ja.includes(q) || q.includes(ja)) {
+          matchedEn.add(en.toLowerCase());
+        }
+      }
+      
+      if (matchedEn.size > 0) {
+        filtered = allItems.filter(item => {
+          const name = item.name.toLowerCase();
+          for (const en of matchedEn) {
+            if (name.includes(en)) return true;
+          }
+          return false;
+        });
+      }
+    } else {
+      // 英語の場合：そのまま検索
+      filtered = allItems.filter(item =>
+        item.name.toLowerCase().includes(q.toLowerCase())
+      );
+    }
+
+    filtered = filtered.slice(0, 8);
     if (filtered.length === 0) { hideSuggestions(); return; }
     showSuggestions(filtered);
   } catch(err) { 
