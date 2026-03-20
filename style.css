@@ -807,3 +807,20 @@ footer a:hover { color: var(--accent); }
 .map-btn:hover {
   background: rgba(0,200,150,0.3);
 }
+
+.item-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.item-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.item-title-text h2 {
+  margin: 0 0 8px 0;
+}
