@@ -25,6 +25,30 @@ let currentItems = [];
 let currentOrders = [];
 let debounceTimer = null;
 
+// 全件キャッシュ
+let cachedMarketItems = null;
+
+async function fetchAllMarketItems() {
+  if (cachedMarketItems) return cachedMarketItems;
+  const pageSize = 500;
+  let offset = 0;
+  let allItems = [];
+  while (true) {
+    const res = await fetch(
+      `${API_BASE}/market?hasOrders=true&limit=${pageSize}&offset=${offset}`,
+      { headers: HEADERS }
+    );
+    if (!res.ok) break;
+    const json = await res.json();
+    const items = json?.data?.items || [];
+    allItems = allItems.concat(items);
+    if (items.length < pageSize) break;
+    offset += pageSize;
+  }
+  cachedMarketItems = allItems;
+  return allItems;
+}
+
 // ============================================
 // 初期化
 // ============================================
@@ -52,13 +76,13 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-    const enQuery = translateQuery(q);
-    const res = await fetch(`${API_BASE}/market?q=${encodeURIComponent(enQuery)}&limit=8`, { headers: HEADERS });
-    if (!res.ok) return;
-    const data = await res.json();
-    const items = data.items || [];
-    if (items.length === 0) { hideSuggestions(); return; }
-    showSuggestions(items);
+    const enQuery = translateQuery(q).toLowerCase();
+    const allItems = await fetchAllMarketItems();
+    const filtered = allItems
+      .filter(item => item.name.toLowerCase().includes(enQuery))
+      .slice(0, 8);
+    if (filtered.length === 0) { hideSuggestions(); return; }
+    showSuggestions(filtered);
   } catch { hideSuggestions(); }
 }
 
@@ -98,30 +122,27 @@ async function doSearch() {
   clearError();
 
   try {
-    const enQuery = translateQuery(q);
-    const category = categoryFilter.value;
+    const enQuery = translateQuery(q).toLowerCase();
     const tier = tierFilter.value;
 
-    // アイテム検索
-    let url = `${API_BASE}/market?q=${encodeURIComponent(enQuery)}`;
-    if (category) url += `&category=${encodeURIComponent(category)}`;
-    if (tier) url += `&tier=${tier}`;
-    url += `&limit=50`;
+    const allItems = await fetchAllMarketItems();
 
-    const res = await fetch(url, { headers: HEADERS });
-    if (!res.ok) throw new Error(`API Error: ${res.status}`);
-    const data = await res.json();
+    let filtered = allItems.filter(item =>
+      item.name.toLowerCase().includes(enQuery)
+    );
 
-    currentItems = data?.data?.items || [];
+    if (tier) {
+      filtered = filtered.filter(item => String(item.tier) === String(tier));
+    }
+
+    currentItems = filtered.slice(0, 50);
 
     if (currentItems.length === 0) {
       showError('アイテムが見つかりませんでした。別のキーワードで試してください。');
       return;
     }
 
-    // 最初にマッチしたアイテムの詳細を取得
-    const mainItem = currentItems[0];
-    await loadItemDetail(mainItem);
+    await loadItemDetail(currentItems[0]);
 
   } catch (err) {
     showError(`エラーが発生しました: ${err.message}`);
@@ -130,7 +151,6 @@ async function doSearch() {
     hideLoading();
   }
 }
-
 // ============================================
 // アイテム詳細取得
 // ============================================
@@ -156,7 +176,6 @@ async function loadItemDetail(item) {
       currentOrders = [...sells, ...buys];
     }
 
-    // statsをitemにマージ
     const enrichedItem = {
       ...item,
       lowestSellPrice: marketData?.stats?.lowestSell,
