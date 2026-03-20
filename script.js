@@ -527,26 +527,3 @@ function clearError() {
   errorMsg.textContent = '';
 }
 
-.order-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 24px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.order-badge.sell {
-  background: rgba(0, 200, 150, 0.2);
-  color: #00c896;
-  border: 1px solid #00c896;
-}
-
-.order-badge.buy {
-  background: rgba(91, 156, 246, 0.2);
-  color: #5b9cf6;
-  border: 1px solid #5b9cf6;
-}
