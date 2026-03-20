@@ -319,6 +319,7 @@ function applyFilters() {
 function renderResult(item, priceData, orders, orderType) {
   renderItemHeader(item);
   renderPriceSummary(item, priceData);
+  renderPriceChart(priceData);
   renderSupplyDemand(orders);
   renderOrders(orders, orderType);
 
