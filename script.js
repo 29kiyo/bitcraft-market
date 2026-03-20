@@ -33,6 +33,8 @@ backBtn.addEventListener('click', () => {
 
 // 状態
 let currentItems = [];
+let currentPage = 1;
+const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
 let debounceTimer = null;
 
@@ -219,8 +221,9 @@ async function doSearch() {
     }
 
     // 複数件なら一覧表示
-    renderSearchResults(currentItems);
-
+    currentPage = 1;
+    renderSearchResults(currentItems, currentPage);
+    
   } catch (err) {
     showError(`エラーが発生しました: ${err.message}`);
     console.error(err);
@@ -229,11 +232,16 @@ async function doSearch() {
   }
 }
 
-function renderSearchResults(items) {
+function renderSearchResults(items, page = 1) {
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const pageItems = items.slice(start, end);
+
   searchResultsList.innerHTML = `
     <h3 class="section-title">🔍 検索結果 <span class="order-count">${items.length}件</span></h3>
     <div class="result-grid">
-      ${items.map(item => {
+      ${pageItems.map(item => {
         const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
         const jaName = getJaName(item.name);
         const useJaName = jaName && jaName.length > 2;
@@ -252,6 +260,13 @@ function renderSearchResults(items) {
         `;
       }).join('')}
     </div>
+    ${totalPages > 1 ? `
+      <div class="pagination">
+        <button class="page-btn" onclick="changePage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
+        <span class="page-info">${page} / ${totalPages}</span>
+        <button class="page-btn" onclick="changePage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+      </div>
+    ` : ''}
   `;
 
   searchResults.classList.remove('hidden');
@@ -259,11 +274,10 @@ function renderSearchResults(items) {
   emptyState.classList.add('hidden');
 }
 
-window.selectItem = async function(itemId) {
-  const item = currentItems.find(i => i.id === itemId);
-  if (!item) return;
-  searchResults.classList.add('hidden');
-  await loadItemDetail(item);
+window.changePage = function(page) {
+  currentPage = page;
+  renderSearchResults(currentItems, currentPage);
+  window.scrollTo(0, 0);
 };
 // ============================================
 // アイテム詳細取得
