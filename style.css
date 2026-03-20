@@ -1,0 +1,638 @@
+/* ============================================
+   BitCraft Market Search - style.css
+   Dark industrial / fantasy RPG theme
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #070d17;
+  --bg2: #0d1827;
+  --bg3: #111f30;
+  --border: #1e3a55;
+  --border2: #2a4f72;
+  --accent: #00c896;
+  --accent2: #00a37a;
+  --accent-sell: #00c896;
+  --accent-buy: #5b9cf6;
+  --accent-gold: #f0a500;
+  --text: #c8dff0;
+  --text2: #7a9ab8;
+  --text3: #4a6a88;
+  --danger: #ff4d6d;
+  --pos: #00c896;
+  --neg: #ff4d6d;
+  --card-bg: rgba(13, 24, 39, 0.9);
+  --glow: 0 0 20px rgba(0,200,150,0.15);
+  --radius: 8px;
+  --radius-lg: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ---- 背景エフェクト ---- */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,150,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,150,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,200,150,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---- ヘッダー ---- */
+header {
+  position: relative; z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: rgba(7,13,23,0.95);
+  backdrop-filter: blur(12px);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+.logo h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  line-height: 1;
+}
+.logo h1 .accent { color: var(--accent); }
+.logo .tagline {
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ---- メイン ---- */
+main {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* ---- 検索 ---- */
+.search-section {
+  margin-bottom: 40px;
+}
+.search-box {
+  position: relative;
+  margin-bottom: 16px;
+}
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 4px 4px 4px 16px;
+  gap: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,200,150,0.12);
+}
+.search-icon { font-size: 1.1rem; color: var(--text3); }
+#searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1rem;
+  padding: 10px 0;
+}
+#searchInput::placeholder { color: var(--text3); }
+#searchBtn {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+#searchBtn:hover { background: #00e6ad; }
+#searchBtn:active { transform: scale(0.97); }
+
+/* サジェスト */
+.suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover { background: rgba(0,200,150,0.08); }
+.s-name { font-weight: 500; }
+.s-ja { color: var(--text2); font-size: 0.85rem; }
+.s-tier {
+  margin-left: auto;
+  font-size: 0.75rem;
+  background: rgba(0,200,150,0.15);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+
+/* フィルター */
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-group label {
+  font-size: 0.8rem;
+  color: var(--text2);
+  white-space: nowrap;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.filter-group select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.filter-group select:focus { border-color: var(--accent); }
+
+/* ---- セクションタイトル ---- */
+.section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- アイテムヘッダー ---- */
+.item-header {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+}
+.item-title h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.item-ja { color: var(--text2); font-size: 1.3rem; }
+.item-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+.badge.tier {
+  background: rgba(240,165,0,0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(240,165,0,0.3);
+}
+.badge.cat {
+  background: rgba(91,156,246,0.15);
+  color: var(--accent-buy);
+  border: 1px solid rgba(91,156,246,0.3);
+}
+
+/* ---- 価格カード ---- */
+.price-summary {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.price-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.price-card {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.price-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.price-card.sell { border-left: 3px solid var(--accent-sell); }
+.price-card.buy { border-left: 3px solid var(--accent-buy); }
+.price-card.avg, .price-card.avg7 { border-left: 3px solid var(--accent-gold); }
+.price-card.vol { border-left: 3px solid var(--text3); }
+.pc-label {
+  font-size: 0.72rem;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.pc-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.pc-sub {
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.coin { font-size: 0.9em; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---- 需要と供給 ---- */
+.supply-demand-section {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.sd-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: center;
+}
+.sd-info { display: flex; flex-direction: column; gap: 8px; }
+.sd-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+.sd-label { font-size: 0.85rem; min-width: 110px; }
+.sd-count {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+.sd-qty {
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-left: auto;
+}
+.sd-bar-wrap { min-width: 0; }
+.sd-bar {
+  display: flex;
+  height: 28px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.sd-fill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Rajdhani', sans-serif;
+  transition: width 0.6s ease;
+}
+.sell-fill { background: rgba(0,200,150,0.35); color: var(--accent); }
+.buy-fill { background: rgba(91,156,246,0.35); color: var(--accent-buy); }
+.sd-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text2);
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* ---- 注文＋マップレイアウト ---- */
+.orders-map-layout {
+  display: grid;
+  grid-template-columns: 1fr 580px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .orders-map-layout { grid-template-columns: 1fr; }
+  .sd-wrap { grid-template-columns: 1fr; }
+}
+
+/* ---- 注文一覧 ---- */
+.orders-list {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  overflow-x: auto;
+}
+.order-count {
+  font-size: 0.8rem;
+  color: var(--text2);
+  font-weight: 400;
+}
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.orders-table thead tr {
+  border-bottom: 1px solid var(--border2);
+}
+.orders-table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+}
+.order-row {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.order-row:hover { background: rgba(0,200,150,0.05); }
+.order-row td { padding: 10px 12px; vertical-align: middle; }
+.order-badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+.order-badge.sell {
+  background: rgba(0,200,150,0.15);
+  color: var(--accent-sell);
+  border: 1px solid rgba(0,200,150,0.3);
+}
+.order-badge.buy {
+  background: rgba(91,156,246,0.15);
+  color: var(--accent-buy);
+  border: 1px solid rgba(91,156,246,0.3);
+}
+.price-cell {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+}
+.claim-name { color: var(--text); font-weight: 500; }
+.coords { font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; color: var(--text2); }
+.no-orders { color: var(--text2); text-align: center; padding: 24px; }
+
+/* ---- マップ ---- */
+.map-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+.map-container {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.map-loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text2);
+  font-size: 0.9rem;
+}
+.map-inner { position: relative; }
+.claims-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.map-marker { transition: opacity 0.2s; }
+.map-marker:hover { opacity: 0.8; }
+.pulse-ring {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { r: 12; opacity: 0.4; }
+  50% { r: 18; opacity: 0.1; }
+  100% { r: 12; opacity: 0.4; }
+}
+.map-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,200,150,0.1);
+  border: 1px solid rgba(0,200,150,0.3);
+  color: var(--accent);
+  text-decoration: none;
+  padding: 7px 16px;
+  border-radius: var(--radius);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.map-link-btn:hover { background: rgba(0,200,150,0.2); }
+.map-hint { font-size: 0.75rem; color: var(--text3); }
+
+/* マーカー情報ポップアップ */
+.marker-info {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+.mi-header { margin-bottom: 6px; }
+.mi-header strong { display: block; font-size: 0.95rem; color: #fff; }
+.mi-region { font-size: 0.75rem; color: var(--text2); }
+.mi-coords { font-size: 0.78rem; color: var(--text2); margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; }
+.mi-orders { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.mi-order {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  background: var(--bg2);
+  border-radius: 4px;
+}
+.mi-maplink {
+  display: block;
+  text-align: center;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+.mi-close {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+}
+.mi-close:hover { color: var(--text); }
+
+/* 凡例 */
+.map-legend { margin-top: 12px; }
+.legend-items { display: flex; gap: 16px; flex-wrap: wrap; }
+.leg {
+  font-size: 0.78rem;
+  color: var(--text2);
+  font-family: 'Rajdhani', sans-serif;
+}
+.leg.sell { color: var(--accent-sell); }
+.leg.buy { color: var(--accent-buy); }
+.leg.both { color: var(--accent-gold); }
+
+/* ---- 空状態 ---- */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text2);
+}
+.empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.4; }
+.empty-sub { font-size: 0.85rem; color: var(--text3); margin-top: 6px; }
+
+/* ---- ローディング ---- */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text2);
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- エラー ---- */
+.error-msg {
+  background: rgba(255,77,109,0.1);
+  border: 1px solid rgba(255,77,109,0.3);
+  color: var(--danger);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+/* ---- フッター ---- */
+footer {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text3);
+}
+footer a { color: var(--text2); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* ---- ユーティリティ ---- */
+.hidden { display: none !important; }

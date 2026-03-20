@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitCraft Market Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⚒</span>
+        <div>
+          <h1>BitCraft<span class="accent"> Market</span></h1>
+          <p class="tagline">Powered by Bitjita API</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 検索セクション -->
+    <section class="search-section">
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="アイテム名を入力（日本語・英語）..."
+            autocomplete="off"
+          >
+          <button id="searchBtn">検索</button>
+        </div>
+        <div id="suggestions" class="suggestions hidden"></div>
+      </div>
+
+      <!-- フィルター -->
+      <div class="filters">
+        <div class="filter-group">
+          <label>Tier</label>
+          <select id="tierFilter">
+            <option value="">すべて</option>
+            <option value="1">Tier 1</option>
+            <option value="2">Tier 2</option>
+            <option value="3">Tier 3</option>
+            <option value="4">Tier 4</option>
+            <option value="5">Tier 5</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>カテゴリ</label>
+          <select id="categoryFilter">
+            <option value="">すべて</option>
+            <option value="Wood">木材</option>
+            <option value="Ore">鉱石</option>
+            <option value="Food">食料</option>
+            <option value="Tool">ツール</option>
+            <option value="Weapon">武器</option>
+            <option value="Armor">防具</option>
+            <option value="Fiber">繊維</option>
+            <option value="Stone">石材</option>
+            <option value="Gem">宝石</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>注文種別</label>
+          <select id="orderTypeFilter">
+            <option value="">売り＆買い</option>
+            <option value="sell">売り注文のみ</option>
+            <option value="buy">買い注文のみ</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- 結果エリア -->
+    <section id="resultSection" class="result-section hidden">
+
+      <!-- アイテム情報ヘッダー -->
+      <div id="itemHeader" class="item-header"></div>
+
+      <!-- 価格サマリー -->
+      <div id="priceSummary" class="price-summary"></div>
+
+      <!-- 需要と供給 -->
+      <div id="supplyDemand" class="supply-demand-section"></div>
+
+      <!-- 注文一覧 + マップ -->
+      <div class="orders-map-layout">
+        <div id="ordersList" class="orders-list"></div>
+        <div id="mapSection" class="map-section">
+          <h3 class="section-title">🗺 領地マップ</h3>
+          <div id="mapContainer" class="map-container">
+            <div class="map-loading">マップを読み込み中...</div>
+          </div>
+          <div id="mapLegend" class="map-legend"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 初期表示 -->
+    <section id="emptyState" class="empty-state">
+      <div class="empty-icon">⚒</div>
+      <p>アイテム名を入力して検索してください</p>
+      <p class="empty-sub">日本語・英語どちらでも検索できます</p>
+    </section>
+
+    <!-- ローディング -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>データを取得中...</p>
+    </div>
+
+    <!-- エラー -->
+    <div id="errorMsg" class="error-msg hidden"></div>
+  </main>
+
+  <footer>
+    <p>Data provided by <a href="https://bitjita.com" target="_blank">Bitjita</a> · Not affiliated with Clockwork Labs</p>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
