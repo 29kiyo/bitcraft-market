@@ -308,10 +308,8 @@ async function loadItemDetail(item) {
 // フィルター適用
 // ============================================
 function applyFilters() {
-  if (currentItems.length > 0) {
-    const orderType = orderTypeFilter.value;
-    renderOrders(currentOrders, orderType);
-    renderMap(currentOrders, orderType);
+  if (searchInput.value.trim()) {
+    doSearch();
   }
 }
 
