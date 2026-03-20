@@ -125,10 +125,10 @@ const ITEM_TRANSLATIONS = {
   "ブラクサイト": "Braxite",
   "ジプサイト": "Gypsite",
   "宝石付きリング": "Gem Encrusted Ring",
-  "未カットダイヤ": "Uncut Rough Diamond",
-  "未カットルビー": "Uncut Rough Ruby",
-  "未カットエメラルド": "Uncut Rough Emerald",
-  "未カットサファイア": "Uncut Rough Sapphire",
+  "ラフダイヤモンド": "Uncut Rough Diamond",
+  "ラフルビー": "Uncut Rough Ruby",
+  "ラフエメラルド": "Uncut Rough Emerald",
+  "ラフサファイア": "Uncut Rough Sapphire",
 
   // ===== 食料・農業系 =====
   "食料": "Food",
