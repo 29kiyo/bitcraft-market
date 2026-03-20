@@ -1,3 +1,5 @@
+まだ完成してません
+
 # BitCraft Market Search
 
 BitCraft のマーケット情報を日本語・英語で検索できるWebサイトです。
