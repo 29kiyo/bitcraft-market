@@ -440,13 +440,23 @@ function renderPriceChart(priceData, period = '7d') {
       }]
     },
     options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#aaa' } } },
-      scales: {
-        x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-      }
+  responsive: true,
+  plugins: { legend: { labels: { color: '#aaa' } } },
+  scales: {
+    x: {
+      ticks: {
+        color: '#aaa',
+        maxRotation: 45,
+        autoSkip: false  // ← 全ラベル表示
+      },
+      grid: { color: 'rgba(255,255,255,0.05)' }
+    },
+    y: {
+      ticks: { color: '#aaa' },
+      grid: { color: 'rgba(255,255,255,0.05)' }
     }
+  }
+}
   });
 
   new Chart(document.getElementById('volumeCanvas'), {
@@ -462,13 +472,23 @@ function renderPriceChart(priceData, period = '7d') {
       }]
     },
     options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#aaa' } } },
-      scales: {
-        x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-      }
+  responsive: true,
+  plugins: { legend: { labels: { color: '#aaa' } } },
+  scales: {
+    x: {
+      ticks: {
+        color: '#aaa',
+        maxRotation: 45,
+        autoSkip: false  // ← 全ラベル表示
+      },
+      grid: { color: 'rgba(255,255,255,0.05)' }
+    },
+    y: {
+      ticks: { color: '#aaa' },
+      grid: { color: 'rgba(255,255,255,0.05)' }
     }
+  }
+}
   });
 }
 
