@@ -971,3 +971,52 @@ footer a:hover { color: var(--accent); }
   color: #aaa;
   font-size: 14px;
 }
+
+.order-type-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #aaa;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  border-color: #00c896;
+  color: #00c896;
+}
+
+.tab-btn.active {
+  background: rgba(0,200,150,0.15);
+  border-color: #00c896;
+  color: #00c896;
+}
+
+.sort-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #aaa;
+  padding: 1px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.sort-btn.active {
+  border-color: #00c896;
+  color: #00c896;
+}
+
+.sort-btn:hover {
+  border-color: #00c896;
+  color: #00c896;
+}
