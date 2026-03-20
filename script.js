@@ -34,25 +34,41 @@ let debounceTimer = null;
 // 全件キャッシュ
 let cachedMarketItems = null;
 
+let cachedMarketItems = null;
+let isFetching = false;
+let fetchPromise = null;
+
 async function fetchAllMarketItems() {
+  // キャッシュがあれば即返す
   if (cachedMarketItems) return cachedMarketItems;
-  const pageSize = 500;
-  let offset = 0;
-  let allItems = [];
-  while (true) {
-    const res = await fetch(
-      `${API_BASE}/market?hasOrders=true&limit=${pageSize}&offset=${offset}`,
-      { headers: HEADERS }
-    );
-    if (!res.ok) break;
-    const json = await res.json();
-    const items = json?.data?.items || [];
-    allItems = allItems.concat(items);
-    if (items.length < pageSize) break;
-    offset += pageSize;
-  }
-  cachedMarketItems = allItems;
-  return allItems;
+  // 既に取得中なら同じPromiseを返す（重複リクエスト防止）
+  if (isFetching) return fetchPromise;
+
+  isFetching = true;
+  fetchPromise = (async () => {
+    const pageSize = 500;
+    let offset = 0;
+    let allItems = [];
+
+    while (true) {
+      const res = await fetch(
+        `${API_BASE}/market?hasOrders=true&limit=${pageSize}&offset=${offset}`,
+        { headers: HEADERS }
+      );
+      if (!res.ok) break;
+      const json = await res.json();
+      const items = json?.data?.items || [];
+      allItems = allItems.concat(items);
+      if (items.length < pageSize) break;
+      offset += pageSize;
+    }
+
+    cachedMarketItems = allItems;
+    isFetching = false;
+    return allItems;
+  })();
+
+  return fetchPromise;
 }
 
 // ============================================
@@ -201,8 +217,10 @@ async function loadItemDetail(item) {
 // フィルター適用
 // ============================================
 function applyFilters() {
-  if (currentOrders.length > 0 || currentItems.length > 0) {
-    doSearch();
+  if (currentItems.length > 0) {
+    const orderType = orderTypeFilter.value;
+    renderOrders(currentOrders, orderType);
+    renderMap(currentOrders, orderType);
   }
 }
 
