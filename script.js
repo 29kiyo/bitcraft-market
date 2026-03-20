@@ -3,6 +3,12 @@
 // ============================================
 
 const API_BASE = 'https://bitcraft-proxy.29kiyo.workers.dev/api';
+
+// ページ読み込み時にバックグラウンドでキャッシュを作っておく
+window.addEventListener('DOMContentLoaded', () => {
+  fetchAllMarketItems(); // 結果は使わないが裏で取得しておく
+});
+
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
 // BitCraft Map用のベースURL（座標→マップリンク）
