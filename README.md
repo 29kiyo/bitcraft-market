@@ -20,6 +20,9 @@ https://29kiyo.github.io/bitcraft-market/
 - APIプロキシ: Cloudflare Workers
 - データ提供: [Bitjita API](https://bitjita.com)
 
+- ## 🤖 開発について
+このプロジェクトはClaude (Anthropic)を活用して開発しました。
+
 ## ⚠️ 免責事項
 - このサイトはClockwork Labsとは無関係です
 - データはBitjita APIから取得しています
