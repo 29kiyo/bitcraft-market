@@ -329,12 +329,18 @@ function renderResult(item, priceData, orders, orderType) {
 }
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
+  const useJaName = jaName && jaName.length > 2;
+  const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
+
   document.getElementById('itemHeader').innerHTML = `
     <div class="item-title">
-      <h2>${item.name}${jaName ? ` <span class="item-ja">/ ${jaName}</span>` : ''}</h2>
-      <div class="item-badges">
-        ${item.tier ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
-        ${item.category ? `<span class="badge cat">${item.category}</span>` : ''}
+      <img class="item-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+      <div class="item-title-text">
+        <h2>${useJaName ? jaName : item.name}${useJaName ? ` <span class="item-ja">/ ${item.name}</span>` : ''}</h2>
+        <div class="item-badges">
+          ${item.tier && item.tier > 0 ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
+          <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+        </div>
       </div>
     </div>
   `;
