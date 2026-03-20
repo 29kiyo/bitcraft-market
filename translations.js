@@ -1,142 +1,288 @@
-// BitCraft アイテム名 日本語⇔英語 変換テーブル
+// BitCraft アイテム名 日本語⇔英語 変換テーブル（BitCraft準拠）
 const ITEM_TRANSLATIONS = {
-  // 木材系
-  "木": "Wood",
-  "木材": "Wood",
-  "原木": "Log",
-  "丸太": "Log",
+
+  // ===== 素材品質プレフィックス =====
+  "粗い": "Rough",
+  "シンプル": "Simple",
+  "ファイン": "Fine",
+  "頑丈な": "Sturdy",
+  "装飾的な": "Ornate",
+  "卓越した": "Exquisite",
+  "比類なき": "Peerless",
+  "注入された": "Infused",
+
+  // ===== 金属・鉱石系 =====
+  "フェラライト": "Ferralith",
+  "フェラライト鉱石": "Ferralith Ore Chunk",
+  "フェラライト精鉱": "Ferralith Ore Concentrate",
+  "フェラライトインゴット": "Ferralith Ingot",
+  "フェラライト釘": "Ferralith Nails",
+  "ピュレライト": "Pyrelite",
+  "ピュレライト鉱石": "Pyrelite Ore Chunk",
+  "ピュレライト精鉱": "Pyrelite Ore Concentrate",
+  "ピュレライトインゴット": "Pyrelite Ingot",
+  "ルミナイト": "Luminite",
+  "ルミナイト鉱石": "Luminite Ore Chunk",
+  "ルミナイトインゴット": "Luminite Ingot",
+  "エレンバー": "Elenvar",
+  "エレンバー鉱石": "Elenvar Ore Chunk",
+  "エレンバーインゴット": "Elenvar Ingot",
+  "エマリウム": "Emarium",
+  "エマリウム鉱石": "Emarium Ore Chunk",
+  "エマリウムインゴット": "Emarium Ingot",
+  "ラシウム": "Rathium",
+  "ラシウム鉱石": "Rathium Ore Chunk",
+  "ラシウムインゴット": "Rathium Ingot",
+  "オーラムマイト": "Aurumite",
+  "オーラムマイトインゴット": "Aurumite Ingot",
+  "アルジェント": "Argent",
+  "アルジェント鉱石": "Argent Ore",
+  "アルジェント粒": "Argent Nugget",
+  "アルジェントインゴット": "Argent Ingot",
+  "溶融フェラライト": "Molten Ferralith",
+  "溶融ピュレライト": "Molten Pyrelite",
+  "溶融ルミナイト": "Molten Luminite",
+  "溶融エレンバー": "Molten Elenvar",
+  "古代金属破片": "Ancient Metal Fragments",
+  "精製フェラライトインゴット": "Refined Ferralith Ingot",
+  "精製エレンバーインゴット": "Refined Elenvar Ingot",
+
+  // ===== 木材系 =====
+  "木": "Wood Log",
+  "木材": "Wood Log",
+  "丸太": "Wood Log",
   "板": "Plank",
   "板材": "Plank",
   "棒": "Stick",
-  "枝": "Branch",
-  "樹液": "Sap",
-  "樹脂": "Resin",
+  "スティック": "Stick",
+  "樹液": "Tree Sap",
+  "樹脂": "Amber Resin",
+  "琥珀樹脂": "Amber Resin",
+  "剥いた木": "Stripped Wood",
+  "材木": "Timber",
+  "幹": "Trunk",
+  "樹皮": "Tree Bark",
+  "ピッチ": "Pitch",
   "松": "Pine",
-  "松の木": "Pine",
-  "松材": "Pine Wood",
+  "松の種": "Pine Seed",
   "オーク": "Oak",
-  "オークの木": "Oak",
+  "オークの種": "Oak Seed",
   "バーチ": "Birch",
-  "白樺": "Birch",
-  "マホガニー": "Mahogany",
-  "チーク": "Teak",
-  "エボニー": "Ebony",
+  "白樺の種": "Birch Seed",
+  "スプルース": "Spruce",
+  "スプルースの種": "Spruce Seed",
+  "ブナの種": "Beech Seed",
+  "サイプレスの種": "Cypress Seed",
+  "デンドロの種": "Dendro Seed",
+  "木の磨き剤": "Wood Polish",
 
-  // 鉱石・金属系
-  "石": "Stone",
-  "岩": "Rock",
-  "鉱石": "Ore",
-  "石炭": "Coal",
-  "銅": "Copper",
-  "銅鉱石": "Copper Ore",
-  "銅インゴット": "Copper Ingot",
-  "鉄": "Iron",
-  "鉄鉱石": "Iron Ore",
-  "鉄インゴット": "Iron Ingot",
-  "鉄棒": "Iron Bar",
-  "銀": "Silver",
-  "銀鉱石": "Silver Ore",
-  "銀インゴット": "Silver Ingot",
-  "金": "Gold",
-  "金鉱石": "Gold Ore",
-  "金インゴット": "Gold Ingot",
-  "ミスリル": "Mithril",
-  "ミスリル鉱石": "Mithril Ore",
-  "アダマント": "Adamant",
-  "鋼": "Steel",
-  "鋼鉄": "Steel",
-  "鋼インゴット": "Steel Ingot",
-  "アストラライト": "Astralite",
+  // ===== 石材系 =====
+  "石": "Stone Chunk",
+  "石材": "Stone Chunk",
+  "レンガ": "Brick",
+  "砂利": "Pebbles",
+  "砂": "Sand",
+  "粘土": "Clay Lump",
+  "石英": "Gypsite",
+  "粗いレンガスラブ": "Rough Brick Slab",
+  "未焼成レンガ": "Unfired Rough Brick",
 
-  // 食料系
-  "食料": "Food",
-  "食べ物": "Food",
-  "肉": "Meat",
-  "魚": "Fish",
-  "パン": "Bread",
-  "小麦": "Wheat",
-  "小麦粉": "Flour",
-  "野菜": "Vegetable",
-  "果物": "Fruit",
-  "りんご": "Apple",
-  "ベリー": "Berry",
-  "キノコ": "Mushroom",
-  "きのこ": "Mushroom",
-  "ハーブ": "Herb",
-  "スープ": "Soup",
-  "料理": "Cooked",
-  "干し肉": "Jerky",
-
-  // 繊維系
-  "繊維": "Fiber",
-  "布": "Cloth",
-  "糸": "Thread",
-  "綿": "Cotton",
-  "麻": "Flax",
-  "亜麻": "Flax",
+  // ===== 繊維・革系 =====
   "革": "Leather",
-  "皮": "Hide",
+  "皮": "Leather",
+  "なめし革": "Tanned Pelt",
+  "生皮": "Raw Pelt",
   "毛皮": "Fur",
-  "絹": "Silk",
-  "羊毛": "Wool",
+  "動物の毛": "Animal Hair",
+  "布": "Cloth",
+  "布地": "Cloth",
+  "クロス": "Cloth",
+  "布ストリップ": "Cloth Strip",
+  "繊維": "Plant Fiber",
+  "植物繊維": "Plant Fiber",
+  "ロープ": "Rope",
+  "ウィスプウィーブ": "Wispweave",
+  "ウィスプウィーブ繊維": "Wispweave Filament",
+  "ウィスプウィーブの種": "Wispweave Seeds",
+  "糸": "Spool Of Thread",
+  "スプール": "Spool Of Thread",
+  "麦わら": "Straw",
+  "テキスタイル": "Textile",
+  "タンニン": "Tannin",
+  "なめし剤": "Tannin",
+  "革処理剤": "Leather Treatment",
+  "帆布": "Sail Cloth",
+  "タープ": "Cloth Tarp",
 
-  // ツール系
-  "ツール": "Tool",
-  "道具": "Tool",
+  // ===== 宝石系 =====
+  "宝石": "Gem",
+  "ダイヤ": "Diamond",
+  "ダイヤモンド": "Diamond",
+  "ルビー": "Ruby",
+  "エメラルド": "Emerald",
+  "サファイア": "Sapphire",
+  "ジオード": "Geode",
+  "ブラクサイト": "Braxite",
+  "ジプサイト": "Gypsite",
+  "宝石付きリング": "Gem Encrusted Ring",
+  "未カットダイヤ": "Uncut Rough Diamond",
+  "未カットルビー": "Uncut Rough Ruby",
+  "未カットエメラルド": "Uncut Rough Emerald",
+  "未カットサファイア": "Uncut Rough Sapphire",
+
+  // ===== 食料・農業系 =====
+  "食料": "Food",
+  "肉": "Raw Meat",
+  "生肉": "Raw Meat",
+  "魚": "Fish",
+  "ベリー": "Berry",
+  "きのこ": "Mushroom",
+  "キノコ": "Mushroom",
+  "スターバルブ": "Starbulb",
+  "玉ねぎ": "Starbulb",
+  "エンバーグレイン": "Embergrain",
+  "穀物": "Embergrain",
+  "小麦": "Embergrain",
+  "生地": "Embergrain Dough",
+  "パン": "Plain Bread",
+  "砂糖": "Sugar",
+  "塩": "Salt",
+  "肥料": "Fertilizer",
+  "植物の根": "Plant Roots",
+  "野生の種": "Wild Grain Seeds",
+  "作物油": "Crop Oil",
+  "魚油": "Fish Oil",
+  "食品廃棄物": "Food Waste",
+  "花": "Flower",
+  "スキッチ肉": "Cooked Skitch Meat",
+  "焼き魚": "Plain Roasted Fish",
+  "焼き肉": "Plain Roasted Meat",
+  "肉サンド": "Plain Meat Sandwich",
+  "マッシュバルブ": "Plain Mashed Bulbs",
+  "お茶": "Plain Hot Tea",
+  "冷茶": "Plain Chilling Tea",
+
+  // ===== ポーション・消耗品系 =====
+  "回復ポーション": "Healing Potion",
+  "スタミナポーション": "Stamina Potion",
+  "建築エリクサー": "Building Elixir",
+  "採集エリクサー": "Gathering Elixir",
+  "クラフトエリクサー": "Crafting Elixir",
+  "触媒": "Chemical Catalyst",
+  "インク": "Ink",
+  "顔料": "Pigment",
+  "ガラス瓶": "Glass Vial",
+  "羊皮紙": "Parchment",
+  "ファイアサンド": "Firesand",
+  "金属溶剤": "Metal Solvent",
+  "再鍛造溶剤": "Reforging Solvent",
+  "土器ミックス": "Potter's Mix",
+  "バーサーカーキノコ": "Berserker Mushroom",
+
+  // ===== ツール系 =====
   "斧": "Axe",
   "つるはし": "Pickaxe",
   "ピッケル": "Pickaxe",
   "鍬": "Hoe",
-  "鎌": "Sickle",
-  "のこぎり": "Saw",
+  "ナイフ": "Knife",
+  "マチェーテ": "Machete",
+  "ノコギリ": "Saw",
   "ハンマー": "Hammer",
-  "錬金術": "Alchemy",
-
-  // 武器系
-  "武器": "Weapon",
-  "剣": "Sword",
-  "刀": "Sword",
+  "ノミ": "Chisel",
+  "ロッド": "Rod",
+  "羽根ペン": "Quill",
+  "ハサミ": "Scissors",
   "弓": "Bow",
+  "フリントツール": "Flint",
+
+  // ===== 武器・防具系 =====
+  "剣": "Shortsword",
+  "ショートソード": "Shortsword",
+  "クレイモア": "Claymore",
   "槍": "Spear",
   "盾": "Shield",
-  "短剣": "Dagger",
-  "大剣": "Greatsword",
-  "弓矢": "Arrow",
-  "矢": "Arrow",
-
-  // 防具系
-  "防具": "Armor",
-  "鎧": "Armor",
-  "兜": "Helmet",
-  "胴鎧": "Chestplate",
-  "脚鎧": "Leggings",
+  "クロスボウ": "Crossbow",
+  "短剣": "Daggers",
+  "メイス": "Mace",
+  "鎧": "Plated Armor",
+  "デュエリスト鎧": "Duelist Armor",
+  "ベルト": "Belt",
   "ブーツ": "Boots",
-  "手袋": "Gloves",
+  "ブレーサー": "Bracers",
+  "ヘルム": "Helm",
+  "レッグガード": "Legguards",
+  "アクセサリー": "Amulet",
+  "ネックレス": "Amulet",
+  "指輪": "Ring",
 
-  // 宝石・素材系
-  "宝石": "Gem",
-  "クリスタル": "Crystal",
-  "水晶": "Crystal",
-  "サファイア": "Sapphire",
-  "ルビー": "Ruby",
-  "エメラルド": "Emerald",
-  "ダイヤ": "Diamond",
-  "ダイヤモンド": "Diamond",
-  "アメジスト": "Amethyst",
+  // ===== 魚系 =====
+  "ブライニーリナス": "Briny Linus",
+  "ブライニーアルガス": "Briny Argus",
+  "ブライニーグッピー": "Briny Guppi",
+  "アズールセントロ": "Azure Centro",
+  "アズールスフィラ": "Azure Sphyra",
+  "アズールミニ": "Azure Minni",
+  "グリーンホーンドロ": "Greenhorn Dolo",
+  "グリーンホーンゴルブ": "Greenhorn Gorbu",
+  "ムッディオンコル": "Muddy Oncor",
+  "ムッディアウラトゥス": "Muddy Auratus",
+  "フィレ": "Filet",
+  "鱗": "Scale",
+  "魚の切り身": "Filet",
+  "エサ": "Bait",
+  "撒き餌": "Chum",
 
-  // その他素材
-  "砂": "Sand",
-  "砂岩": "Sandstone",
-  "粘土": "Clay",
-  "土": "Dirt",
-  "骨": "Bone",
-  "羽根": "Feather",
-  "羽": "Feather",
-  "蜂蜜": "Honey",
-  "蜜蝋": "Beeswax",
-  "油": "Oil",
-  "コイン": "Coin",
-  "インゴット": "Ingot",
+  // ===== 動物・素材系 =====
+  "ジャキル毛皮": "Jakyl Fur",
+  "ジャキル牙": "Jakyl Fang",
+  "スキッチ甲殻": "Chitin",
+  "甲殻": "Chitin",
+  "硬化した殻": "Hardened Shell",
+  "刺": "Stinger",
+  "致死毒針": "Deadly Stinger",
+  "乾燥アラクニルの毒": "Dried Araknir Venom",
+  "昆虫の翅": "Insect Wing",
+  "アンブラ毛皮": "Umbura Fur",
+  "アンブラ牙": "Umbura Fang",
+  "結晶化したスライム": "Crystalized Slime",
+
+  // ===== 建築・クラフト素材 =====
+  "ガラス": "Glass",
+  "空のバケツ": "Empty Bucket",
+  "水入りバケツ": "Water Bucket",
+  "スティック": "Stick",
+  "釘": "Nails",
+  "フレーム": "Frames",
+  "ヘキサイトカプセル": "Hexite Capsule",
+  "焚き火キット": "Campfire Kit",
+  "植物スポット": "Potted",
+
+  // ===== 研究・コーデックス =====
+  "コーデックス": "Codex",
+  "研究": "Research",
+  "石版": "Stone Carvings",
+  "石の図": "Stone Diagrams",
+  "学習帳": "Study Journal",
+  "布研究": "Cloth Research",
+  "革研究": "Leather Research",
+  "金属研究": "Metal Research",
+  "石材研究": "Stone Research",
+  "木材研究": "Wood Research",
+
+  // ===== センチネル装備 =====
+  "センチネルの剣": "Sentinel's Shortsword",
+  "センチネルの槍": "Sentinel's Spear & Shield",
+  "センチネルのクレイモア": "Sentinel's Claymore",
+  "センチネルの紋章": "Sentinel's Insignia",
+
+  // ===== その他 =====
+  "ヘックスコイン": "Hex Coins",
+  "コイン": "Hex Coins",
+  "バウチャー": "Business Voucher",
+  "ロストシップメント": "Lost Shipment",
+  "帆": "Sail Cloth",
+  "塩": "Salt",
+  "砂糖": "Sugar",
 };
 
 // 英語→日本語（逆引き用）
@@ -147,30 +293,33 @@ for (const [ja, en] of Object.entries(ITEM_TRANSLATIONS)) {
   }
 }
 
-/**
- * 日本語のクエリを英語に変換（部分一致）
- * 英語の場合はそのまま返す
- */
 function translateQuery(query) {
   const q = query.trim();
+  if (!q) return q;
 
-  // 完全一致チェック
+  // 日本語が含まれているか判定
+  const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
+  if (!hasJapanese) return q; // 英語ならそのまま
+
+  // 完全一致
   if (ITEM_TRANSLATIONS[q]) return ITEM_TRANSLATIONS[q];
 
-  // 部分一致チェック
-  for (const [ja, en] of Object.entries(ITEM_TRANSLATIONS)) {
-    if (q.includes(ja) || ja.includes(q)) {
-      return en;
-    }
+  // 部分一致（長いキーを優先）
+  const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+  for (const [ja, en] of sorted) {
+    if (q.includes(ja)) return en;
   }
 
-  // 英語の場合そのまま返す
   return q;
 }
 
-/**
- * 英語アイテム名に対応する日本語を返す（なければ英語のまま）
- */
 function getJaName(enName) {
-  return ITEM_TRANSLATIONS_EN_JA[enName] || null;
+  if (!enName) return null;
+  // 完全一致
+  if (ITEM_TRANSLATIONS_EN_JA[enName]) return ITEM_TRANSLATIONS_EN_JA[enName];
+  // 部分一致（英語名の一部がキーに含まれる場合）
+  for (const [en, ja] of Object.entries(ITEM_TRANSLATIONS_EN_JA)) {
+    if (enName.includes(en)) return ja;
+  }
+  return null;
 }
