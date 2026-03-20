@@ -405,6 +405,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 20px 24px;
+   min-width: 0;
   overflow-x: auto;
 }
 .order-count {
@@ -830,7 +831,6 @@ footer a:hover { color: var(--accent); }
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 16px;
 }
 
 .chart-wrap {
