@@ -391,7 +391,7 @@ function renderPriceSummary(item, priceData) {
   const highestBuy = item.highestBuyPrice ?? '—';
   const avg24h = stats.avg24h ?? '—';
   const avg7d = stats.avg7d ?? '—';
-  const volume24h = item.volume24h ?? 0;
+  const volume24h = priceData?.priceData?.[0]?.volume ?? 0;
   const change24h = stats.priceChange24h;
 
   const changeHtml = change24h != null
