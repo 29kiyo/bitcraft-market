@@ -1,42 +1,25 @@
-## まだ完成してません
-
 # BitCraft Market Search
 
-BitCraft のマーケット情報を日本語・英語で検索できるWebサイトです。
+BitCraftのマーケット情報をリアルタイムで検索・確認できるWebアプリです。
 
-[Bitjita API](https://bitjita.com/docs/api) を使用しています。
+## 🔗 サイト
+https://29kiyo.github.io/bitcraft-market/
 
-## 機能
+## ✨ 機能
+- アイテム名検索（日本語・英語対応）
+- Tier・レア度・注文種別でフィルタリング
+- 売り・買い注文一覧（価格順ソート・ページネーション）
+- 価格推移グラフ（24H・7D・30D）
+- 取引量グラフ
+- 需要と供給の表示
+- リージョン・座標の表示
 
-- 🔍 アイテム名検索（日本語・英語対応）
-- 💰 価格情報（最低売値・最高買値・24h/7d平均・取引量）
-- 📊 需要と供給の可視化
-- 📋 売り/買い注文一覧（領地名・座標・リージョン）
-- 🗺 領地マップ（SVGビジュアライザー + BitCraft Mapリンク）
-- 🔧 フィルター（Tier・カテゴリ・注文種別）
+## 🛠 技術構成
+- フロントエンド: HTML / CSS / JavaScript
+- ホスティング: GitHub Pages
+- APIプロキシ: Cloudflare Workers
+- データ提供: [Bitjita API](https://bitjita.com)
 
-## 使い方
-
-1. 検索ボックスにアイテム名を入力（例：「革」「lether」）
-2. Tier・カテゴリでフィルタリング
-3. 結果からマップで領地の位置を確認
-4. 「BitCraft Mapで開く」ボタンで詳細マップへ
-
-## セットアップ (GitHub Pages)
-
-1. このリポジトリをFork
-2. Settings → Pages → Source: `main` ブランチの `/root` を選択
-3. `https://<username>.github.io/<repo-name>` でアクセス
-
-## 技術スタック
-
-- HTML / CSS / JavaScript（フレームワーク不要）
-- [Bitjita API](https://bitjita.com/docs/api)
-- GitHub Pages
-
-## 注意
-
-- Bitjita API に非公式ツールとして接続しています
-- `x-app-identifier` ヘッダーを設定済みです
-- レート制限: 250リクエスト/分
-
+## ⚠️ 免責事項
+- このサイトはClockwork Labsとは無関係です
+- データはBitjita APIから取得しています
