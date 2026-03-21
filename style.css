@@ -1216,3 +1216,11 @@ footer a:hover { color: var(--accent); }
 
 .orders-table-header th:nth-child(6),
 .orders-table-body td:nth-child(6) { width: 120px; }
+
+
+.orders-thead th {
+  position: sticky;
+  top: 233px;
+  z-index: 5;
+  background: #0d1520;
+}
