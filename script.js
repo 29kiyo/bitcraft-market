@@ -202,7 +202,7 @@ async function doSearch() {
   const category = categoryFilter.value;
 
   // 検索ワードもフィルターも何もない場合だけ早期リターン
-  if (!q && !tier && rarity === '') return;
+  if (!q && !tier && rarity === '' && !category) return;
 
   hideSuggestions();
   showLoading();
