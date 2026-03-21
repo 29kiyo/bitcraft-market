@@ -31,11 +31,13 @@ categoryFilter.addEventListener('change', applyFilters);
 backBtn.addEventListener('click', () => {
   resultSection.classList.add('hidden');
   searchResults.classList.remove('hidden');
+  setTimeout(() => window.scrollTo(0, savedScrollPosition), 0);
 });
 
 // 状態
 let currentItems = [];
 let currentPage = 1;
+let savedScrollPosition = 0;
 let currentOrderPage = 1;
 const ORDERS_PER_PAGE = 20;
 let currentOrderSort = 'asc';
@@ -332,6 +334,7 @@ function renderSearchResults(items, page = 1) {
 window.selectItem = async function(itemId) {
   const item = currentItems.find(i => i.id === itemId);
   if (!item) return;
+  savedScrollPosition = window.scrollY;
   searchResults.classList.add('hidden');
   await loadItemDetail(item);
 };
