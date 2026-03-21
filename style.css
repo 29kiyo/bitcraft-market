@@ -1099,16 +1099,6 @@ footer a:hover { color: var(--accent); }
   }
 }
 
-.orders-list {
-  position: relative;
-}
-
-.orders-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #0d1520;
-}
 
 .trade-log-section {
   background: rgba(255,255,255,0.02);
@@ -1188,46 +1178,6 @@ footer a:hover { color: var(--accent); }
   padding: 8px 0;
 }
 
-.orders-table-body::-webkit-scrollbar {
-  display: none;
-}
-
-.orders-table-header table,
-.orders-table-body table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.orders-table-header th:nth-child(1),
-.orders-table-body td:nth-child(1) { width: 60px; }
-
-.orders-table-header th:nth-child(2),
-.orders-table-body td:nth-child(2) { width: 100px; }
-
-.orders-table-header th:nth-child(3),
-.orders-table-body td:nth-child(3) { width: 60px; }
-
-.orders-table-header th:nth-child(4),
-.orders-table-body td:nth-child(4) { width: 150px; }
-
-.orders-table-header th:nth-child(5),
-.orders-table-body td:nth-child(5) { width: 120px; }
-
-.orders-table-header th:nth-child(6),
-.orders-table-body td:nth-child(6) { width: 120px; }
-
-.orders-table-wrap::-webkit-scrollbar {
-  width: 6px;
-}
-
-.orders-table-wrap::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.05);
-}
-
-.orders-table-wrap::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 3px;
-}
 
 .orders-table-wrap::-webkit-scrollbar {
   width: 6px;
