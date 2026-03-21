@@ -769,12 +769,13 @@ function renderLogTable(trades, page) {
     <h3 class="section-title">📜 取引ログ <span class="order-count">${limited.length}件</span></h3>
     <div class="log-filter">
       <select id="logRegionFilter" onchange="filterTradeLog()">
-        <option value="">全リージョン</option>
-        ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
-          const rid = trades.find(t => t.regionName === r)?.regionId || '';
-          return `<option value="${r}">${r} (R${rid})</option>`;
-        }).join('')}
-      </select>
+  <option value="">全リージョン</option>
+  ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
+    const rid = trades.find(t => t.regionName === r)?.regionId || '';
+    const selected = (document.getElementById('logRegionFilter')?.value === r) ? 'selected' : '';
+    return `<option value="${r}" ${selected}>${r} (R${rid})</option>`;
+  }).join('')}
+</select>
     </div>
     ${pagination}
     <div class="log-table-wrap">
@@ -830,7 +831,15 @@ window.filterTradeLog = function() {
   const trades = window._tradeLogs || [];
   const filtered = region ? trades.filter(t => t.regionName === region) : trades;
   currentLogPage = 1;
-  renderLogTable(filtered, 1);
+  
+  // テーブルボディだけ更新（セレクトは再生成しない）
+  const maxItems = LOG_PER_PAGE * LOG_MAX_PAGES;
+  const limited = filtered.slice(0, maxItems);
+  const totalPages = Math.ceil(limited.length / LOG_PER_PAGE);
+  const pageItems = limited.slice(0, LOG_PER_PAGE);
+  
+  const tbody = document.querySelector('#tradeLog tbody');
+  if (tbody) tbody.innerHTML = renderLogRows(pageItems);
 };
 
 
