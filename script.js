@@ -48,11 +48,12 @@ window.changeOrderClaim = function(claim) {
   claimDebounceTimer = setTimeout(() => {
     currentOrderClaim = claim;
     renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, claim);
-    // 入力値を復元
     const input = document.getElementById('claimSearchInput');
     if (input) {
       input.value = claim;
       input.focus();
+      // カーソルを末尾に移動
+      input.setSelectionRange(claim.length, claim.length);
     }
   }, 500);
 };
