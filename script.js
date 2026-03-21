@@ -14,8 +14,6 @@ const MAP_BASE = 'https://map.bitcraft.com';
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const suggestions = document.getElementById('suggestions');
-const tierFilter = document.getElementById('tierFilter');
-const rarityFilter = document.getElementById('rarityFilter');
 const orderTypeFilter = document.getElementById('orderTypeFilter');
 const resultSection = document.getElementById('resultSection');
 const emptyState = document.getElementById('emptyState');
@@ -167,9 +165,7 @@ searchInput.addEventListener('input', onSearchInput);
 document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
-tierFilter.addEventListener('change', applyFilters);
-rarityFilter.addEventListener('change', applyFilters);
-orderTypeFilter.addEventListener('change', applyFilters);
+
 searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
