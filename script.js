@@ -735,7 +735,6 @@ function renderTradeLog(priceData) {
             <th>買い手</th>
             <th>売り手</th>
             <th>リージョン</th>
-            <th>領地名</th>
             <th>単価</th>
             <th>数量</th>
             <th>合計</th>
@@ -761,7 +760,6 @@ function renderLogRows(trades) {
         <td>${t.buyerUsername || '—'}</td>
         <td>${t.sellerUsername || '—'}</td>
         <td>${t.regionName || '—'} (R${t.regionId || ''})</td>
-        <td>${t.claimName || '—'}</td>
         <td class="price-cell">${formatPrice(t.unitPrice)}</td>
         <td>${formatNum(t.quantity)}</td>
         <td class="price-cell">${formatPrice(t.price)}</td>
