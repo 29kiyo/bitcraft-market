@@ -88,6 +88,49 @@ window.changeOrderRegion = function(region) {
 
 const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
+
+// マルチセレクト管理
+function getCheckedValues(type) {
+  const dropdown = document.getElementById(`${type}Dropdown`);
+  if (!dropdown) return [];
+  return [...dropdown.querySelectorAll('input[type=checkbox]:not([value=all]):checked')]
+    .map(cb => cb.value);
+}
+
+function toggleDropdown(id) {
+  const dropdown = document.getElementById(id);
+  dropdown.classList.toggle('hidden');
+}
+
+function updateMultiLabel(type) {
+  const values = getCheckedValues(type);
+  const label = document.getElementById(`${type}Label`);
+  if (!label) return;
+  if (values.length === 0) {
+    label.textContent = 'すべて';
+  } else {
+    label.textContent = `${values.length}件選択中`;
+  }
+  applyFilters();
+}
+
+function handleMultiAll(type, cb) {
+  const dropdown = document.getElementById(`${type}Dropdown`);
+  if (!dropdown) return;
+  const checkboxes = [...dropdown.querySelectorAll('input[type=checkbox]:not([value=all])')];
+  checkboxes.forEach(c => c.checked = false);
+  cb.checked = false;
+  updateMultiLabel(type);
+}
+
+// ドロップダウン外クリックで閉じる
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-box')) hideSuggestions();
+  if (!e.target.closest('.multi-select-wrap')) {
+    document.querySelectorAll('.multi-select-dropdown').forEach(d => d.classList.add('hidden'));
+  }
+});
+
 let accumulatedTrades = [];
 const MAX_TRADES = 50;
 let debounceTimer = null;
@@ -227,12 +270,11 @@ function hideSuggestions() {
 // ============================================
 async function doSearch() {
   const q = searchInput.value.trim();
-  const tier = tierFilter.value;
-  const rarity = rarityFilter.value;
-  const category = categoryFilter.value;
+  const tiers = getCheckedValues('tier');
+const rarities = getCheckedValues('rarity');
+const categories = getCheckedValues('category');
 
-  // 検索ワードもフィルターも何もない場合だけ早期リターン
-  if (!q && !tier && rarity === '' && !category) return;
+if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
 
   hideSuggestions();
   showLoading();
@@ -268,24 +310,28 @@ async function doSearch() {
       }
     }
 
-    if (tier) filtered = filtered.filter(item => String(item.tier) === String(tier));
-    if (rarity !== '') filtered = filtered.filter(item => String(item.rarity) === String(rarity));
-    if (category) {
-  if (category.startsWith('__group__')) {
-    const groupName = category.replace('__group__', '');
-    const select = document.getElementById('categoryFilter');
-    // __group__の次のoptionから次の__group__までの値を取得
-    const options = [...select.querySelectorAll('option')];
-    const groupIdx = options.findIndex(o => o.value === category);
-    const tags = [];
-    for (let i = groupIdx + 1; i < options.length; i++) {
-      if (options[i].value.startsWith('__group__')) break;
-      tags.push(options[i].value);
+    if (tiers.length > 0) {
+  filtered = filtered.filter(item => tiers.includes(String(item.tier)));
+}
+if (rarities.length > 0) {
+  filtered = filtered.filter(item => rarities.includes(String(item.rarity)));
+}
+if (categories.length > 0) {
+  const allTags = new Set();
+  const select = document.getElementById('categoryDropdown');
+  categories.forEach(cat => {
+    if (cat.startsWith('__group__')) {
+      const options = [...document.querySelectorAll(`#categoryDropdown input[type=checkbox]`)];
+      const groupIdx = options.findIndex(o => o.value === cat);
+      for (let i = groupIdx + 1; i < options.length; i++) {
+        if (options[i].value.startsWith('__group__')) break;
+        allTags.add(options[i].value);
+      }
+    } else {
+      allTags.add(cat);
     }
-    filtered = filtered.filter(item => tags.includes(item.tag));
-  } else {
-    filtered = filtered.filter(item => item.tag === category);
-  }
+  });
+  filtered = filtered.filter(item => allTags.has(item.tag));
 }
 
     currentItems = filtered;
@@ -418,11 +464,11 @@ async function loadItemDetail(item) {
 // フィルター適用
 // ============================================
 function applyFilters() {
-  const tier = tierFilter.value;
-  const rarity = rarityFilter.value;
-  const category = categoryFilter.value;
+  const tiers = getCheckedValues('tier');
+  const rarities = getCheckedValues('rarity');
+  const categories = getCheckedValues('category');
   const q = searchInput.value.trim();
-  if (q || tier || rarity !== '' || category) {
+  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0) {
     doSearch();
   }
 }
