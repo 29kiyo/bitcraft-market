@@ -40,24 +40,31 @@ let currentOrderPage = 1;
 const ORDERS_PER_PAGE = 20;
 let currentOrderSort = 'asc';
 let currentOrderRegion = '';
+let currentOrderClaim = '';
 
-window.changeOrderRegion = function(region) {
-  currentOrderRegion = region;
-  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, region);
+window.changeOrderClaim = function(claim) {
+  currentOrderClaim = claim;
+  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, claim);
+};
+
+window.changeOrderPage = function(page) {
+  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort, currentOrderRegion, currentOrderClaim);
+};
+
+window.changeOrderSort = function(sort) {
+  renderOrders(currentOrders, orderTypeFilter.value, 1, sort, currentOrderRegion, currentOrderClaim);
 };
 
 window.changeOrderType = function(type) {
   orderTypeFilter.value = type;
-  renderOrders(currentOrders, type, 1, currentOrderSort, currentOrderRegion);
+  renderOrders(currentOrders, type, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
 };
 
-window.changeOrderPage = function(page) {
-  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort, currentOrderRegion);
+window.changeOrderRegion = function(region) {
+  currentOrderRegion = region;
+  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, region, currentOrderClaim);
 };
 
-window.changeOrderSort = function(sort) {
-  renderOrders(currentOrders, orderTypeFilter.value, 1, sort, currentOrderRegion);
-};
 const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
 let debounceTimer = null;
@@ -610,7 +617,7 @@ function renderSupplyDemand(orders) {
 }
 
 
-function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '') {
+function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '', claimFilter = '') {
   currentOrderPage = page;
   currentOrderSort = sort;
 
@@ -618,6 +625,7 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
   if (orderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
   if (orderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
   if (regionFilter) filtered = filtered.filter(o => o.regionName === regionFilter);
+  if (claimFilter) filtered = filtered.filter(o => o.claimName?.toLowerCase().includes(claimFilter.toLowerCase()));
 
   if (sort === 'asc') {
     filtered.sort((a, b) => Number(a.priceThreshold) - Number(b.priceThreshold));
@@ -680,18 +688,23 @@ const regionOptions = regions.map(r => {
     `;
 
   document.getElementById('ordersList').innerHTML = `
+  <div class="orders-list-header">
     <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
     <div class="order-type-tabs">
       <button class="tab-btn ${orderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${orders.length})</button>
       <button class="tab-btn ${orderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
       <button class="tab-btn ${orderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
       <select class="region-order-filter" onchange="changeOrderRegion(this.value)">
-    <option value="">全リージョン</option>
-    ${regionOptions}
-  </select>
+        <option value="">全リージョン</option>
+        ${regionOptions}
+      </select>
+      <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)">
     </div>
-    ${html}
-  `;
+    ${pagination}
+  </div>
+  ${html}
+  ${pagination}
+`;
 }
 
 function renderTradeLog(priceData) {
@@ -706,14 +719,15 @@ function renderTradeLog(priceData) {
   document.getElementById('tradeLog').innerHTML = `
     <h3 class="section-title">📜 取引ログ <span class="order-count">${trades.length}件</span></h3>
     <div class="log-filter">
-      <select id="logRegionFilter" onchange="filterTradeLog()">
-        <option value="">全リージョン</option>
-        ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
-          const rid = trades.find(t => t.regionName === r)?.regionId || '';
-          return `<option value="${r}">${r} (R${rid})</option>`;
-        }).join('')}
-      </select>
-    </div>
+  <select id="logRegionFilter" onchange="filterTradeLog()">
+    <option value="">全リージョン</option>
+    ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
+      const rid = trades.find(t => t.regionName === r)?.regionId || '';
+      return `<option value="${r}">${r} (R${rid})</option>`;
+    }).join('')}
+  </select>
+  <input type="text" id="logClaimFilter" class="claim-search" placeholder="領地名検索..." oninput="filterTradeLog()">
+</div>
     <div class="log-table-wrap">
       <table class="log-table" id="logTable">
         <thead>
@@ -722,6 +736,7 @@ function renderTradeLog(priceData) {
             <th>買い手</th>
             <th>売り手</th>
             <th>リージョン</th>
+            <th>領地名</th>
             <th>単価</th>
             <th>数量</th>
             <th>合計</th>
@@ -747,6 +762,7 @@ function renderLogRows(trades) {
         <td>${t.buyerUsername || '—'}</td>
         <td>${t.sellerUsername || '—'}</td>
         <td>${t.regionName || '—'} (R${t.regionId || ''})</td>
+        <td>${t.claimName || '—'}</td>
         <td class="price-cell">${formatPrice(t.unitPrice)}</td>
         <td>${formatNum(t.quantity)}</td>
         <td class="price-cell">${formatPrice(t.price)}</td>
@@ -756,9 +772,12 @@ function renderLogRows(trades) {
 }
 
 window.filterTradeLog = function() {
-  const region = document.getElementById('logRegionFilter').value;
+  const region = document.getElementById('logRegionFilter')?.value || '';
+  const claim = document.getElementById('logClaimFilter')?.value || '';
   const trades = window._tradeLogs || [];
-  const filtered = region ? trades.filter(t => t.regionName === region) : trades;
+  let filtered = trades;
+  if (region) filtered = filtered.filter(t => t.regionName === region);
+  if (claim) filtered = filtered.filter(t => t.claimName?.toLowerCase().includes(claim.toLowerCase()));
   document.getElementById('logTableBody').innerHTML = renderLogRows(filtered);
 };
 
