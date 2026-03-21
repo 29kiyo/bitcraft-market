@@ -88,6 +88,8 @@ window.changeOrderRegion = function(region) {
 
 const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
+let accumulatedTrades = [];
+const MAX_TRADES = 50;
 let debounceTimer = null;
 
 let cachedMarketItems = null;
@@ -740,14 +742,27 @@ const LOG_PER_PAGE = 20;
 const LOG_MAX_PAGES = 5;
 
 function renderTradeLog(priceData) {
-  const trades = priceData?.recentTrades || [];
-  if (trades.length === 0) {
+  const newTrades = priceData?.recentTrades || [];
+  if (newTrades.length === 0) {
     document.getElementById('tradeLog').innerHTML = '';
     return;
   }
-  window._tradeLogs = trades;
+
+  // 既存のログと新しいログをマージ（IDで重複排除）
+  const existingIds = new Set(accumulatedTrades.map(t => t.id));
+  const uniqueNewTrades = newTrades.filter(t => !existingIds.has(t.id));
+  
+  // 新しいものを先頭に追加
+  accumulatedTrades = [...uniqueNewTrades, ...accumulatedTrades];
+  
+  // 50件超えたら古いものを削除
+  if (accumulatedTrades.length > MAX_TRADES) {
+    accumulatedTrades = accumulatedTrades.slice(0, MAX_TRADES);
+  }
+
+  window._tradeLogs = accumulatedTrades;
   currentLogPage = 1;
-  renderLogTable(trades, currentLogPage);
+  renderLogTable(accumulatedTrades, currentLogPage);
 }
 
 function renderLogTable(trades, page) {
