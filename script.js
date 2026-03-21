@@ -677,12 +677,12 @@ const regionOptions = regions.map(r => {
         <thead>
           <tr>
             <th>種別</th>
-            <th>
+            <th style="white-space:nowrap;">
   価格
-  <div style="display:inline-flex; flex-direction:column; gap:2px; margin-left:4px; vertical-align:middle;">
+  <span style="display:inline-flex; flex-direction:column; gap:2px; margin-left:4px; vertical-align:middle;">
     <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
     <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
-  </div>
+  </span>
 </th>
             <th>数量</th>
             <th>領地名</th>
