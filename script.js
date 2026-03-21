@@ -24,6 +24,8 @@ const errorMsg = document.getElementById('errorMsg');
 const searchResults = document.getElementById('searchResults');
 const searchResultsList = document.getElementById('searchResultsList');
 const backBtn = document.getElementById('backBtn');
+const categoryFilter = document.getElementById('categoryFilter');
+categoryFilter.addEventListener('change', applyFilters);
 
 
 backBtn.addEventListener('click', () => {
@@ -194,6 +196,7 @@ async function doSearch() {
   const q = searchInput.value.trim();
   const tier = tierFilter.value;
   const rarity = rarityFilter.value;
+  const category = categoryFilter.value;
 
   // 検索ワードもフィルターも何もない場合だけ早期リターン
   if (!q && !tier && rarity === '') return;
@@ -234,6 +237,7 @@ async function doSearch() {
 
     if (tier) filtered = filtered.filter(item => String(item.tier) === String(tier));
     if (rarity !== '') filtered = filtered.filter(item => String(item.rarity) === String(rarity));
+    if (category) filtered = filtered.filter(item => item.tag === category);
 
     currentItems = filtered;
 
