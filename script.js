@@ -945,7 +945,9 @@ function formatNum(val) {
 
 function formatCoords(order) {
   if (order.claimLocationX == null) return '—';
-  return `N:${Math.round(order.claimLocationZ)}, E:${Math.round(order.claimLocationX)}`;
+  const n = Math.round(order.claimLocationZ / 3);
+  const e = Math.round(order.claimLocationX / 3);
+  return `N:${n}, E:${e}`;
 }
 
 function showLoading() {
