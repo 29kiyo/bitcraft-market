@@ -1183,3 +1183,7 @@ footer a:hover { color: var(--accent); }
 .claim-search::placeholder {
   color: #666;
 }
+
+.orders-search-bar {
+  padding: 8px 0;
+}
