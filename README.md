@@ -33,8 +33,8 @@ https://29kiyo.github.io/bitcraft-market/
 
 ## 🌐 外部通信
 本ツールは以下の外部サービスと通信を行います。
-- **Bitjita API**（`https://bitjita.com/api`）: マーケットデータの取得
-- **Cloudflare Workers**（`https://bitcraft-proxy.29kiyo.workers.dev`）: CORSプロキシ経由でAPIにアクセス
+- **Bitjita API**: マーケットデータの取得 → [https://bitjita.com/api](https://bitjita.com/api)
+- **Cloudflare Workers**: CORSプロキシ経由でAPIにアクセス → [https://bitcraft-proxy.29kiyo.workers.dev](https://bitcraft-proxy.29kiyo.workers.dev)
 
 収集・保存する個人情報はありません。
 
