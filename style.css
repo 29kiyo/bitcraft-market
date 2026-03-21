@@ -1188,11 +1188,6 @@ footer a:hover { color: var(--accent); }
   padding: 8px 0;
 }
 
-
-.orders-table-body::-webkit-scrollbar {
-  display: none;
-}
-
 .orders-table-header table,
 .orders-table-body table {
   table-layout: fixed;
