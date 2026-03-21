@@ -82,162 +82,197 @@
   <label>カテゴリー</label>
   <select id="categoryFilter">
     <option value="">すべて</option>
-    <optgroup label="🪵 木材・建材">
-      <option value="Wood Log">木材</option>
-      <option value="Plank">板材</option>
-      <option value="Stripped Wood">加工木材</option>
-      <option value="Timber">材木</option>
-      <option value="Trunk">幹</option>
-      <option value="Brick">レンガ</option>
-      <option value="Refined Brick">精製レンガ</option>
-      <option value="Stone Research">石材研究</option>
-    </optgroup>
-    <optgroup label="⛏ 鉱石・金属">
-      <option value="Ore">鉱石</option>
-      <option value="Ore Chunk">鉱石塊</option>
-      <option value="Ore Concentrate">精鉱</option>
-      <option value="Ingot">インゴット</option>
-      <option value="Refined Ingot">精製インゴット</option>
-      <option value="Molten Ingot">溶融インゴット</option>
-      <option value="Precious Metal Ore">貴金属鉱石</option>
-      <option value="Precious Metal Nugget">貴金属粒</option>
-      <option value="Precious Metal Ingot">貴金属インゴット</option>
-      <option value="Nail">釘</option>
-      <option value="Frame">フレーム</option>
-    </optgroup>
-    <option value="__group__繊維・革">🧵 繊維・革（全て）</option>
-<optgroup label="　└ 繊維・革">
-  <option value="Leather">革</option>
-  <option value="Refined Leather">精製革</option>
-  <option value="Leather Solvent">革溶剤</option>
-  <option value="Cloth">布</option>
-  <option value="Refined Cloth">精製布</option>
-  <option value="Filament">繊維糸</option>
-  <option value="Filament Plant">繊維植物</option>
-  <option value="Filament Seeds">繊維の種</option>
-  <option value="Thread">糸</option>
-  <option value="Tannin">タンニン</option>
-  <option value="Raw Pelt">生皮</option>
-  <option value="Cleaned Pelt">洗浄皮</option>
-  <option value="Tanned Pelt">なめし革</option>
-  <option value="Animal Hair">動物の毛</option>
-  <option value="Textile">テキスタイル</option>
-  <option value="Sheeting">シーティング</option>
-  <option value="Tarp">タープ</option>
-  <option value="Cloth Research">布研究</option>
-  <option value="Leather Research">革研究</option>
-</optgroup>
-    <optgroup label="🍖 食料">
-      <option value="Food">食料</option>
-      <option value="Meal">食事</option>
-      <option value="Raw Meal">生食料</option>
-      <option value="Basic Food">基本食料</option>
-      <option value="Raw Meat">生肉</option>
-      <option value="Berry">ベリー</option>
-      <option value="Mushroom">キノコ</option>
-      <option value="Rare Mushroom">レアキノコ</option>
-      <option value="Vegetable">野菜</option>
-      <option value="Grain">穀物</option>
-      <option value="Dough">生地</option>
-      <option value="Tea">お茶</option>
-    </optgroup>
-    <optgroup label="🐟 魚">
-      <option value="Ocean Fish">海水魚</option>
-      <option value="Lake Fish">淡水魚</option>
-      <option value="Baitfish">ベイトフィッシュ</option>
-      <option value="Oceanfish Filet">海水魚フィレ</option>
-      <option value="Lake Fish Filet">淡水魚フィレ</option>
-      <option value="Oceanfish Scale">海水魚鱗</option>
-      <option value="Bait">エサ</option>
-      <option value="Chum">撒き餌</option>
-    <optgroup label="🐾 動物">
-      <option value="Animal">動物本体</option>
-      <option value="Pet Egg">ペット卵</option>
-      <option value="Taming Item">テイムアイテム</option>
-    </optgroup>
-    </optgroup>
-    <optgroup label="💎 宝石・素材">
-      <option value="Gem">宝石</option>
-      <option value="Uncut Gem">未カット宝石</option>
-      <option value="Gem Fragment">宝石破片</option>
-      <option value="Geode">ジオード</option>
-      <option value="Jewelry">ジュエリー</option>
-    </optgroup>
-    <optgroup label="⚗️ 消耗品・素材">
-      <option value="Healing Potion">回復ポーション</option>
-      <option value="Stamina Potion">スタミナポーション</option>
-      <option value="Elixir">エリクサー</option>
-      <option value="Catalyst">触媒</option>
-      <option value="Ink">インク</option>
-      <option value="Pigment">顔料</option>
-      <option value="Resin">樹脂</option>
-      <option value="Firesand">ファイアサンド</option>
-      <option value="Metal Solvent">金属溶剤</option>
-      <option value="Leather Solvent">革溶剤</option>
-      <option value="Reforging Solvent">再鍛造溶剤</option>
-      <option value="Wood Polish">木材磨き剤</option>
-    </optgroup>
-    <optgroup label="🔧 ツール">
-      <option value="Forester Tool">伐採ツール</option>
-      <option value="Miner Tool">採掘ツール</option>
-      <option value="Farmer Tool">農業ツール</option>
-      <option value="Fisher Tool">釣りツール</option>
-      <option value="Hunter Tool">狩猟ツール</option>
-      <option value="Carpenter Tool">大工ツール</option>
-      <option value="Blacksmith Tool">鍛冶ツール</option>
-      <option value="Mason Tool">石工ツール</option>
-      <option value="Leatherworker Tool">革職人ツール</option>
-      <option value="Tailor Tool">仕立てツール</option>
-      <option value="Scholar Tool">学者ツール</option>
-      <option value="Forager Tool">採集ツール</option>
-    </optgroup>
-    <optgroup label="⚔️ 武器・防具">
-      <option value="Weapon">武器</option>
-      <option value="Metal Armor">金属防具</option>
-      <option value="Leather Clothing">革装備</option>
-      <option value="Cloth Clothing">布装備</option>
-      <option value="Dungeon Equipment">ダンジョン装備</option>
-    </optgroup>
-    <optgroup label="📚 研究">
-      <option value="Codex">コーデックス</option>
-      <option value="Journal">ジャーナル</option>
-      <option value="Cloth Research">布研究</option>
-      <option value="Leather Research">革研究</option>
-      <option value="Metal Research">金属研究</option>
-      <option value="Wood Research">木材研究</option>
-      <option value="Outpost Research">前哨地研究</option>
-    </optgroup>
-    <optgroup label="🏠 家具・装飾">
-      <option value="Furniture">家具</option>
-      <option value="Cosmetic Clothes">コスメ服</option>
-      <option value="Premium Cosmetic">プレミアムコスメ</option>
-      <option value="Seasonal Cosmetic">季節コスメ</option>
-    </optgroup>
-    <optgroup label="🌿 農業">
-      <option value="Fertilizer">肥料</option>
-      <option value="Vegetable Seeds">野菜の種</option>
-      <option value="Grain Seeds">穀物の種</option>
-      <option value="Filament Seeds">繊維の種</option>
-      <option value="Wild Seeds">野生の種</option>
-      <option value="Tree Seed">木の種</option>
-      <option value="Sapling">苗木</option>
-    </optgroup>
-    <optgroup label="🗡️ ダンジョン">
-      <option value="Dungeon Loot">ダンジョン戦利品</option>
-      <option value="Dungeon Crafting Material">ダンジョン素材</option>
-      <option value="Dungeon Upgrade">ダンジョンアップグレード</option>
-      <option value="Common Slayer Material">スレイヤー素材</option>
-      <option value="Rare Slayer Material">レアスレイヤー素材</option>
-      <option value="Ancient Relic">古代遺物</option>
-      <option value="Ancient Hieroglyphs">古代象形文字</option>
-    </optgroup>
-    <optgroup label="📦 その他">
-      <option value="Package">パッケージ</option>
-      <option value="Hex Coin Sack">ヘックスコイン袋</option>
-      <option value="Premium Item">プレミアムアイテム</option>
-      <option value="Quest Item">クエストアイテム</option>
-      <option value="Deed">証書</option>
-    </optgroup>
+
+    <option value="__group__木材・建材" style="font-weight:bold; color:#00c896;">🪵 木材・建材（全て）</option>
+    <option value="Wood Log">　├ 木材</option>
+    <option value="Plank">　├ 板材</option>
+    <option value="Untreated Plank">　├ 未処理板材</option>
+    <option value="Refined Plank">　├ 精製板材</option>
+    <option value="Stripped Wood">　├ 加工木材</option>
+    <option value="Timber">　├ 材木</option>
+    <option value="Trunk">　├ 幹</option>
+    <option value="Bark">　├ 樹皮</option>
+    <option value="Brick">　├ レンガ</option>
+    <option value="Brick Slab">　├ レンガスラブ</option>
+    <option value="Refined Brick">　├ 精製レンガ</option>
+    <option value="Construction Material">　├ 建設素材</option>
+    <option value="Construction Blueprints">　├ 建設設計図</option>
+    <option value="Settlement Foundation Kit">　├ 拠点設立キット</option>
+    <option value="Treeplanter's Pot">　├ 植木鉢</option>
+    <option value="Wood Polish">　├ 木材磨き剤</option>
+    <option value="Wood Research">　└ 木材研究</option>
+
+    <option value="__group__鉱石・金属" style="font-weight:bold; color:#00c896;">⛏ 鉱石・金属（全て）</option>
+    <option value="Ore">　├ 鉱石</option>
+    <option value="Ore Chunk">　├ 鉱石塊</option>
+    <option value="Ore Concentrate">　├ 精鉱</option>
+    <option value="Chunk">　├ 塊</option>
+    <option value="Ingot">　├ インゴット</option>
+    <option value="Refined Ingot">　├ 精製インゴット</option>
+    <option value="Molten Ingot">　├ 溶融インゴット</option>
+    <option value="Precious Metal Ore">　├ 貴金属鉱石</option>
+    <option value="Precious Metal Nugget">　├ 貴金属粒</option>
+    <option value="Precious Metal Ingot">　├ 貴金属インゴット</option>
+    <option value="Nail">　├ 釘</option>
+    <option value="Frame">　├ フレーム</option>
+    <option value="Metal Solvent">　├ 金属溶剤</option>
+    <option value="Reforging Solvent">　├ 再鍛造溶剤</option>
+    <option value="Metal Research">　└ 金属研究</option>
+
+    <option value="__group__繊維・革" style="font-weight:bold; color:#00c896;">🧵 繊維・革（全て）</option>
+    <option value="Leather">　├ 革</option>
+    <option value="Refined Leather">　├ 精製革</option>
+    <option value="Leather Solvent">　├ 革溶剤</option>
+    <option value="Cloth">　├ 布</option>
+    <option value="Refined Cloth">　├ 精製布</option>
+    <option value="Filament">　├ 繊維糸</option>
+    <option value="Filament Plant">　├ 繊維植物</option>
+    <option value="Filament Seeds">　├ 繊維の種</option>
+    <option value="Thread">　├ 糸</option>
+    <option value="Tannin">　├ タンニン</option>
+    <option value="Raw Pelt">　├ 生皮</option>
+    <option value="Cleaned Pelt">　├ 洗浄皮</option>
+    <option value="Tanned Pelt">　├ なめし革</option>
+    <option value="Animal Hair">　├ 動物の毛</option>
+    <option value="Textile">　├ テキスタイル</option>
+    <option value="Sheeting">　├ シーティング</option>
+    <option value="Tarp">　├ タープ</option>
+    <option value="Cloth Research">　├ 布研究</option>
+    <option value="Leather Research">　└ 革研究</option>
+
+    <option value="__group__食料" style="font-weight:bold; color:#00c896;">🍖 食料（全て）</option>
+    <option value="Food">　├ 食料</option>
+    <option value="Basic Food">　├ 基本食料</option>
+    <option value="Meal">　├ 食事</option>
+    <option value="Raw Meal">　├ 生食料</option>
+    <option value="Raw Meat">　├ 生肉</option>
+    <option value="Berry">　├ ベリー</option>
+    <option value="Citric Berry">　├ シトリックベリー</option>
+    <option value="Mushroom">　├ キノコ</option>
+    <option value="Rare Mushroom">　├ レアキノコ</option>
+    <option value="Vegetable">　├ 野菜</option>
+    <option value="Vegetable Plant">　├ 野菜植物</option>
+    <option value="Vegetable Seeds">　├ 野菜の種</option>
+    <option value="Grain">　├ 穀物</option>
+    <option value="Grain Plant">　├ 穀物植物</option>
+    <option value="Grain Seeds">　├ 穀物の種</option>
+    <option value="Dough">　├ 生地</option>
+    <option value="Tea">　├ お茶</option>
+    <option value="Crop Oil">　├ 作物油</option>
+    <option value="Sugar">　├ 砂糖</option>
+    <option value="Salt">　└ 塩</option>
+
+    <option value="__group__魚" style="font-weight:bold; color:#00c896;">🐟 魚（全て）</option>
+    <option value="Ocean Fish">　├ 海水魚</option>
+    <option value="Lake Fish">　├ 淡水魚</option>
+    <option value="Baitfish">　├ ベイトフィッシュ</option>
+    <option value="Oceanfish Filet">　├ 海水魚フィレ</option>
+    <option value="Lake Fish Filet">　├ 淡水魚フィレ</option>
+    <option value="Oceanfish Scale">　├ 海水魚鱗</option>
+    <option value="Bait">　├ エサ</option>
+    <option value="Chum">　├ 撒き餌</option>
+    <option value="Fish Oil">　└ 魚油</option>
+
+    <option value="__group__宝石・素材" style="font-weight:bold; color:#00c896;">💎 宝石・素材（全て）</option>
+    <option value="Gem">　├ 宝石</option>
+    <option value="Uncut Gem">　├ 未カット宝石</option>
+    <option value="Gem Fragment">　├ 宝石破片</option>
+    <option value="Geode">　├ ジオード</option>
+    <option value="Jewelry">　└ ジュエリー</option>
+
+    <option value="__group__ポーション・消耗品" style="font-weight:bold; color:#00c896;">⚗️ ポーション・消耗品（全て）</option>
+    <option value="Healing Potion">　├ 回復ポーション</option>
+    <option value="Stamina Potion">　├ スタミナポーション</option>
+    <option value="Elixir">　├ エリクサー</option>
+    <option value="Catalyst">　├ 触媒</option>
+    <option value="Vial">　├ 瓶</option>
+    <option value="Ink">　├ インク</option>
+    <option value="Pigment">　├ 顔料</option>
+    <option value="Resin">　├ 樹脂</option>
+    <option value="Sap">　├ 樹液</option>
+    <option value="Firesand">　├ ファイアサンド</option>
+    <option value="Parchment">　└ 羊皮紙</option>
+
+    <option value="__group__ツール" style="font-weight:bold; color:#00c896;">🔧 ツール（全て）</option>
+    <option value="Forester Tool">　├ 伐採ツール</option>
+    <option value="Miner Tool">　├ 採掘ツール</option>
+    <option value="Farmer Tool">　├ 農業ツール</option>
+    <option value="Fisher Tool">　├ 釣りツール</option>
+    <option value="Hunter Tool">　├ 狩猟ツール</option>
+    <option value="Carpenter Tool">　├ 大工ツール</option>
+    <option value="Blacksmith Tool">　├ 鍛冶ツール</option>
+    <option value="Mason Tool">　├ 石工ツール</option>
+    <option value="Leatherworker Tool">　├ 革職人ツール</option>
+    <option value="Tailor Tool">　├ 仕立てツール</option>
+    <option value="Scholar Tool">　├ 学者ツール</option>
+    <option value="Forager Tool">　├ 採集ツール</option>
+    <option value="Tool Bundle">　├ ツールバンドル</option>
+    <option value="Scrap">　└ スクラップ</option>
+
+    <option value="__group__武器・防具" style="font-weight:bold; color:#00c896;">⚔️ 武器・防具（全て）</option>
+    <option value="Weapon">　├ 武器</option>
+    <option value="Metal Armor">　├ 金属防具</option>
+    <option value="Leather Clothing">　├ 革装備</option>
+    <option value="Cloth Clothing">　├ 布装備</option>
+    <option value="Dungeon Equipment">　└ ダンジョン装備</option>
+
+    <option value="__group__研究・知識" style="font-weight:bold; color:#00c896;">📚 研究・知識（全て）</option>
+    <option value="Codex">　├ コーデックス</option>
+    <option value="Journal">　├ ジャーナル</option>
+    <option value="Cloth Research">　├ 布研究</option>
+    <option value="Leather Research">　├ 革研究</option>
+    <option value="Metal Research">　├ 金属研究</option>
+    <option value="Wood Research">　├ 木材研究</option>
+    <option value="Stone Research">　├ 石材研究</option>
+    <option value="Outpost Research">　├ 前哨地研究</option>
+    <option value="Schematic Fragments">　└ 設計図破片</option>
+
+    <option value="__group__家具・装飾" style="font-weight:bold; color:#00c896;">🏠 家具・装飾（全て）</option>
+    <option value="Furniture">　├ 家具</option>
+    <option value="Cosmetic Clothes">　├ コスメ服</option>
+    <option value="Premium Cosmetic">　├ プレミアムコスメ</option>
+    <option value="Seasonal Cosmetic">　├ 季節コスメ</option>
+    <option value="Interior Wall Deed">　└ 内壁証書</option>
+
+    <option value="__group__農業" style="font-weight:bold; color:#00c896;">🌿 農業（全て）</option>
+    <option value="Fertilizer">　├ 肥料</option>
+    <option value="Wild Seeds">　├ 野生の種</option>
+    <option value="Tree Seed">　├ 木の種</option>
+    <option value="Sapling">　├ 苗木</option>
+    <option value="Clay">　└ 粘土</option>
+
+    <option value="__group__ダンジョン" style="font-weight:bold; color:#00c896;">🗡️ ダンジョン（全て）</option>
+    <option value="Dungeon Loot">　├ ダンジョン戦利品</option>
+    <option value="Dungeon Crafting Material">　├ ダンジョン素材</option>
+    <option value="Dungeon Upgrade">　├ ダンジョンアップグレード</option>
+    <option value="Common Slayer Material">　├ スレイヤー素材</option>
+    <option value="Rare Slayer Material">　├ レアスレイヤー素材</option>
+    <option value="Ancient Relic">　├ 古代遺物</option>
+    <option value="Ancient Hieroglyphs">　├ 古代象形文字</option>
+    <option value="Ancient Component">　└ 古代コンポーネント</option>
+
+    <option value="__group__機械・素材" style="font-weight:bold; color:#00c896;">⚙️ 機械・素材（全て）</option>
+    <option value="Heart Component">　├ ハートコンポーネント</option>
+    <option value="Automata Heart">　├ オートマタハート</option>
+    <option value="Frame">　└ フレーム</option>
+
+    <option value="__group__動物" style="font-weight:bold; color:#00c896;">🐾 動物（全て）</option>
+    <option value="Animal">　├ 動物本体</option>
+    <option value="Pet Egg">　├ ペット卵</option>
+    <option value="Taming Item">　└ テイムアイテム</option>
+
+    <option value="__group__その他" style="font-weight:bold; color:#00c896;">📦 その他（全て）</option>
+    <option value="Package">　├ パッケージ</option>
+    <option value="Hex Coin Sack">　├ ヘックスコイン袋</option>
+    <option value="Premium Item">　├ プレミアムアイテム</option>
+    <option value="Quest Item">　├ クエストアイテム</option>
+    <option value="Deed">　├ 証書</option>
+    <option value="Sailing Loot">　├ 帆走戦利品</option>
+    <option value="Trader License">　├ 商人ライセンス</option>
+    <option value="Supplies">　├ 補給品</option>
+    <option value="Water">　├ 水</option>
+    <option value="Wagon II Quest">　├ ワゴンクエスト</option>
+    <option value="Crushed Shells">　└ 砕いた殻</option>
   </select>
 </div>
         
