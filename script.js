@@ -389,10 +389,12 @@ function renderResult(item, priceData, orders, orderType) {
   renderPriceChart(priceData);
   renderSupplyDemand(orders);
   renderOrders(orders, orderType);
+  renderTradeLog(priceData); // 追加
 
   resultSection.classList.remove('hidden');
   emptyState.classList.add('hidden');
 }
+
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
   const useJaName = jaName && jaName.length > 2;
@@ -691,6 +693,74 @@ const regionOptions = regions.map(r => {
     ${html}
   `;
 }
+
+function renderTradeLog(priceData) {
+  const trades = priceData?.recentTrades || [];
+  if (trades.length === 0) {
+    document.getElementById('tradeLog').innerHTML = '';
+    return;
+  }
+
+  let currentRegion = '';
+
+  document.getElementById('tradeLog').innerHTML = `
+    <h3 class="section-title">📜 取引ログ <span class="order-count">${trades.length}件</span></h3>
+    <div class="log-filter">
+      <select id="logRegionFilter" onchange="filterTradeLog()">
+        <option value="">全リージョン</option>
+        ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
+          const rid = trades.find(t => t.regionName === r)?.regionId || '';
+          return `<option value="${r}">${r} (R${rid})</option>`;
+        }).join('')}
+      </select>
+    </div>
+    <div class="log-table-wrap">
+      <table class="log-table" id="logTable">
+        <thead>
+          <tr>
+            <th>日時</th>
+            <th>買い手</th>
+            <th>売り手</th>
+            <th>リージョン</th>
+            <th>単価</th>
+            <th>数量</th>
+            <th>合計</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody">
+          ${renderLogRows(trades)}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  window._tradeLogs = trades;
+}
+
+function renderLogRows(trades) {
+  return trades.slice(0, 100).map(t => {
+    const date = new Date(t.timestamp);
+    const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    return `
+      <tr>
+        <td>${dateStr}</td>
+        <td>${t.buyerUsername || '—'}</td>
+        <td>${t.sellerUsername || '—'}</td>
+        <td>${t.regionName || '—'} (R${t.regionId || ''})</td>
+        <td class="price-cell">${formatPrice(t.unitPrice)}</td>
+        <td>${formatNum(t.quantity)}</td>
+        <td class="price-cell">${formatPrice(t.price)}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.filterTradeLog = function() {
+  const region = document.getElementById('logRegionFilter').value;
+  const trades = window._tradeLogs || [];
+  const filtered = region ? trades.filter(t => t.regionName === region) : trades;
+  document.getElementById('logTableBody').innerHTML = renderLogRows(filtered);
+};
 
 window.changeOrderPage = function(page) {
   renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort);
