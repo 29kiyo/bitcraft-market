@@ -1099,3 +1099,59 @@ footer a:hover { color: var(--accent); }
   z-index: 10;
   background: #0d1520;
 }
+
+.trade-log-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.log-filter {
+  margin-bottom: 12px;
+}
+
+.log-filter select {
+  background: #1a2535;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.log-filter select option {
+  background: #1a2535;
+}
+
+.log-table-wrap {
+  overflow-x: auto;
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.log-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: #888;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  background: #0d1520;
+}
+
+.log-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: #e0e0e0;
+}
+
+.log-table tr:hover {
+  background: rgba(255,255,255,0.03);
+}
