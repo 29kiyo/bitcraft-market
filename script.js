@@ -474,17 +474,29 @@ function renderPriceSummary(item, priceData) {
     ? `<span class="${change24h >= 0 ? 'pos' : 'neg'}">${change24h >= 0 ? '▲' : '▼'} ${Math.abs(change24h).toFixed(1)}%</span>`
     : '';
 
+  const regions = [...new Set(currentOrders.map(o => o.regionName).filter(Boolean))].sort();
+  const regionOptions = regions.map(r => {
+    const rid = currentOrders.find(o => o.regionName === r)?.regionId || '';
+    return `<option value="${r}">${r} (R${rid})</option>`;
+  }).join('');
+
   document.getElementById('priceSummary').innerHTML = `
     <h3 class="section-title">💰 価格情報</h3>
+    <div class="price-region-filter">
+      <select id="priceRegionFilter" onchange="updatePriceByRegion()">
+        <option value="">全リージョン</option>
+        ${regionOptions}
+      </select>
+    </div>
     <div class="price-cards">
       <div class="price-card sell">
         <div class="pc-label">最低売値</div>
-        <div class="pc-value">${formatPrice(lowestSell)}</div>
+        <div class="pc-value" id="pcLowestSell">${formatPrice(lowestSell)}</div>
         <div class="pc-sub">Lowest Sell</div>
       </div>
       <div class="price-card buy">
         <div class="pc-label">最高買値</div>
-        <div class="pc-value">${formatPrice(highestBuy)}</div>
+        <div class="pc-value" id="pcHighestBuy">${formatPrice(highestBuy)}</div>
         <div class="pc-sub">Highest Buy</div>
       </div>
       <div class="price-card avg">
@@ -505,6 +517,26 @@ function renderPriceSummary(item, priceData) {
     </div>
   `;
 }
+
+window.updatePriceByRegion = function() {
+  const region = document.getElementById('priceRegionFilter')?.value || '';
+  const filtered = region ? currentOrders.filter(o => o.regionName === region) : currentOrders;
+  
+  const sells = filtered.filter(o => o.orderType === 'sell');
+  const buys = filtered.filter(o => o.orderType === 'buy');
+  
+  const lowestSell = sells.length > 0
+    ? Math.min(...sells.map(o => Number(o.priceThreshold)))
+    : null;
+  const highestBuy = buys.length > 0
+    ? Math.max(...buys.map(o => Number(o.priceThreshold)))
+    : null;
+
+  const pcLowestSell = document.getElementById('pcLowestSell');
+  const pcHighestBuy = document.getElementById('pcHighestBuy');
+  if (pcLowestSell) pcLowestSell.innerHTML = formatPrice(lowestSell ?? '—');
+  if (pcHighestBuy) pcHighestBuy.innerHTML = formatPrice(highestBuy ?? '—');
+};
 
 function renderPriceChart(priceData, period = '7d') {
   const data = priceData?.priceData || [];
