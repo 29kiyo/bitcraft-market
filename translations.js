@@ -12,11 +12,11 @@ const ITEM_TRANSLATIONS = {
   "注入された": "Infused",
 
   // ===== 金属・鉱石系 =====
-  "フェラライト": "Ferralith",
-  "フェラライト鉱石": "Ferralith Ore Chunk",
-  "フェラライト精鉱": "Ferralith Ore Concentrate",
-  "フェラライトインゴット": "Ferralith Ingot",
-  "フェラライト釘": "Ferralith Nails",
+  "フェラリス": "Ferralith",
+  "フェラリス鉱石": "Ferralith Ore Chunk",
+  "フェラリスト精鉱": "Ferralith Ore Concentrate",
+  "フェラリスインゴット": "Ferralith Ingot",
+  "フェラリス釘": "Ferralith Nails",
   "パイライト": "Pyrelite",
   "パイライト鉱石": "Pyrelite Ore Chunk",
   "パイライト精鉱": "Pyrelite Ore Concentrate",
@@ -44,7 +44,7 @@ const ITEM_TRANSLATIONS = {
   "溶融ルミナイト": "Molten Luminite",
   "溶融エレンバー": "Molten Elenvar",
   "古代金属破片": "Ancient Metal Fragments",
-  "精製フェラライトインゴット": "Refined Ferralith Ingot",
+  "精製フェラリスインゴット": "Refined Ferralith Ingot",
   "精製エレンバーインゴット": "Refined Elenvar Ingot",
 
   // ===== 木材系 =====
