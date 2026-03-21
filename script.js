@@ -98,6 +98,9 @@ document.addEventListener('click', e => {
 tierFilter.addEventListener('change', applyFilters);
 rarityFilter.addEventListener('change', applyFilters);
 orderTypeFilter.addEventListener('change', applyFilters);
+searchInput.addEventListener('blur', () => {
+  setTimeout(() => hideSuggestions(), 200);
+});
 
 // ============================================
 // 検索オートサジェスト
