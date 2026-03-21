@@ -832,15 +832,7 @@ window.filterTradeLog = function() {
   currentLogPage = 1;
   renderLogTable(filtered, 1);
 };
-window.filterTradeLog = function() {
-  const region = document.getElementById('logRegionFilter')?.value || '';
-  const claim = document.getElementById('logClaimFilter')?.value || '';
-  const trades = window._tradeLogs || [];
-  let filtered = trades;
-  if (region) filtered = filtered.filter(t => t.regionName === region);
-  if (claim) filtered = filtered.filter(t => t.claimName?.toLowerCase().includes(claim.toLowerCase()));
-  document.getElementById('logTableBody').innerHTML = renderLogRows(filtered);
-};
+
 
 
 function renderMap(orders, orderType) {
