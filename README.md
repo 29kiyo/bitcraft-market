@@ -43,13 +43,25 @@ CORSプロキシのソースコードは以下の通りです。
 
 ```javascript
 const BITJITA_BASE = 'https://bitjita.com/api';
+const ALLOWED_ORIGINS = ['https://29kiyo.github.io'];
 
 export default {
   async fetch(request) {
     const url = new URL(request.url);
+    const origin = request.headers.get('Origin');
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders() });
+      if (!ALLOWED_ORIGINS.includes(origin)) {
+        return new Response(null, { status: 403 });
+      }
+      return new Response(null, { headers: corsHeaders(origin) });
+    }
+
+    if (!ALLOWED_ORIGINS.includes(origin)) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const apiPath = url.pathname.replace(/^\/?api/, '');
@@ -66,20 +78,20 @@ export default {
       const data = await response.text();
       return new Response(data, {
         status: response.status,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
       });
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
       });
     }
   },
 };
 
-function corsHeaders() {
+function corsHeaders(origin) {
   return {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': origin || '',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, x-app-identifier',
   };
