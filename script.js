@@ -24,8 +24,7 @@ const errorMsg = document.getElementById('errorMsg');
 const searchResults = document.getElementById('searchResults');
 const searchResultsList = document.getElementById('searchResultsList');
 const backBtn = document.getElementById('backBtn');
-const categoryFilter = document.getElementById('categoryFilter');
-categoryFilter.addEventListener('change', applyFilters);
+
 
 
 backBtn.addEventListener('click', () => {
