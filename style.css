@@ -1155,3 +1155,25 @@ footer a:hover { color: var(--accent); }
 .log-table tr:hover {
   background: rgba(255,255,255,0.03);
 }
+
+.orders-list-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0d1520;
+  padding-bottom: 8px;
+}
+
+.claim-search {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 150px;
+}
+
+.claim-search::placeholder {
+  color: #666;
+}
