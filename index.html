@@ -46,236 +46,54 @@
 
       <!-- フィルター -->
       <div class="filters">
+  <!-- Tier -->
   <div class="filter-group">
     <label>Tier</label>
-    <select id="tierFilter">
-      <option value="">すべて</option>
-      <option value="-1">Tier -1</option>
-      <option value="0">Tier 0</option>
-      <option value="1">Tier 1</option>
-      <option value="2">Tier 2</option>
-      <option value="3">Tier 3</option>
-      <option value="4">Tier 4</option>
-      <option value="5">Tier 5</option>
-      <option value="6">Tier 6</option>
-      <option value="7">Tier 7</option>
-      <option value="8">Tier 8</option>
-      <option value="9">Tier 9</option>
-      <option value="10">Tier 10</option>
-    </select>
+    <div class="multi-select-wrap">
+      <div class="multi-select-btn" onclick="toggleDropdown('tierDropdown')">
+        <span id="tierLabel">すべて</span>
+        <span class="ms-arrow">▼</span>
+      </div>
+      <div class="multi-select-dropdown hidden" id="tierDropdown">
+        <label class="ms-item ms-all"><input type="checkbox" value="all" onchange="handleMultiAll('tier', this)"> すべて解除</label>
+        <label class="ms-item"><input type="checkbox" value="-1" onchange="updateMultiLabel('tier')"> Tier -1</label>
+        <label class="ms-item"><input type="checkbox" value="0" onchange="updateMultiLabel('tier')"> Tier 0</label>
+        <label class="ms-item"><input type="checkbox" value="1" onchange="updateMultiLabel('tier')"> Tier 1</label>
+        <label class="ms-item"><input type="checkbox" value="2" onchange="updateMultiLabel('tier')"> Tier 2</label>
+        <label class="ms-item"><input type="checkbox" value="3" onchange="updateMultiLabel('tier')"> Tier 3</label>
+        <label class="ms-item"><input type="checkbox" value="4" onchange="updateMultiLabel('tier')"> Tier 4</label>
+        <label class="ms-item"><input type="checkbox" value="5" onchange="updateMultiLabel('tier')"> Tier 5</label>
+        <label class="ms-item"><input type="checkbox" value="6" onchange="updateMultiLabel('tier')"> Tier 6</label>
+        <label class="ms-item"><input type="checkbox" value="7" onchange="updateMultiLabel('tier')"> Tier 7</label>
+        <label class="ms-item"><input type="checkbox" value="8" onchange="updateMultiLabel('tier')"> Tier 8</label>
+        <label class="ms-item"><input type="checkbox" value="9" onchange="updateMultiLabel('tier')"> Tier 9</label>
+        <label class="ms-item"><input type="checkbox" value="10" onchange="updateMultiLabel('tier')"> Tier 10</label>
+      </div>
+    </div>
   </div>
+
+  <!-- レア度 -->
   <div class="filter-group">
     <label>レア度</label>
-    <select id="rarityFilter">
-      <option value="">すべて</option>
-      <option value="0">Default</option>
-      <option value="1">Common</option>
-      <option value="2">Uncommon</option>
-      <option value="3">Rare</option>
-      <option value="4">Epic</option>
-      <option value="5">Legendary</option>
-      <option value="6">Mythic</option>
-    </select>
+    <div class="multi-select-wrap">
+      <div class="multi-select-btn" onclick="toggleDropdown('rarityDropdown')">
+        <span id="rarityLabel">すべて</span>
+        <span class="ms-arrow">▼</span>
+      </div>
+      <div class="multi-select-dropdown hidden" id="rarityDropdown">
+        <label class="ms-item ms-all"><input type="checkbox" value="all" onchange="handleMultiAll('rarity', this)"> すべて解除</label>
+        <label class="ms-item"><input type="checkbox" value="0" onchange="updateMultiLabel('rarity')"> Default</label>
+        <label class="ms-item"><input type="checkbox" value="1" onchange="updateMultiLabel('rarity')"> Common</label>
+        <label class="ms-item"><input type="checkbox" value="2" onchange="updateMultiLabel('rarity')"> Uncommon</label>
+        <label class="ms-item"><input type="checkbox" value="3" onchange="updateMultiLabel('rarity')"> Rare</label>
+        <label class="ms-item"><input type="checkbox" value="4" onchange="updateMultiLabel('rarity')"> Epic</label>
+        <label class="ms-item"><input type="checkbox" value="5" onchange="updateMultiLabel('rarity')"> Legendary</label>
+        <label class="ms-item"><input type="checkbox" value="6" onchange="updateMultiLabel('rarity')"> Mythic</label>
+      </div>
+    </div>
   </div>
 
-  <div class="filter-group">
-  <label>カテゴリー</label>
-  <select id="categoryFilter">
-    <option value="">すべて</option>
-
-    <option value="__group__木材・建材" style="font-weight:bold; color:#00c896;">🪵 木材・建材（全て）</option>
-    <option value="Wood Log">　├ 木材</option>
-    <option value="Plank">　├ 板材</option>
-    <option value="Untreated Plank">　├ 未処理板材</option>
-    <option value="Refined Plank">　├ 精製板材</option>
-    <option value="Stripped Wood">　├ 加工木材</option>
-    <option value="Timber">　├ 材木</option>
-    <option value="Trunk">　├ 幹</option>
-    <option value="Bark">　├ 樹皮</option>
-    <option value="Brick">　├ レンガ</option>
-    <option value="Brick Slab">　├ レンガスラブ</option>
-    <option value="Refined Brick">　├ 精製レンガ</option>
-    <option value="Construction Material">　├ 建設素材</option>
-    <option value="Construction Blueprints">　├ 建設設計図</option>
-    <option value="Settlement Foundation Kit">　├ 拠点設立キット</option>
-    <option value="Treeplanter's Pot">　├ 植木鉢</option>
-    <option value="Wood Polish">　├ 木材磨き剤</option>
-    <option value="Wood Research">　└ 木材研究</option>
-
-    <option value="__group__鉱石・金属" style="font-weight:bold; color:#00c896;">⛏ 鉱石・金属（全て）</option>
-    <option value="Ore">　├ 鉱石</option>
-    <option value="Ore Chunk">　├ 鉱石塊</option>
-    <option value="Ore Concentrate">　├ 精鉱</option>
-    <option value="Chunk">　├ 塊</option>
-    <option value="Ingot">　├ インゴット</option>
-    <option value="Refined Ingot">　├ 精製インゴット</option>
-    <option value="Molten Ingot">　├ 溶融インゴット</option>
-    <option value="Precious Metal Ore">　├ 貴金属鉱石</option>
-    <option value="Precious Metal Nugget">　├ 貴金属粒</option>
-    <option value="Precious Metal Ingot">　├ 貴金属インゴット</option>
-    <option value="Nail">　├ 釘</option>
-    <option value="Frame">　├ フレーム</option>
-    <option value="Metal Solvent">　├ 金属溶剤</option>
-    <option value="Reforging Solvent">　├ 再鍛造溶剤</option>
-    <option value="Metal Research">　└ 金属研究</option>
-
-    <option value="__group__繊維・革" style="font-weight:bold; color:#00c896;">🧵 繊維・革（全て）</option>
-    <option value="Leather">　├ 革</option>
-    <option value="Refined Leather">　├ 精製革</option>
-    <option value="Leather Solvent">　├ 革溶剤</option>
-    <option value="Cloth">　├ 布</option>
-    <option value="Refined Cloth">　├ 精製布</option>
-    <option value="Filament">　├ 繊維糸</option>
-    <option value="Filament Plant">　├ 繊維植物</option>
-    <option value="Filament Seeds">　├ 繊維の種</option>
-    <option value="Thread">　├ 糸</option>
-    <option value="Tannin">　├ タンニン</option>
-    <option value="Raw Pelt">　├ 生皮</option>
-    <option value="Cleaned Pelt">　├ 洗浄皮</option>
-    <option value="Tanned Pelt">　├ なめし革</option>
-    <option value="Animal Hair">　├ 動物の毛</option>
-    <option value="Textile">　├ テキスタイル</option>
-    <option value="Sheeting">　├ シーティング</option>
-    <option value="Tarp">　├ タープ</option>
-    <option value="Cloth Research">　├ 布研究</option>
-    <option value="Leather Research">　└ 革研究</option>
-
-    <option value="__group__食料" style="font-weight:bold; color:#00c896;">🍖 食料（全て）</option>
-    <option value="Food">　├ 食料</option>
-    <option value="Basic Food">　├ 基本食料</option>
-    <option value="Meal">　├ 食事</option>
-    <option value="Raw Meal">　├ 生食料</option>
-    <option value="Raw Meat">　├ 生肉</option>
-    <option value="Berry">　├ ベリー</option>
-    <option value="Citric Berry">　├ シトリックベリー</option>
-    <option value="Mushroom">　├ キノコ</option>
-    <option value="Rare Mushroom">　├ レアキノコ</option>
-    <option value="Vegetable">　├ 野菜</option>
-    <option value="Vegetable Plant">　├ 野菜植物</option>
-    <option value="Vegetable Seeds">　├ 野菜の種</option>
-    <option value="Grain">　├ 穀物</option>
-    <option value="Grain Plant">　├ 穀物植物</option>
-    <option value="Grain Seeds">　├ 穀物の種</option>
-    <option value="Dough">　├ 生地</option>
-    <option value="Tea">　├ お茶</option>
-    <option value="Crop Oil">　├ 作物油</option>
-    <option value="Sugar">　├ 砂糖</option>
-    <option value="Salt">　└ 塩</option>
-
-    <option value="__group__魚" style="font-weight:bold; color:#00c896;">🐟 魚（全て）</option>
-    <option value="Ocean Fish">　├ 海水魚</option>
-    <option value="Lake Fish">　├ 淡水魚</option>
-    <option value="Baitfish">　├ ベイトフィッシュ</option>
-    <option value="Oceanfish Filet">　├ 海水魚フィレ</option>
-    <option value="Lake Fish Filet">　├ 淡水魚フィレ</option>
-    <option value="Oceanfish Scale">　├ 海水魚鱗</option>
-    <option value="Bait">　├ エサ</option>
-    <option value="Chum">　├ 撒き餌</option>
-    <option value="Fish Oil">　└ 魚油</option>
-
-    <option value="__group__宝石・素材" style="font-weight:bold; color:#00c896;">💎 宝石・素材（全て）</option>
-    <option value="Gem">　├ 宝石</option>
-    <option value="Uncut Gem">　├ 未カット宝石</option>
-    <option value="Gem Fragment">　├ 宝石破片</option>
-    <option value="Geode">　├ ジオード</option>
-    <option value="Jewelry">　└ ジュエリー</option>
-
-    <option value="__group__ポーション・消耗品" style="font-weight:bold; color:#00c896;">⚗️ ポーション・消耗品（全て）</option>
-    <option value="Healing Potion">　├ 回復ポーション</option>
-    <option value="Stamina Potion">　├ スタミナポーション</option>
-    <option value="Elixir">　├ エリクサー</option>
-    <option value="Catalyst">　├ 触媒</option>
-    <option value="Vial">　├ 瓶</option>
-    <option value="Ink">　├ インク</option>
-    <option value="Pigment">　├ 顔料</option>
-    <option value="Resin">　├ 樹脂</option>
-    <option value="Sap">　├ 樹液</option>
-    <option value="Firesand">　├ ファイアサンド</option>
-    <option value="Parchment">　└ 羊皮紙</option>
-
-    <option value="__group__ツール" style="font-weight:bold; color:#00c896;">🔧 ツール（全て）</option>
-    <option value="Forester Tool">　├ 伐採ツール</option>
-    <option value="Miner Tool">　├ 採掘ツール</option>
-    <option value="Farmer Tool">　├ 農業ツール</option>
-    <option value="Fisher Tool">　├ 釣りツール</option>
-    <option value="Hunter Tool">　├ 狩猟ツール</option>
-    <option value="Carpenter Tool">　├ 大工ツール</option>
-    <option value="Blacksmith Tool">　├ 鍛冶ツール</option>
-    <option value="Mason Tool">　├ 石工ツール</option>
-    <option value="Leatherworker Tool">　├ 革職人ツール</option>
-    <option value="Tailor Tool">　├ 仕立てツール</option>
-    <option value="Scholar Tool">　├ 学者ツール</option>
-    <option value="Forager Tool">　├ 採集ツール</option>
-    <option value="Tool Bundle">　├ ツールバンドル</option>
-    <option value="Scrap">　└ スクラップ</option>
-
-    <option value="__group__武器・防具" style="font-weight:bold; color:#00c896;">⚔️ 武器・防具（全て）</option>
-    <option value="Weapon">　├ 武器</option>
-    <option value="Metal Armor">　├ 金属防具</option>
-    <option value="Leather Clothing">　├ 革装備</option>
-    <option value="Cloth Clothing">　├ 布装備</option>
-    <option value="Dungeon Equipment">　└ ダンジョン装備</option>
-
-    <option value="__group__研究・知識" style="font-weight:bold; color:#00c896;">📚 研究・知識（全て）</option>
-    <option value="Codex">　├ コーデックス</option>
-    <option value="Journal">　├ ジャーナル</option>
-    <option value="Cloth Research">　├ 布研究</option>
-    <option value="Leather Research">　├ 革研究</option>
-    <option value="Metal Research">　├ 金属研究</option>
-    <option value="Wood Research">　├ 木材研究</option>
-    <option value="Stone Research">　├ 石材研究</option>
-    <option value="Outpost Research">　├ 前哨地研究</option>
-    <option value="Schematic Fragments">　└ 設計図破片</option>
-
-    <option value="__group__家具・装飾" style="font-weight:bold; color:#00c896;">🏠 家具・装飾（全て）</option>
-    <option value="Furniture">　├ 家具</option>
-    <option value="Cosmetic Clothes">　├ コスメ服</option>
-    <option value="Premium Cosmetic">　├ プレミアムコスメ</option>
-    <option value="Seasonal Cosmetic">　├ 季節コスメ</option>
-    <option value="Interior Wall Deed">　└ 内壁証書</option>
-
-    <option value="__group__農業" style="font-weight:bold; color:#00c896;">🌿 農業（全て）</option>
-    <option value="Fertilizer">　├ 肥料</option>
-    <option value="Wild Seeds">　├ 野生の種</option>
-    <option value="Tree Seed">　├ 木の種</option>
-    <option value="Sapling">　├ 苗木</option>
-    <option value="Clay">　└ 粘土</option>
-
-    <option value="__group__ダンジョン" style="font-weight:bold; color:#00c896;">🗡️ ダンジョン（全て）</option>
-    <option value="Dungeon Loot">　├ ダンジョン戦利品</option>
-    <option value="Dungeon Crafting Material">　├ ダンジョン素材</option>
-    <option value="Dungeon Upgrade">　├ ダンジョンアップグレード</option>
-    <option value="Common Slayer Material">　├ スレイヤー素材</option>
-    <option value="Rare Slayer Material">　├ レアスレイヤー素材</option>
-    <option value="Ancient Relic">　├ 古代遺物</option>
-    <option value="Ancient Hieroglyphs">　├ 古代象形文字</option>
-    <option value="Ancient Component">　└ 古代コンポーネント</option>
-
-    <option value="__group__機械・素材" style="font-weight:bold; color:#00c896;">⚙️ 機械・素材（全て）</option>
-    <option value="Heart Component">　├ ハートコンポーネント</option>
-    <option value="Automata Heart">　├ オートマタハート</option>
-    <option value="Frame">　└ フレーム</option>
-
-    <option value="__group__動物" style="font-weight:bold; color:#00c896;">🐾 動物（全て）</option>
-    <option value="Animal">　├ 動物本体</option>
-    <option value="Pet Egg">　├ ペット卵</option>
-    <option value="Taming Item">　└ テイムアイテム</option>
-
-    <option value="__group__その他" style="font-weight:bold; color:#00c896;">📦 その他（全て）</option>
-    <option value="Package">　├ パッケージ</option>
-    <option value="Hex Coin Sack">　├ ヘックスコイン袋</option>
-    <option value="Premium Item">　├ プレミアムアイテム</option>
-    <option value="Quest Item">　├ クエストアイテム</option>
-    <option value="Deed">　├ 証書</option>
-    <option value="Sailing Loot">　├ 帆走戦利品</option>
-    <option value="Trader License">　├ 商人ライセンス</option>
-    <option value="Supplies">　├ 補給品</option>
-    <option value="Water">　├ 水</option>
-    <option value="Wagon II Quest">　├ ワゴンクエスト</option>
-    <option value="Crushed Shells">　└ 砕いた殻</option>
-  </select>
-</div>
-        
+  <!-- 注文種別 -->
   <div class="filter-group">
     <label>注文種別</label>
     <select id="orderTypeFilter">
@@ -283,6 +101,151 @@
       <option value="sell">売り注文のみ</option>
       <option value="buy">買い注文のみ</option>
     </select>
+  </div>
+
+  <!-- カテゴリー -->
+  <div class="filter-group">
+    <label>カテゴリー</label>
+    <div class="multi-select-wrap">
+      <div class="multi-select-btn" onclick="toggleDropdown('categoryDropdown')">
+        <span id="categoryLabel">すべて</span>
+        <span class="ms-arrow">▼</span>
+      </div>
+      <div class="multi-select-dropdown hidden" id="categoryDropdown">
+        <label class="ms-item ms-all"><input type="checkbox" value="all" onchange="handleMultiAll('category', this)"> すべて解除</label>
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__木材・建材" onchange="updateMultiLabel('category')">🪵 木材・建材（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Wood Log" onchange="updateMultiLabel('category')"> 木材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Plank" onchange="updateMultiLabel('category')"> 板材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Untreated Plank" onchange="updateMultiLabel('category')"> 未処理板材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Refined Plank" onchange="updateMultiLabel('category')"> 精製板材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Stripped Wood" onchange="updateMultiLabel('category')"> 加工木材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Timber" onchange="updateMultiLabel('category')"> 材木</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Trunk" onchange="updateMultiLabel('category')"> 幹</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Bark" onchange="updateMultiLabel('category')"> 樹皮</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Brick" onchange="updateMultiLabel('category')"> レンガ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Brick Slab" onchange="updateMultiLabel('category')"> レンガスラブ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Refined Brick" onchange="updateMultiLabel('category')"> 精製レンガ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Construction Material" onchange="updateMultiLabel('category')"> 建設素材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Wood Polish" onchange="updateMultiLabel('category')"> 木材磨き剤</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Wood Research" onchange="updateMultiLabel('category')"> 木材研究</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__鉱石・金属" onchange="updateMultiLabel('category')">⛏ 鉱石・金属（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ore" onchange="updateMultiLabel('category')"> 鉱石</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ore Chunk" onchange="updateMultiLabel('category')"> 鉱石塊</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ore Concentrate" onchange="updateMultiLabel('category')"> 精鉱</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ingot" onchange="updateMultiLabel('category')"> インゴット</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Refined Ingot" onchange="updateMultiLabel('category')"> 精製インゴット</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Molten Ingot" onchange="updateMultiLabel('category')"> 溶融インゴット</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Precious Metal Ore" onchange="updateMultiLabel('category')"> 貴金属鉱石</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Precious Metal Nugget" onchange="updateMultiLabel('category')"> 貴金属粒</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Precious Metal Ingot" onchange="updateMultiLabel('category')"> 貴金属インゴット</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Nail" onchange="updateMultiLabel('category')"> 釘</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Frame" onchange="updateMultiLabel('category')"> フレーム</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Metal Solvent" onchange="updateMultiLabel('category')"> 金属溶剤</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Metal Research" onchange="updateMultiLabel('category')"> 金属研究</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__繊維・革" onchange="updateMultiLabel('category')">🧵 繊維・革（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Leather" onchange="updateMultiLabel('category')"> 革</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Refined Leather" onchange="updateMultiLabel('category')"> 精製革</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Cloth" onchange="updateMultiLabel('category')"> 布</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Refined Cloth" onchange="updateMultiLabel('category')"> 精製布</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Filament" onchange="updateMultiLabel('category')"> 繊維糸</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Thread" onchange="updateMultiLabel('category')"> 糸</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Tannin" onchange="updateMultiLabel('category')"> タンニン</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Raw Pelt" onchange="updateMultiLabel('category')"> 生皮</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Tanned Pelt" onchange="updateMultiLabel('category')"> なめし革</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Animal Hair" onchange="updateMultiLabel('category')"> 動物の毛</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Textile" onchange="updateMultiLabel('category')"> テキスタイル</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Cloth Research" onchange="updateMultiLabel('category')"> 布研究</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Leather Research" onchange="updateMultiLabel('category')"> 革研究</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__食料" onchange="updateMultiLabel('category')">🍖 食料（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Food" onchange="updateMultiLabel('category')"> 食料</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Meal" onchange="updateMultiLabel('category')"> 食事</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Raw Meat" onchange="updateMultiLabel('category')"> 生肉</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Berry" onchange="updateMultiLabel('category')"> ベリー</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Mushroom" onchange="updateMultiLabel('category')"> キノコ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Vegetable" onchange="updateMultiLabel('category')"> 野菜</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Grain" onchange="updateMultiLabel('category')"> 穀物</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Dough" onchange="updateMultiLabel('category')"> 生地</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Tea" onchange="updateMultiLabel('category')"> お茶</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Crop Oil" onchange="updateMultiLabel('category')"> 作物油</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__魚" onchange="updateMultiLabel('category')">🐟 魚（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ocean Fish" onchange="updateMultiLabel('category')"> 海水魚</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Lake Fish" onchange="updateMultiLabel('category')"> 淡水魚</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Baitfish" onchange="updateMultiLabel('category')"> ベイトフィッシュ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Oceanfish Filet" onchange="updateMultiLabel('category')"> 海水魚フィレ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Lake Fish Filet" onchange="updateMultiLabel('category')"> 淡水魚フィレ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Bait" onchange="updateMultiLabel('category')"> エサ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Fish Oil" onchange="updateMultiLabel('category')"> 魚油</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__宝石・素材" onchange="updateMultiLabel('category')">💎 宝石・素材（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Gem" onchange="updateMultiLabel('category')"> 宝石</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Uncut Gem" onchange="updateMultiLabel('category')"> 未カット宝石</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Gem Fragment" onchange="updateMultiLabel('category')"> 宝石破片</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Geode" onchange="updateMultiLabel('category')"> ジオード</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Jewelry" onchange="updateMultiLabel('category')"> ジュエリー</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__ポーション・消耗品" onchange="updateMultiLabel('category')">⚗️ ポーション・消耗品（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Healing Potion" onchange="updateMultiLabel('category')"> 回復ポーション</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Stamina Potion" onchange="updateMultiLabel('category')"> スタミナポーション</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Elixir" onchange="updateMultiLabel('category')"> エリクサー</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Catalyst" onchange="updateMultiLabel('category')"> 触媒</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ink" onchange="updateMultiLabel('category')"> インク</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Firesand" onchange="updateMultiLabel('category')"> ファイアサンド</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__ツール" onchange="updateMultiLabel('category')">🔧 ツール（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Forester Tool" onchange="updateMultiLabel('category')"> 伐採ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Miner Tool" onchange="updateMultiLabel('category')"> 採掘ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Farmer Tool" onchange="updateMultiLabel('category')"> 農業ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Fisher Tool" onchange="updateMultiLabel('category')"> 釣りツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Hunter Tool" onchange="updateMultiLabel('category')"> 狩猟ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Blacksmith Tool" onchange="updateMultiLabel('category')"> 鍛冶ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Mason Tool" onchange="updateMultiLabel('category')"> 石工ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Scholar Tool" onchange="updateMultiLabel('category')"> 学者ツール</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Tool Bundle" onchange="updateMultiLabel('category')"> ツールバンドル</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__武器・防具" onchange="updateMultiLabel('category')">⚔️ 武器・防具（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Weapon" onchange="updateMultiLabel('category')"> 武器</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Metal Armor" onchange="updateMultiLabel('category')"> 金属防具</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Leather Clothing" onchange="updateMultiLabel('category')"> 革装備</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Cloth Clothing" onchange="updateMultiLabel('category')"> 布装備</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Dungeon Equipment" onchange="updateMultiLabel('category')"> ダンジョン装備</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__研究・知識" onchange="updateMultiLabel('category')">📚 研究・知識（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Codex" onchange="updateMultiLabel('category')"> コーデックス</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Journal" onchange="updateMultiLabel('category')"> ジャーナル</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Outpost Research" onchange="updateMultiLabel('category')"> 前哨地研究</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__家具・装飾" onchange="updateMultiLabel('category')">🏠 家具・装飾（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Furniture" onchange="updateMultiLabel('category')"> 家具</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Premium Cosmetic" onchange="updateMultiLabel('category')"> プレミアムコスメ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Seasonal Cosmetic" onchange="updateMultiLabel('category')"> 季節コスメ</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__農業" onchange="updateMultiLabel('category')">🌿 農業（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Fertilizer" onchange="updateMultiLabel('category')"> 肥料</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Wild Seeds" onchange="updateMultiLabel('category')"> 野生の種</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Tree Seed" onchange="updateMultiLabel('category')"> 木の種</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Sapling" onchange="updateMultiLabel('category')"> 苗木</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__ダンジョン" onchange="updateMultiLabel('category')">🗡️ ダンジョン（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Dungeon Loot" onchange="updateMultiLabel('category')"> ダンジョン戦利品</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Dungeon Crafting Material" onchange="updateMultiLabel('category')"> ダンジョン素材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Common Slayer Material" onchange="updateMultiLabel('category')"> スレイヤー素材</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Ancient Relic" onchange="updateMultiLabel('category')"> 古代遺物</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__動物" onchange="updateMultiLabel('category')">🐾 動物（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Animal" onchange="updateMultiLabel('category')"> 動物本体</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Pet Egg" onchange="updateMultiLabel('category')"> ペット卵</label>
+
+        <label class="ms-item ms-group"><input type="checkbox" value="__group__その他" onchange="updateMultiLabel('category')">📦 その他（全て）</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Package" onchange="updateMultiLabel('category')"> パッケージ</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Premium Item" onchange="updateMultiLabel('category')"> プレミアムアイテム</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Quest Item" onchange="updateMultiLabel('category')"> クエストアイテム</label>
+        <label class="ms-item ms-child"><input type="checkbox" value="Sailing Loot" onchange="updateMultiLabel('category')"> 帆走戦利品</label>
+      </div>
+    </div>
   </div>
 </div>
   
