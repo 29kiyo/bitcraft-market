@@ -500,20 +500,20 @@ function renderPriceSummary(item, priceData) {
         <div class="pc-sub">Highest Buy</div>
       </div>
       <div class="price-card avg">
-        <div class="pc-label">24h平均</div>
-        <div class="pc-value">${formatPrice(avg24h)} ${changeHtml}</div>
-        <div class="pc-sub">24h Average</div>
-      </div>
-      <div class="price-card avg7">
-        <div class="pc-label">7日平均</div>
-        <div class="pc-value">${formatPrice(avg7d)}</div>
-        <div class="pc-sub">7-day Average</div>
-      </div>
-      <div class="price-card vol">
-        <div class="pc-label">24h取引量</div>
-        <div class="pc-value">${formatNum(volume24h)}</div>
-        <div class="pc-sub">24h Volume</div>
-      </div>
+  <div class="pc-label">24h平均</div>
+  <div class="pc-value" id="pcAvg24h">${formatPrice(avg24h)} ${changeHtml}</div>
+  <div class="pc-sub">24h Average</div>
+</div>
+<div class="price-card avg7">
+  <div class="pc-label">7日平均</div>
+  <div class="pc-value" id="pcAvg7d">${formatPrice(avg7d)}</div>
+  <div class="pc-sub">7-day Average</div>
+</div>
+<div class="price-card vol">
+  <div class="pc-label">24h取引量</div>
+  <div class="pc-value" id="pcVol">${formatNum(volume24h)}</div>
+  <div class="pc-sub">24h Volume</div>
+</div>
     </div>
   `;
 }
@@ -534,8 +534,18 @@ window.updatePriceByRegion = function() {
 
   const pcLowestSell = document.getElementById('pcLowestSell');
   const pcHighestBuy = document.getElementById('pcHighestBuy');
+  const pcAvg24h = document.getElementById('pcAvg24h');
+  const pcAvg7d = document.getElementById('pcAvg7d');
+  const pcVol = document.getElementById('pcVol');
+
   if (pcLowestSell) pcLowestSell.innerHTML = formatPrice(lowestSell ?? '—');
   if (pcHighestBuy) pcHighestBuy.innerHTML = formatPrice(highestBuy ?? '—');
+  
+  if (region) {
+    if (pcAvg24h) pcAvg24h.innerHTML = '—';
+    if (pcAvg7d) pcAvg7d.innerHTML = '—';
+    if (pcVol) pcVol.innerHTML = '—';
+  }
 };
 
 function renderPriceChart(priceData, period = '7d') {
