@@ -977,6 +977,27 @@ window.refreshTradeLog = async function() {
   if (priceData) renderTradeLog(priceData);
 };
 
+window.clearAllFilters = function() {
+  // Tier
+  document.querySelectorAll('#tierDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('tierLabel').textContent = 'すべて';
+  
+  // レア度
+  document.querySelectorAll('#rarityDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('rarityLabel').textContent = 'すべて';
+  
+  // カテゴリー
+  document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('categoryLabel').textContent = 'すべて';
+  
+  // 注文種別
+  document.getElementById('orderTypeFilter').value = '';
+  
+  // 検索ワードもある場合は再検索
+  const q = searchInput.value.trim();
+  if (q) doSearch();
+};
+
 window.filterTradeLog = function() {
   const region = document.getElementById('logRegionFilter')?.value || '';
   const trades = window._tradeLogs || [];
