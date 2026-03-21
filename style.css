@@ -1033,11 +1033,9 @@ footer a:hover { color: var(--accent); }
 }
 
 .orders-list {
-  min-width: 0;
   overflow-y: auto;
-  max-height: 600px;
+  max-height: 800px;
 }
-
 .region-order-filter {
   background: #1a2535;
   border: 1px solid rgba(255,255,255,0.15);
