@@ -1188,17 +1188,6 @@ footer a:hover { color: var(--accent); }
   padding: 8px 0;
 }
 
-.orders-table-header {
-  position: sticky;
-  top: 233px;
-  z-index: 5;
-  background: #0d1520;
-}
-
-.orders-table-body {
-  overflow-y: auto;
-  max-height: 500px;
-}
 
 .orders-table-body::-webkit-scrollbar {
   display: none;
