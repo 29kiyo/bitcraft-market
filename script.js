@@ -671,8 +671,9 @@ const regionOptions = regions.map(r => {
   const html = filtered.length === 0
   ? '<p class="no-orders">注文が見つかりませんでした</p>'
   : `
+    ${pagination}
     <table class="orders-table">
-      <thead class="orders-thead">
+      <thead>
         <tr>
           <th>種別</th>
           <th>
