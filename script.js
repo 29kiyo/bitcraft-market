@@ -283,7 +283,7 @@ function renderSearchResults(items, page = 1) {
     <button class="page-btn" onclick="changePage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
   </div>
 ` : ''}
-<div class="result-grid">
+
     <div class="result-grid">
       ${pageItems.map(item => {
         const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
@@ -778,18 +778,6 @@ window.filterTradeLog = function() {
   document.getElementById('logTableBody').innerHTML = renderLogRows(filtered);
 };
 
-window.changeOrderPage = function(page) {
-  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort);
-};
-
-window.changeOrderSort = function(sort) {
-  renderOrders(currentOrders, orderTypeFilter.value, 1, sort);
-};
-
-window.changeOrderType = function(type) {
-  orderTypeFilter.value = type;
-  renderOrders(currentOrders, type, 1, currentOrderSort);
-};
 
 function renderMap(orders, orderType) {
   let filtered = orders;
