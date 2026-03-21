@@ -687,7 +687,7 @@ const regionOptions = regions.map(r => {
       ${pagination}
     `;
 
-  document.getElementById('ordersList').innerHTML = `
+document.getElementById('ordersList').innerHTML = `
   <div class="orders-list-header">
     <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
     <div class="order-type-tabs">
@@ -698,11 +698,12 @@ const regionOptions = regions.map(r => {
         <option value="">全リージョン</option>
         ${regionOptions}
       </select>
-      <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)">
     </div>
   </div>
+  <div class="orders-search-bar">
+    <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
+  </div>
   ${html}
-  ${pagination}
 `;
 }
 
