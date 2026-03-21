@@ -1088,3 +1088,14 @@ footer a:hover { color: var(--accent); }
     padding: 6px 4px;
   }
 }
+
+.orders-list {
+  position: relative;
+}
+
+.orders-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0d1520;
+}
