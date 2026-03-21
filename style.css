@@ -1203,3 +1203,27 @@ footer a:hover { color: var(--accent); }
 .orders-table-body::-webkit-scrollbar {
   display: none;
 }
+
+.orders-table-header table,
+.orders-table-body table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.orders-table-header th:nth-child(1),
+.orders-table-body td:nth-child(1) { width: 60px; }
+
+.orders-table-header th:nth-child(2),
+.orders-table-body td:nth-child(2) { width: 100px; }
+
+.orders-table-header th:nth-child(3),
+.orders-table-body td:nth-child(3) { width: 60px; }
+
+.orders-table-header th:nth-child(4),
+.orders-table-body td:nth-child(4) { width: 150px; }
+
+.orders-table-header th:nth-child(5),
+.orders-table-body td:nth-child(5) { width: 120px; }
+
+.orders-table-header th:nth-child(6),
+.orders-table-body td:nth-child(6) { width: 120px; }
