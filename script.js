@@ -614,17 +614,42 @@ window.changePeriod = async function(period) {
   const priceData = res.ok ? await res.json() : null;
   renderPriceChart(priceData, period);
 };
+
 function renderSupplyDemand(orders) {
-  const sellOrders = orders.filter(o => o.orderType === 'sell');
-  const buyOrders = orders.filter(o => o.orderType === 'buy');
+  const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
+  
+  document.getElementById('supplyDemand').innerHTML = `
+    <h3 class="section-title">📊 需要と供給</h3>
+    <div class="sd-region-filter">
+      <select id="sdRegionFilter" onchange="updateSupplyDemand()">
+        <option value="">全リージョン</option>
+        ${regions.map(r => {
+          const rid = orders.find(o => o.regionName === r)?.regionId || '';
+          return `<option value="${r}">${r} (R${rid})</option>`;
+        }).join('')}
+      </select>
+    </div>
+    <div id="sdContent"></div>
+  `;
+
+  window._sdOrders = orders;
+  updateSupplyDemand();
+}
+
+window.updateSupplyDemand = function() {
+  const region = document.getElementById('sdRegionFilter')?.value || '';
+  const orders = window._sdOrders || [];
+  const filtered = region ? orders.filter(o => o.regionName === region) : orders;
+
+  const sellOrders = filtered.filter(o => o.orderType === 'sell');
+  const buyOrders = filtered.filter(o => o.orderType === 'buy');
   const totalSupply = sellOrders.reduce((s, o) => s + (Number(o.quantity) || 0), 0);
   const totalDemand = buyOrders.reduce((s, o) => s + (Number(o.quantity) || 0), 0);
   const total = totalSupply + totalDemand;
   const supplyPct = total > 0 ? Math.round((totalSupply / total) * 100) : 50;
   const demandPct = 100 - supplyPct;
 
-  document.getElementById('supplyDemand').innerHTML = `
-    <h3 class="section-title">📊 需要と供給</h3>
+  document.getElementById('sdContent').innerHTML = `
     <div class="sd-wrap">
       <div class="sd-info">
         <div class="sd-item sell">
@@ -654,7 +679,7 @@ function renderSupplyDemand(orders) {
       </div>
     </div>
   `;
-}
+};
 
 
 function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '', claimFilter = '') {
