@@ -199,7 +199,8 @@ const yomiMatched = searchByYomi(q);
 yomiMatched.forEach(en => matchedEn.add(en));
       const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
       for (const [ja, en] of sorted) {
-        if (ja.includes(q) || q.includes(ja)) {
+        if (ja.includes(q) || q.includes(ja) ||
+    toHiragana(ja).includes(toHiragana(q)) || toHiragana(q).includes(toHiragana(ja))) {
           matchedEn.add(en.toLowerCase());
         }
       }
@@ -293,7 +294,8 @@ const yomiMatched = searchByYomi(q);
 yomiMatched.forEach(en => matchedEn.add(en));
         const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
         for (const [ja, en] of sorted) {
-          if (ja.includes(q) || q.includes(ja)) matchedEn.add(en.toLowerCase());
+          if (ja.includes(q) || q.includes(ja) ||
+    toHiragana(ja).includes(toHiragana(q)) || toHiragana(q).includes(toHiragana(ja))) matchedEn.add(en.toLowerCase());
         }
         if (matchedEn.size > 0) {
           filtered = filtered.filter(item => {
