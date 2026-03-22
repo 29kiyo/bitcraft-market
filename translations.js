@@ -456,6 +456,10 @@ const ITEM_TRANSLATIONS = {
 "再鍛造溶剤": "Reforging Solvent",
 "海水魚鱗": "Oceanfish Scale",
 "設計図破片": "Schematic Fragments",
+"拡張テレポートエナジーセル": "Expanded Teleportation Energy Cell",
+  "セル": "cell",
+  "テレポート": "Teleportation",
+  "エナジー": " Energy",
   
 };
 
@@ -525,6 +529,7 @@ const ITEM_YOMI = {
   "証書":     "しょうしょ",
   "補給品":   "ほきゅうひん",
   "令状":     "れいじょう",
+  "拡張":     "かくちょう",
 };
 
 // ひらがな→カタカナ変換
