@@ -4,7 +4,7 @@ const ITEM_TRANSLATIONS = {
   // ===== 素材品質プレフィックス =====
   "粗い": "Rough",
   "シンプル": "Simple",
-  "ファイン": "Fine",
+  "上質な": "Fine",
   "頑丈な": "Sturdy",
   "装飾的な": "Ornate",
   "卓越した": "Exquisite",
@@ -177,7 +177,7 @@ const ITEM_TRANSLATIONS = {
   "金属溶剤": "Metal Solvent",
   "再鍛造溶剤": "Reforging Solvent",
   "土器ミックス": "Potter's Mix",
-  "バーサーカーキノコ": "Berserker Mushroom",
+  "狂戦士キノコ": "Berserker Mushroom",
 
   // ===== ツール系 =====
   "斧": "Axe",
@@ -840,7 +840,7 @@ function translateQuery(query) {
 const EN_QUALITY_PREFIX = {
   "Rough": "粗い",
   "Simple": "シンプル",
-  "Fine": "ファイン",
+  "Fine": "上質な",
   "Sturdy": "頑丈な",
   "Ornate": "装飾的な",
   "Exquisite": "卓越した",
@@ -1086,6 +1086,45 @@ const EN_ITEM_BASE = {
   "Scale": "鱗",
 };
 
+// カテゴリ別プレフィックス訳
+const EN_QUALITY_BY_CATEGORY = {
+  "Rough":     { material: "粗い",         equipment: "粗い",         food: "素朴な" },
+  "Simple":    { material: "シンプルな",   equipment: "シンプルな",   food: "シンプルな" },
+  "Fine":      { material: "上質な",       equipment: "上質な",       food: "上質な" },
+  "Sturdy":    { material: "頑丈な",       equipment: "頑丈な",       food: "頑丈な" },
+  "Ornate":    { material: "装飾的な",     equipment: "装飾的な",     food: "装飾的な" },
+  "Exquisite": { material: "上質な",       equipment: "精巧な",       food: "極上の" },
+  "Peerless":  { material: "比類なき",     equipment: "比類なき",     food: "無双の" },
+  "Infused":   { material: "注入された",   equipment: "注入された",   food: "注入された" },
+  "Basic":     { material: "ベーシック",   equipment: "ベーシック",   food: "ベーシック" },
+  "Plain":     { material: "プレーン",     equipment: "プレーン",     food: "プレーンな" },
+  "Savory":    { material: "風味豊かな",   equipment: "風味豊かな",   food: "風味豊かな" },
+  "Zesty":     { material: "ゼスティ",     equipment: "ゼスティ",     food: "ゼスティな" },
+  "Succulent": { material: "ジューシーな", equipment: "ジューシーな", food: "ジューシーな" },
+  "Ambrosial": { material: "アンブロシアル", equipment: "アンブロシアル", food: "アンブロシアル" },
+};
+
+const EN_FOOD_BASES = new Set([
+  "Berry Pie", "Bread", "Bulb Rolls", "Chilling Tea", "Cooked Berries",
+  "Deluxe Berry Pie", "Deluxe Bulb Rolls", "Deluxe Fish and Bulbs",
+  "Deluxe Ground Meat and Mashed Bulbs", "Deluxe Meat Sandwich",
+  "Deluxe Mushroom Stuffed Bulbs", "Deluxe Ocean Fish Sticks",
+  "Fish and Bulbs", "Ground Meat and Mashed Bulbs", "Hot Tea", "Mashed Bulbs",
+  "Mushroom Skewer", "Mushroom Stuffed Bulbs", "Ocean Fish Sticks",
+  "Raw Berry Pie", "Raw Bulb Rolls", "Roasted Fish", "Roasted Meat",
+  "Roasted Ocean Fish", "Skewered Baitfish",
+]);
+
+const EN_EQUIPMENT_BASES = new Set([
+  "Plated Armor", "Plated Belt", "Plated Boots", "Plated Bracers", "Plated Helm", "Plated Legguards",
+  "Duelist Armor", "Duelist Belt", "Duelist Boots", "Duelist Bracers", "Duelist Helm", "Duelist Legguards",
+  "Leather Belt", "Leather Boots", "Leather Cap", "Leather Gloves", "Leather Leggings", "Leather Shirt",
+  "Woven Belt", "Woven Cap", "Woven Gloves", "Woven Shirt", "Woven Shoes", "Woven Shorts",
+  "Hardened Shell Amulet", "Jakyl Fang Amulet", "Stinger Amulet", "Umbura Fang Amulet",
+  "Crystalized Slime Amulet", "Gem Encrusted Ring",
+  "Diamond Ring", "Emerald Ring", "Ruby Ring", "Sapphire Ring",
+]);
+
 function getJaName(enName) {
   if (!enName) return null;
 
@@ -1100,11 +1139,15 @@ function getJaName(enName) {
     }
   }
 
-  // 3. 品質プレフィックス＋ベース名
-  for (const [enQ, jaQ] of Object.entries(EN_QUALITY_PREFIX)) {
+  // 3. 品質プレフィックス＋ベース名（カテゴリ別訳）
+  for (const [enQ, byCategory] of Object.entries(EN_QUALITY_BY_CATEGORY)) {
     if (enName.startsWith(enQ + " ")) {
       const base = enName.slice(enQ.length + 1);
-      if (EN_ITEM_BASE[base]) return jaQ + EN_ITEM_BASE[base];
+      if (!EN_ITEM_BASE[base]) continue;
+      const cat = EN_FOOD_BASES.has(base) ? "food"
+                : EN_EQUIPMENT_BASES.has(base) ? "equipment"
+                : "material";
+      return byCategory[cat] + EN_ITEM_BASE[base];
     }
   }
 
@@ -1112,4 +1155,5 @@ function getJaName(enName) {
   if (EN_ITEM_BASE[enName]) return EN_ITEM_BASE[enName];
 
   return null;
+}
 }
