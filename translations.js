@@ -1151,7 +1151,10 @@ function getJaName(enName) {
     }
   }
 
-  // 4. ベース名のみ
+  // 4. 完全一致テーブル
+  if (EN_EXACT[enName]) return EN_EXACT[enName];
+
+  // 5. ベース名のみ
   if (EN_ITEM_BASE[enName]) return EN_ITEM_BASE[enName];
 
   return null;
