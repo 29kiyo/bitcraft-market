@@ -531,9 +531,13 @@ function renderPriceSummary(item, priceData) {
   const avg7d = stats.avg7d ?? '—';
   const volume24h = priceData?.priceData?.[0]?.volume ?? 0;
   const change24h = stats.priceChange24h;
+  const change7d = stats.priceChange7d;
 
   const changeHtml = change24h != null
     ? `<span class="${change24h >= 0 ? 'pos' : 'neg'}">${change24h >= 0 ? '▲' : '▼'} ${Math.abs(change24h).toFixed(1)}%</span>`
+    : '';
+  const change7dHtml = change7d != null
+    ? `<span class="${change7d >= 0 ? 'pos' : 'neg'}">${change7d >= 0 ? '▲' : '▼'} ${Math.abs(change7d).toFixed(1)}%</span>`
     : '';
 
   const regions = [...new Set(currentOrders.map(o => o.regionName).filter(Boolean))].sort();
@@ -578,7 +582,7 @@ function renderPriceSummary(item, priceData) {
       </div>
       <div class="price-card avg7">
         <div class="pc-label">7日平均</div>
-        <div class="pc-value" id="pcAvg7d">${formatPrice(avg7d)}</div>
+        <div class="pc-value" id="pcAvg7d">${formatPrice(avg7d)} ${change7dHtml}</div>
         <div class="pc-sub">7-day Average</div>
       </div>
       <div class="price-card vol">
