@@ -1156,4 +1156,3 @@ function getJaName(enName) {
 
   return null;
 }
-}
