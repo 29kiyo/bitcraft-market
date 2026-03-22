@@ -268,6 +268,14 @@ function hideSuggestions() {
 // メイン検索
 // ============================================
 async function doSearch() {
+  // 新しい検索時にフィルターをクリア
+  document.querySelectorAll('#tierDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('tierLabel').textContent = 'すべて';
+  document.querySelectorAll('#rarityDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('rarityLabel').textContent = 'すべて';
+  document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('categoryLabel').textContent = 'すべて';
+  document.getElementById('orderTypeFilter').value = '';
   const q = searchInput.value.trim();
   const tiers = getCheckedValues('tier');
 const rarities = getCheckedValues('rarity');
