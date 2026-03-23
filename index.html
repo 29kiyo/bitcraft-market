@@ -376,11 +376,30 @@
       </div>
     </section>
     <!-- 初期表示 -->
-    <section id="emptyState" class="empty-state">
-      <div class="empty-icon">⚒</div>
-      <p>アイテム名を入力して検索してください</p>
-      <p class="empty-sub">日本語・英語どちらでも検索できます</p>
-    </section>
+<section id="emptyState" class="empty-state-layout">
+  <!-- 左：買い時アイテム -->
+  <div class="arb-panel">
+    <div class="arbitrage-header">
+      <h3 class="section-title">📉 買い時アイテム</h3>
+      <button id="bargainBtn" class="arb-refresh-btn" onclick="loadBargain()">🔄 更新</button>
+    </div>
+    <p class="arb-desc">最低売値が7日平均より安いアイテム一覧</p>
+    <div id="bargainList" class="arbitrage-list">
+      <p class="arb-empty">「更新」を押すと買い時のアイテムを表示します</p>
+    </div>
+  </div>
+  <!-- 右：転売チャンスリスト -->
+  <div class="arb-panel">
+    <div class="arbitrage-header">
+      <h3 class="section-title">💹 転売チャンスリスト</h3>
+      <button id="arbitrageBtn" class="arb-refresh-btn" onclick="loadArbitrage()">🔄 更新</button>
+    </div>
+    <p class="arb-desc">最高買値が最低売値より高いアイテム一覧</p>
+    <div id="arbitrageList" class="arbitrage-list">
+      <p class="arb-empty">「更新」を押すと転売益が出るアイテムを表示します</p>
+    </div>
+  </div>
+</section>
 
     <!-- ローディング -->
     <div id="loading" class="loading hidden">
