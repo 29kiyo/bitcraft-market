@@ -4,6 +4,16 @@
 
 const API_BASE = 'https://bitcraft-proxy.29kiyo.workers.dev/api';
 
+// アイコン画像をキャッシュして再ロードを防ぐ
+const iconCache = new Map();
+function getCachedIcon(iconAssetName) {
+  if (!iconAssetName) return '';
+  if (iconCache.has(iconAssetName)) return iconCache.get(iconAssetName);
+  const url = `https://bitjita.com/${iconAssetName}.webp`;
+  iconCache.set(iconAssetName, url);
+  return url;
+}
+
 
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
@@ -236,8 +246,7 @@ function showSuggestions(items) {
     const div = document.createElement('div');
     div.className = 'suggestion-item';
     const jaName = getJaName(item.name);
-const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
-
+const iconUrl = getCachedIcon(item.iconAssetName);
 // 日本語名が英語名より短すぎる場合（プレフィックスのみ）は使わない
 const useJaName = jaName && jaName.length > 2 && item.name.toLowerCase() !== jaName.toLowerCase();
 
@@ -248,7 +257,8 @@ div.innerHTML = `
     <span class="s-sub">${useJaName ? item.name : ''}</span>
   </div>
   ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
-  <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+  <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}
+  ${item.tag ? `<span class="s-tag">${item.tag}</span>` : ''}</span>
 `;
     div.addEventListener('click', () => {
       searchInput.value = item.name;
@@ -386,7 +396,7 @@ function renderSearchResults(items, page = 1) {
 
     <div class="result-grid">
       ${pageItems.map(item => {
-        const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
+        const iconUrl = getCachedIcon(item.iconAssetName);
         const jaName = getJaName(item.name);
         const useJaName = jaName && jaName.length > 2;
         return `
@@ -398,7 +408,8 @@ function renderSearchResults(items, page = 1) {
             </div>
             <div class="rc-badges">
               ${item.tier && item.tier > 0 ? `<span class="badge tier">T${item.tier}</span>` : ''}
-              <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+              <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}
+              ${item.tag ? `<span class="s-tag">${item.tag}</span>` : ''}</span>
             </div>
           </div>
         `;
@@ -508,7 +519,7 @@ function renderResult(item, priceData, orders, orderType) {
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
   const useJaName = jaName && jaName.length > 2;
-  const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
+  const iconUrl = getCachedIcon(item.iconAssetName);
 
   document.getElementById('itemHeader').innerHTML = `
     <div class="item-title">
