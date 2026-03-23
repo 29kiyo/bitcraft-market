@@ -1394,3 +1394,26 @@ footer a:hover { color: var(--accent); }
   border: 1px solid var(--border);
   white-space: nowrap;
 }
+
+.ms-parent {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.ms-parent:hover { background: var(--bg2); color: var(--text2); }
+.ms-parent-arrow { font-size: 10px; transition: transform 0.2s; }
+.ms-parent.open .ms-parent-arrow { transform: rotate(90deg); }
+.ms-section { }
+.ms-section-body { display: none; }
+.ms-section-body.open { display: block; }
