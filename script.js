@@ -1238,3 +1238,123 @@ function clearError() {
   errorMsg.textContent = '';
 }
 
+window.loadArbitrage = async function() {
+  const btn = document.getElementById('arbitrageBtn');
+  const list = document.getElementById('arbitrageList');
+  if (btn) btn.textContent = '読み込み中...';
+  list.innerHTML = '<p class="arb-empty">データ取得中...</p>';
+
+  try {
+    const allItems = await fetchAllMarketItems();
+    const chances = allItems
+      .filter(item => {
+        const sell = item.lowestSellPrice;
+        const buy  = item.highestBuyPrice;
+        return sell != null && buy != null && Number(buy) > Number(sell);
+      })
+      .map(item => {
+        const sell   = Math.floor(Number(item.lowestSellPrice));
+        const buy    = Math.floor(Number(item.highestBuyPrice));
+        const profit = buy - sell;
+        const rate   = Math.floor((profit / sell) * 100);
+        return { item, sell, buy, profit, rate };
+      })
+      .sort((a, b) => b.profit - a.profit)
+      .slice(0, 50);
+
+    if (chances.length === 0) {
+      list.innerHTML = '<p class="arb-empty">現在転売チャンスのあるアイテムはありません</p>';
+      return;
+    }
+
+    list.innerHTML = `
+      <div class="arb-header-row">
+        <span>アイテム</span>
+        <span style="text-align:right">最低売値</span>
+        <span style="text-align:right">最高買値</span>
+        <span style="text-align:right">利益</span>
+        <span style="text-align:right">利益率</span>
+      </div>
+      ${chances.map(({ item, sell, buy, profit, rate }) => {
+        const ja = getJaName(item.name);
+        const nameHtml = ja
+          ? `<span class="arb-name">${ja}</span><span class="arb-sub">${item.name}</span>`
+          : `<span class="arb-name">${item.name}</span>`;
+        return `
+          <div class="arb-item" onclick="selectItem('${item.id}')">
+            <div>${nameHtml}</div>
+            <div class="arb-val">${sell.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-val">${buy.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-profit">+${profit.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-rate">+${rate}%</div>
+          </div>
+        `;
+      }).join('')}
+    `;
+  } catch(e) {
+    list.innerHTML = '<p class="arb-empty">データの取得に失敗しました</p>';
+  } finally {
+    if (btn) btn.textContent = '🔄 更新';
+  }
+};
+
+window.loadBargain = async function() {
+  const btn = document.getElementById('bargainBtn');
+  const list = document.getElementById('bargainList');
+  if (btn) btn.textContent = '読み込み中...';
+  list.innerHTML = '<p class="arb-empty">データ取得中...</p>';
+
+  try {
+    const allItems = await fetchAllMarketItems();
+    const bargains = allItems
+      .filter(item => {
+        const sell = item.lowestSellPrice;
+        const avg7d = item.avg7dPrice ?? item.stats?.avg7d;
+        return sell != null && avg7d != null && Number(sell) < Number(avg7d);
+      })
+      .map(item => {
+        const sell  = Math.floor(Number(item.lowestSellPrice));
+        const avg7d = Math.floor(Number(item.avg7dPrice ?? item.stats?.avg7d));
+        const diff  = avg7d - sell;
+        const rate  = Math.floor((diff / avg7d) * 100);
+        return { item, sell, avg7d, diff, rate };
+      })
+      .sort((a, b) => b.rate - a.rate)
+      .slice(0, 50);
+
+    if (bargains.length === 0) {
+      list.innerHTML = '<p class="arb-empty">該当するアイテムはありません</p>';
+      return;
+    }
+
+    list.innerHTML = `
+      <div class="arb-header-row">
+        <span>アイテム</span>
+        <span style="text-align:right">最低売値</span>
+        <span style="text-align:right">7日平均</span>
+        <span style="text-align:right">差額</span>
+        <span style="text-align:right">割引率</span>
+      </div>
+      ${bargains.map(({ item, sell, avg7d, diff, rate }) => {
+        const ja = getJaName(item.name);
+        const nameHtml = ja
+          ? `<span class="arb-name">${ja}</span><span class="arb-sub">${item.name}</span>`
+          : `<span class="arb-name">${item.name}</span>`;
+        return `
+          <div class="arb-item" onclick="selectItem('${item.id}')">
+            <div>${nameHtml}</div>
+            <div class="arb-val">${sell.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-val">${avg7d.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-profit">-${diff.toLocaleString('ja-JP')} 🪙</div>
+            <div class="arb-rate">-${rate}%</div>
+          </div>
+        `;
+      }).join('')}
+    `;
+  } catch(e) {
+    list.innerHTML = '<p class="arb-empty">データの取得に失敗しました</p>';
+  } finally {
+    if (btn) btn.textContent = '🔄 更新';
+  }
+};
+
