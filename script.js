@@ -466,6 +466,17 @@ async function loadItemDetail(item) {
     // 現在のアイテムを保存（期間切り替え用）
     window._currentItem = enrichedItem;
 
+    // 転売チャンスキャッシュに蓄積
+    if (marketData?.stats?.lowestSell && marketData?.stats?.highestBuy) {
+      if (!window._arbCache) window._arbCache = {};
+      window._arbCache[item.id] = {
+        item: enrichedItem,
+        sell: Math.floor(Number(marketData.stats.lowestSell)),
+        buy:  Math.floor(Number(marketData.stats.highestBuy)),
+      };
+      updateArbitrageList();
+    }
+
     renderResult(enrichedItem, priceData, currentOrders, orderType);
   } catch (err) {
     showError(`詳細取得エラー: ${err.message}`);
@@ -1238,82 +1249,53 @@ function clearError() {
   errorMsg.textContent = '';
 }
 
-window.loadArbitrage = async function() {
-  const btn = document.getElementById('arbitrageBtn');
-  const list = document.getElementById('arbitrageList');
-  if (btn) btn.disabled = true;
-  list.innerHTML = '<p class="arb-empty">アイテムリスト取得中...</p>';
-
-  try {
-    const allItems = await fetchAllMarketItems();
-    const BATCH = 5;
-    const DELAY = 200; // ms
-    const results = [];
-    let processed = 0;
-
-    for (let i = 0; i < allItems.length; i += BATCH) {
-      const batch = allItems.slice(i, i + BATCH);
-      processed += batch.length;
-      list.innerHTML = `<p class="arb-empty">取得中... ${processed} / ${allItems.length} 件（しばらくお待ちください）</p>`;
-
-      const fetched = await Promise.all(batch.map(item => {
-        const type = item.itemType === 1 ? 'cargo' : 'item';
-        return fetch(`${API_BASE}/market/${type}/${item.id}`, { headers: HEADERS })
-          .then(r => r.ok ? r.json() : null)
-          .catch(() => null);
-      }));
-
-      for (let j = 0; j < fetched.length; j++) {
-        const data = fetched[j];
-        if (!data?.stats) continue;
-        const sell = Number(data.stats.lowestSell);
-        const buy  = Number(data.stats.highestBuy);
-        if (!sell || !buy || buy <= sell) continue;
-        const profit = Math.floor(buy - sell);
-        const rate   = Math.floor((profit / sell) * 100);
-        results.push({ item: allItems[i + j], sell: Math.floor(sell), buy: Math.floor(buy), profit, rate });
-      }
-
-      // レート制限対策
-      await new Promise(r => setTimeout(r, DELAY));
-    }
-
-    results.sort((a, b) => b.profit - a.profit);
-    const top = results.slice(0, 50);
-
-    if (top.length === 0) {
-      list.innerHTML = '<p class="arb-empty">現在転売チャンスのあるアイテムはありません</p>';
-      return;
-    }
-
-    list.innerHTML = `
-      <div class="arb-header-row">
-        <span>アイテム</span>
-        <span style="text-align:right">最低売値</span>
-        <span style="text-align:right">最高買値</span>
-        <span style="text-align:right">利益</span>
-        <span style="text-align:right">利益率</span>
-      </div>
-      ${top.map(({ item, sell, buy, profit, rate }) => {
-        const ja = getJaName(item.name);
-        const nameHtml = ja
-          ? `<span class="arb-name">${ja}</span><span class="arb-sub">${item.name}</span>`
-          : `<span class="arb-name">${item.name}</span>`;
-        return `
-          <div class="arb-item" onclick="selectItem('${item.id}')">
-            <div>${nameHtml}</div>
-            <div class="arb-val">${sell.toLocaleString('ja-JP')} 🪙</div>
-            <div class="arb-val">${buy.toLocaleString('ja-JP')} 🪙</div>
-            <div class="arb-profit">+${profit.toLocaleString('ja-JP')} 🪙</div>
-            <div class="arb-rate">+${rate}%</div>
-          </div>
-        `;
-      }).join('')}
-    `;
-  } catch(e) {
-    list.innerHTML = '<p class="arb-empty">データの取得に失敗しました</p>';
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '🔄 更新'; }
-  }
+window.loadArbitrage = function() {
+  updateArbitrageList();
 };
+
+function updateArbitrageList() {
+  const list = document.getElementById('arbitrageList');
+  if (!list) return;
+
+  const cache = window._arbCache || {};
+  const results = Object.values(cache)
+    .filter(({ sell, buy }) => buy > sell)
+    .map(({ item, sell, buy }) => {
+      const profit = buy - sell;
+      const rate   = Math.floor((profit / sell) * 100);
+      return { item, sell, buy, profit, rate };
+    })
+    .sort((a, b) => b.profit - a.profit)
+    .slice(0, 50);
+
+  if (results.length === 0) {
+    list.innerHTML = '<p class="arb-empty">アイテム詳細を開くと自動で蓄積されます</p>';
+    return;
+  }
+
+  list.innerHTML = `
+    <div class="arb-header-row">
+      <span>アイテム</span>
+      <span style="text-align:right">最低売値</span>
+      <span style="text-align:right">最高買値</span>
+      <span style="text-align:right">利益</span>
+      <span style="text-align:right">利益率</span>
+    </div>
+    ${results.map(({ item, sell, buy, profit, rate }) => {
+      const ja = getJaName(item.name);
+      const nameHtml = ja
+        ? `<span class="arb-name">${ja}</span><span class="arb-sub">${item.name}</span>`
+        : `<span class="arb-name">${item.name}</span>`;
+      return `
+        <div class="arb-item" onclick="selectItem('${item.id}')">
+          <div>${nameHtml}</div>
+          <div class="arb-val">${sell.toLocaleString('ja-JP')} 🪙</div>
+          <div class="arb-val">${buy.toLocaleString('ja-JP')} 🪙</div>
+          <div class="arb-profit">+${profit.toLocaleString('ja-JP')} 🪙</div>
+          <div class="arb-rate">+${rate}%</div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
 
