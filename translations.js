@@ -459,6 +459,7 @@ const ITEM_TRANSLATIONS = {
   "セル": "cell",
   "テレポート": "Teleportation",
   "エナジー": " Energy",
+  "フクロウ": "Owl"
   
 };
 
