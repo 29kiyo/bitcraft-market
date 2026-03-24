@@ -1298,7 +1298,8 @@ const EN_EXACT = {
   "Deed: Pet Lusul (Orange and White)": "証書：ペット・ルスル（橙白）",
   "Deed: Pet Lusul (Peach)": "証書：ペット・ルスル（ピーチ）",
   "Deed: Pet Lusul (Purple)": "証書：ペット・ルスル（紫）",
-  "Owl": "フクロウ"
+  "Owl": "フクロウ",
+  "Pet": "ペット",
   "Deed: Pet Owl Black": "証書：ペット・フクロウ（黒）",
   "Deed: Pet Owl Blue and Orange": "証書：ペット・フクロウ（青橙）",
   "Deed: Pet Owl Brown": "証書：ペット・フクロウ（茶）",
