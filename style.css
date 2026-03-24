@@ -1395,18 +1395,6 @@ footer a:hover { color: var(--accent); }
   white-space: nowrap;
 }
 
-.s-parent-category {
-  font-size: 9px;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(91,156,246,0.1);
-  color: var(--accent-buy);
-  border: 1px solid rgba(91,156,246,0.2);
-  white-space: nowrap;
-  margin-right: 4px;
-}
 
 
 .ms-parent {
