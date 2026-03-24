@@ -214,6 +214,7 @@ const ITEM_TRANSLATIONS = {
   "アクセサリー": "Amulet",
   "ネックレス": "Amulet",
   "指輪": "Ring",
+  "アラクニル": "Araknir",
 
   // ===== 魚系 =====
   "ブライニーリナス": "Briny Linus",
@@ -477,6 +478,7 @@ const ITEM_YOMI = {
   "精製":     "せいせい",
   "古代":     "こだい",
   "金属":     "きんぞく",
+  "牙":       "きば"
   "破片":     "はへん",
   "木":       "き",
   "木材":     "もくざい",
@@ -894,6 +896,7 @@ const EN_ITEM_BASE = {
   "Shortsword": "ショートソード",
   "Spear & Shield": "槍と盾",
   "Frames": "フレーム",
+  "Araknir": "アラクニル",
 
   // ===== 防具 =====
   "Plated Armor": "プレートアーマー",
@@ -1143,6 +1146,7 @@ const EN_EXACT = {
   "Araknir Eggsack": "アラクニル卵嚢",
   "Araknir Fangs": "アラクニル牙",
   "Araknir Silk": "アラクニルシルク",
+  "Araknir": "アラクニル",
   "Pure Argent Ring": "ピュア・アージェントリング",
   "Argent Ingot": "アージェントインゴット",
   "Dried Araknir Blood": "乾燥アラクニル血液",
