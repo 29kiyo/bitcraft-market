@@ -207,6 +207,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 
+orderTypeFilter.addEventListener('change', applyFilters);
 searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
