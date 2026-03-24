@@ -1081,6 +1081,16 @@ window.clearAllFilters = function() {
   document.querySelectorAll('#categoryDropdown .ms-item').forEach(label => {
     label.style.display = '';
   });
+  // 以下3行を追加
+  document.querySelectorAll('#categoryDropdown .ms-section').forEach(section => {
+    section.style.display = '';
+  });
+  document.querySelectorAll('#categoryDropdown .ms-parent').forEach(parent => {
+    parent.classList.remove('open');
+  });
+  document.querySelectorAll('#categoryDropdown .ms-section-body').forEach(body => {
+    body.classList.remove('open');
+  });
 };
 
 window.filterTradeLog = function() {
