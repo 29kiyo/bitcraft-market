@@ -1400,10 +1400,10 @@ footer a:hover { color: var(--accent); }
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   padding: 1px 5px;
-  border-radius: 20px;
-  background: rgba(91,156,246,0.15);
+  border-radius: 3px;
+  background: rgba(91,156,246,0.1);
   color: var(--accent-buy);
-  border: 1px solid rgba(91,156,246,0.3);
+  border: 1px solid rgba(91,156,246,0.2);
   white-space: nowrap;
   margin-right: 4px;
 }
