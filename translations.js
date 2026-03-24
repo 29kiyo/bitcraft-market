@@ -1064,6 +1064,8 @@ const EN_ITEM_BASE = {
   "Roasted Meat": "焼き肉",
   "Roasted Ocean Fish": "焼き海水魚",
   "Skewered Baitfish": "ベイトフィッシュ串焼き",
+  "sugar": "砂糖"
+  "salt": "塩"
 
   // ===== 研究・コーデックス =====
   "Cloth Research": "布研究",
