@@ -289,10 +289,8 @@ div.innerHTML = `
   </div>
   ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
   <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}
-  ${item.tag ? `
-  ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
-  <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
-` : ''}
+   ${item.tag ? `<span class="s-tag">${getJaName(item.tag) || item.tag}</span>` : ''}</span>
+`;
 
     div.addEventListener('click', () => {
       searchInput.value = item.name;
@@ -457,7 +455,11 @@ function renderSearchResults(items, page = 1) {
             <div class="rc-badges">
               ${item.tier && item.tier > 0 ? `<span class="badge tier">T${item.tier}</span>` : ''}
               <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}
-              ${item.tag ? `<span class="s-tag">${getJaName(item.tag) || item.tag}</span>` : ''}</span>
+              ${item.tag ? `
+  ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
+  <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
+` : ''}
+</span>
             </div>
           </div>
         `;
