@@ -1158,7 +1158,7 @@ const EN_EXACT = {
   "Automata's Heart":"オートマタハート",
   "Heated Capacitor":"加熱コンデンサー",
   "Cooling Capacitor":"冷却コンデンサー",
-  "Energy":"エネルギー"
+  "Energy":"エネルギー",
   "Araknir Eggsack": "アラクニル卵嚢",
   "Araknir Fangs": "アラクニル牙",
   "Araknir Silk": "アラクニルシルク",
