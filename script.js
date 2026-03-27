@@ -139,6 +139,12 @@ function getCheckedValues(type) {
     .map(cb => cb.value);
 }
 
+function getOrderTypeFilter() {
+  const dropdown = document.getElementById('orderTypeDropdown');
+  if (!dropdown) return [];
+  return [...dropdown.querySelectorAll('input[type=checkbox]:checked')].map(cb => cb.value);
+}
+
 function toggleDropdown(id) {
   const dropdown = document.getElementById(id);
   dropdown.classList.toggle('hidden');
