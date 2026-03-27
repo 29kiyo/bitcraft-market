@@ -23,7 +23,8 @@ function clearCaches() {
   iconCache.clear();
   // マーケットデータキャッシュをクリア
   cachedMarketItems = null;
-  fetchPromise = null;
+fetchPromise = null;
+window._itemCache = {};
   console.log('キャッシュをクリアしました');
 }
 
@@ -210,23 +211,21 @@ let debounceTimer = null;
 let cachedMarketItems = null;
 let fetchPromise = null;
 
-async function fetchAllMarketItems() {
-  if (cachedMarketItems) return cachedMarketItems;
-  if (fetchPromise) return fetchPromise;
+async function fetchAllMarketItems(orderTypeParam = '') {
+  const cacheKey = orderTypeParam || 'all';
+  if (!window._itemCache) window._itemCache = {};
+  if (window._itemCache[cacheKey]) return window._itemCache[cacheKey];
 
-  fetchPromise = (async () => {
-    // offsetが効かない場合があるので固定で大きめに1回取得
-    const res = await fetch(
-      `${API_BASE}/market?hasOrders=true&limit=2000`,
-      { headers: HEADERS }
-    );
-    if (!res.ok) throw new Error('fetch failed');
-    const json = await res.json();
-    cachedMarketItems = json?.data?.items || [];
-    return cachedMarketItems;
-  })();
+  let params = 'hasOrders=true&limit=2000';
+  if (orderTypeParam === 'sell') params = 'hasSellOrders=true&limit=2000';
+  if (orderTypeParam === 'buy') params = 'hasBuyOrders=true&limit=2000';
 
-  return fetchPromise;
+  const res = await fetch(`${API_BASE}/market?${params}`, { headers: HEADERS });
+  if (!res.ok) throw new Error('fetch failed');
+  const json = await res.json();
+  const items = json?.data?.items || [];
+  window._itemCache[cacheKey] = items;
+  return items;
 }
 
 // ============================================
@@ -371,14 +370,16 @@ async function doSearch() {
 const rarities = getCheckedValues('rarity');
 const categories = getCheckedValues('category');
 
-if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
+const orderTypes = getOrderTypeFilter();
+if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0 && orderTypes.length === 0) return;
   
   hideSuggestions();
   showLoading();
   clearError();
 
   try {
-    const allItems = await fetchAllMarketItems();
+const orderTypeParam = orderTypes.length === 1 ? orderTypes[0] : '';
+const allItems = await fetchAllMarketItems(orderTypeParam);
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
 
     let filtered = allItems;
