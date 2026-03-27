@@ -114,6 +114,8 @@ main {
   padding: 4px 4px 4px 16px;
   gap: 8px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  min-height: 44px;
 }
 .search-input-wrap:focus-within {
   border-color: var(--accent);
@@ -135,7 +137,7 @@ main {
   background: var(--accent);
   color: #000;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 10px 24px;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
@@ -144,6 +146,10 @@ main {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
   white-space: nowrap;
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #searchBtn:hover { background: #00e6ad; }
 #searchBtn:active { transform: scale(0.97); }
