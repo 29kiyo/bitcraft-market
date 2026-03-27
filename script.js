@@ -241,7 +241,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 
-orderTypeFilter.addEventListener('change', applyFilters);
+if (orderTypeFilter) orderTypeFilter.addEventListener('change', applyFilters);
 searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
@@ -364,7 +364,8 @@ async function doSearch() {
     document.getElementById('rarityLabel').textContent = 'すべて';
     document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
     document.getElementById('categoryLabel').textContent = 'すべて';
-    document.getElementById('orderTypeFilter').value = '';
+    const otf = document.getElementById('orderTypeFilter');
+if (otf) otf.value = '';
     window._lastSearchQuery = q;
   }
   const tiers = getCheckedValues('tier');
@@ -533,7 +534,7 @@ window.changePage = function(page) {
 async function loadItemDetail(item) {
   showLoading();
   try {
-    const orderType = orderTypeFilter.value;
+const orderType = orderTypeFilter?.value || '';
     const itemOrCargo = item.itemType === 1 ? 'cargo' : 'item';
 
     const [marketRes, priceRes] = await Promise.all([
