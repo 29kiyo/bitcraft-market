@@ -370,7 +370,8 @@ async function doSearch() {
     document.getElementById('rarityLabel').textContent = 'すべて';
     document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
     document.getElementById('categoryLabel').textContent = 'すべて';
-    document.getElementById('orderTypeFilter').value = '';
+    const otf = document.getElementById('orderTypeFilter');
+if (otf) otf.value = '';
     window._lastSearchQuery = q;
   }
   const tiers = getCheckedValues('tier');
