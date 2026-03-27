@@ -118,7 +118,7 @@ window.changeOrderSort = function(sort) {
 };
 
 window.changeOrderType = function(type) {
-  orderTypeFilter.value = type;
+  if (orderTypeFilter) orderTypeFilter.value = type;
   renderOrders(currentOrders, type, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
 };
 
