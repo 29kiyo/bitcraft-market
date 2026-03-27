@@ -728,6 +728,7 @@ const ITEM_YOMI = {
   "拡張テレポートエナジーセル": "かくちょうてれぽーとえなじーせる",
   // ===== EN_ITEM_BASE対応の追加読み仮名 =====
   "なめし革":             "なめしがわ",
+  "初心者":               "しょしんしゃ",
   "アンブラ牙アミュレット": "あんぶらきばあみゅれっと",
   "ウィスプウィーブの種":  "うぃすぷうぃーぶのたね",
   "ウィスプウィーブ植物":  "うぃすぷうぃーぶしょくぶつ",
@@ -1027,6 +1028,7 @@ const EN_ITEM_BASE = {
   "Wood Log": "丸太",
   "Wood Log Package": "丸太パック",
   "Wood Plank Package": "板材パック",
+  "Beginner's Stone Carving Package": "初心者向け石彫りパック",
   "Wood Polish": "木の磨き剤",
   "Wood Trunk": "木の幹",
   "Woven Belt": "織りベルト",
