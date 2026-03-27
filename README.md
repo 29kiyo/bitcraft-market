@@ -100,7 +100,8 @@ function corsHeaders(origin) {
 
 ### アクセス制限
 Cloudflare WorkersはOriginヘッダーによるアクセス制限を行っています。
-`https://29kiyo.github.io` 以外からのアクセス以外は拒否されます。
+`https://29kiyo.github.io`
+以外からのアクセスは拒否されます。
 
 ## 🤖 開発について
 このプロジェクトはClaude (Anthropic)を活用して開発しました。
