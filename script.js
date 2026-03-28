@@ -88,7 +88,7 @@ let currentItems = [];
 let currentPage = 1;
 let savedScrollPosition = 0;
 let currentOrderPage = 1;
-const ORDERS_PER_PAGE = 20;
+const ORDERS_PER_PAGE = 7;
 let currentOrderSort = 'asc';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
@@ -370,8 +370,8 @@ async function doSearch() {
     window._lastSearchQuery = q;
   }
   const tiers = getCheckedValues('tier');
-const rarities = getCheckedValues('rarity');
-const categories = getCheckedValues('category');
+  const rarities = getCheckedValues('rarity');
+  const categories = getCheckedValues('category');
 
 if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
   
@@ -482,15 +482,15 @@ function renderSearchResults(items, page = 1) {
         const displayName = useJaName ? `${jaName} ${item.name}` : item.name;
         return `
           <div class="result-card" onclick="selectItem('${item.id}')">
-            <div class="rc-top">
-              <img class="rc-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
-              <div class="rc-info">
-                <div class="rc-name">${useJaName ? jaName : item.name}</div>
-                ${useJaName ? `<div class="rc-sub">${item.name}</div>` : ''}
+            <div class="s-top">
+              <img class="s-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+              <div class="s-text">
+                <span class="s-name">${useJaName ? jaName : item.name}</span>
+                ${useJaName ? `<span class="s-sub">${item.name}</span>` : ''}
               </div>
             </div>
-            <div class="rc-badges">
-              ${item.tier && item.tier > 0 ? `<span class="badge tier">T${item.tier}</span>` : ''}
+            <div class="s-tags">
+              ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
               <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
               ${item.tag ? `
                 ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
@@ -610,11 +610,15 @@ function renderItemHeader(item) {
   const useJaName = jaName && jaName.length > 2;
   const iconUrl = getCachedIcon(item.iconAssetName);
 
+  
   document.getElementById('itemHeader').innerHTML = `
     <div class="item-title">
       <img class="item-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
       <div class="item-title-text">
-        <h2>${useJaName ? jaName : item.name}${useJaName ? ` <span class="item-ja">/ ${item.name}</span>` : ''}</h2>
+        <div class="item-name-row">
+          <h2 class="item-ja-name">${useJaName ? jaName : item.name}</h2>
+          ${useJaName ? `<span class="item-en-name">/ ${item.name}</span>` : ''}
+        </div>
         <div class="item-badges">
           ${item.tier && item.tier > 0 ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
           <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
@@ -916,11 +920,9 @@ window.updateSupplyDemand = function() {
   `;
 };
 
-
 function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '', claimFilter = '') {
   currentOrderPage = page;
   currentOrderSort = sort;
-  // orderTypeパラメータは無視し、currentOrderTypeを使用
   const effectiveOrderType = currentOrderType;
 
   let filtered = orders;
@@ -940,13 +942,12 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
   const pageOrders = filtered.slice(start, start + ORDERS_PER_PAGE);
 
   const sellCount = filtered.filter(o => o.orderType === 'sell').length;
-const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
-const regionOptions = regions.map(r => {
-  const rid = orders.find(o => o.regionName === r)?.regionId || '';
-  return `<option value="${r}" ${regionFilter === r ? 'selected' : ''}>${r} (R${rid})</option>`;
-}).join('');
-  
   const buyCount = filtered.filter(o => o.orderType === 'buy').length;
+  const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
+  const regionOptions = regions.map(r => {
+    const rid = orders.find(o => o.regionName === r)?.regionId || '';
+    return `<option value="${r}" ${regionFilter === r ? 'selected' : ''}>${r} (R${rid})</option>`;
+  }).join('');
 
   const pagination = totalPages > 1 ? `
     <div class="pagination">
@@ -956,64 +957,68 @@ const regionOptions = regions.map(r => {
     </div>
   ` : '';
 
- const html = filtered.length === 0
-  ? '<p class="no-orders">注文が見つかりませんでした</p>'
-  : `
-    ${pagination}
-    <div class="orders-table-wrap">
-      <table class="orders-table">
-        <thead>
-          <tr>
-            <th>種別</th>
-            <th style="white-space:nowrap;">
-  価格
-  <span style="display:inline-flex; flex-direction:column; gap:2px; margin-left:4px; vertical-align:middle;">
-    <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
-    <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
-  </span>
-</th>
-            <th>数量</th>
-            <th>領地名</th>
-            <th>リージョン</th>
-            <th>座標</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${pageOrders.map((o) => `
-            <tr class="order-row ${o.orderType}">
-              <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
-              <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
-              <td>${formatNum(o.quantity)}</td>
-              <td class="claim-name">${o.claimName || '—'}</td>
-              <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
-              <td class="coords">${formatCoords(o)}</td>
+  const html = filtered.length === 0
+    ? '<p class="no-orders">注文が見つかりませんでした</p>'
+    : `
+      ${pagination}
+      <div class="orders-table-wrap">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>種別</th>
+              <th style="white-space:nowrap;">
+                価格
+                <span style="display:inline-flex; flex-direction:column; gap:2px; margin-left:4px; vertical-align:middle;">
+                  <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
+                  <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
+                </span>
+              </th>
+              <th>数量</th>
+              <th>領地名</th>
+              <th>リージョン</th>
+              <th>座標</th>
+              <th></th>
             </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-    ${pagination}
-  `;
+          </thead>
+          <tbody>
+            ${pageOrders.map(o => `
+              <tr class="order-row ${o.orderType}">
+                <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
+                <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
+                <td>${formatNum(o.quantity)}</td>
+                <td class="claim-name">${o.claimName || '—'}</td>
+                <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
+                <td class="coords">${formatCoords(o)}</td>
+                ${o.orderType === 'sell' ? `<td><button onclick="addToCalcList(${JSON.stringify(o).replace(/"/g, '&quot;')}, '${window._currentItem?.name || ''}')" style="background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:#00c896;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;">追加</button></td>` : '<td></td>'}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      ${pagination}
+    `;
 
-document.getElementById('ordersList').innerHTML = `
-  <div class="orders-list-header">
-    <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
-    <div class="order-type-tabs">
-      <button class="tab-btn ${effectiveOrderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${filtered.length})</button>
-      <button class="tab-btn ${effectiveOrderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
-      <button class="tab-btn ${effectiveOrderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
-      <select class="region-order-filter" onchange="changeOrderRegion(this.value)">
-        <option value="">全リージョン</option>
-        ${regionOptions}
-      </select>
+  document.getElementById('ordersList').innerHTML = `
+    <div class="orders-list-header">
+      <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
+      <div class="order-type-tabs">
+        <button class="tab-btn ${effectiveOrderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${filtered.length})</button>
+        <button class="tab-btn ${effectiveOrderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
+        <button class="tab-btn ${effectiveOrderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
+        <select class="region-order-filter" onchange="changeOrderRegion(this.value)">
+          <option value="">全リージョン</option>
+          ${regionOptions}
+        </select>
+      </div>
+      <div class="orders-search-bar">
+        <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
+      </div>
     </div>
-    <div class="orders-search-bar">
-      <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
-    </div>
-  </div>
-  ${html}
-`;
+    ${html}
+  `;
 }
+
+  
 
 let currentLogPage = 1;
 const LOG_PER_PAGE = 20;
@@ -1359,3 +1364,113 @@ function clearError() {
   errorMsg.classList.add('hidden');
   errorMsg.textContent = '';
 }
+
+// ============================================
+// 集計リスト
+// ============================================
+window._calcList = [];
+
+function updateCalcListCount() {
+  const el = document.getElementById('calcListCount');
+  if (el) el.textContent = window._calcList.length > 0 ? `(${window._calcList.length})` : '';
+}
+
+window.addToCalcList = function(order, itemName) {
+  window._calcList.push({ ...order, itemName, buyQty: 0 });
+  updateCalcListCount();
+  const toast = document.createElement('div');
+  toast.textContent = `「${itemName}」を集計リストに追加しました`;
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #00c896;color:#00c896;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2000);
+};
+
+window.openCalcList = function() {
+  const renderContent = () => {
+    const list = window._calcList;
+    const total = list.reduce((sum, i) => sum + Number(i.priceThreshold) * i.buyQty, 0);
+    return `
+      <div style="background:#0d1827;border:1px solid #2a4f72;border-radius:14px;padding:24px;width:100%;max-width:680px;max-height:85vh;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 class="section-title" style="margin:0;">🛒 集計リスト</h3>
+          <button onclick="document.getElementById('calcListModal').remove()" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+        </div>
+        ${list.length === 0 ? '<p style="color:#666;text-align:center;padding:40px 0;">リストが空です</p>' : `
+          <table class="orders-table" style="margin-bottom:20px;">
+            <thead><tr>
+              <th>アイテム</th>
+              <th>領地名</th>
+              <th>リージョン</th>
+              <th>単価</th>
+              <th>個数</th>
+              <th>小計</th>
+              <th></th>
+            </tr></thead>
+            <tbody>
+              ${list.map((i, idx) => `
+                <tr class="order-row">
+                  <td style="color:#e0e0e0;font-size:12px;">${i.itemName}</td>
+                  <td class="claim-name">${i.claimName || '—'}</td>
+                  <td style="font-size:12px;">${i.regionName ? `${i.regionName} (R${i.regionId})` : '—'}</td>
+                  <td class="price-cell">${formatPrice(i.priceThreshold)}</td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:3px;flex-wrap:nowrap;">
+                      <button onclick="updateCalcListQty(${idx}, window._calcList[${idx}].buyQty - 10)" style="background:#1a2535;border:1px solid rgba(255,255,255,0.15);color:#aaa;width:32px;height:24px;border-radius:4px;cursor:pointer;font-size:10px;">-10</button>
+                      <button onclick="updateCalcListQty(${idx}, window._calcList[${idx}].buyQty - 1)" style="background:#1a2535;border:1px solid rgba(255,255,255,0.15);color:#e0e0e0;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:14px;">－</button>
+                      <input type="number" min="1" max="${i.quantity}" value="${i.buyQty}"
+                        style="width:50px;background:#1a2535;border:1px solid rgba(255,255,255,0.15);color:#e0e0e0;border-radius:4px;padding:2px 4px;font-size:12px;text-align:center;"
+                        onchange="updateCalcListQty(${idx}, this.value)">
+                      <button onclick="updateCalcListQty(${idx}, window._calcList[${idx}].buyQty + 1)" style="background:#1a2535;border:1px solid rgba(255,255,255,0.15);color:#e0e0e0;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:14px;">＋</button>
+                      <button onclick="updateCalcListQty(${idx}, window._calcList[${idx}].buyQty + 10)" style="background:#1a2535;border:1px solid rgba(255,255,255,0.15);color:#aaa;width:32px;height:24px;border-radius:4px;cursor:pointer;font-size:10px;">+10</button>
+                      <span style="font-size:10px;color:#666;">/${formatNum(i.quantity)}</span>
+                    </div>
+                  </td>
+                  <td class="price-cell calc-subtotal">${formatPrice(Number(i.priceThreshold) * i.buyQty)}</td>
+                  <td><button onclick="removeCalcListItem(${idx})" style="background:none;border:none;color:#ff4d6d;cursor:pointer;font-size:16px;">✕</button></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div style="text-align:right;font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
+            合計: <span id="calcListTotal">${formatPrice(total)}</span>
+          </div>
+          <button onclick="window._calcList=[];updateCalcListCount();openCalcList();" 
+            style="margin-top:12px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:#ff4d6d;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">
+            ✕ クリア
+          </button>
+        `}
+      </div>
+    `;
+  };
+
+  let modal = document.getElementById('calcListModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'calcListModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = renderContent();
+
+  window.updateCalcListQty = function(idx, qty) {
+    const item = window._calcList[idx];
+    if (!item) return;
+    item.buyQty = Math.max(0, Math.min(Number(qty), Number(item.quantity)));
+    // 個数入力欄だけ更新
+    const inputs = document.querySelectorAll('#calcListModal input[type=number]');
+    if (inputs[idx]) inputs[idx].value = item.buyQty;
+    // 小計と合計だけ更新
+    const subtotalCells = document.querySelectorAll('#calcListModal .calc-subtotal');
+    if (subtotalCells[idx]) subtotalCells[idx].innerHTML = formatPrice(Number(item.priceThreshold) * item.buyQty);
+    const total = window._calcList.reduce((sum, i) => sum + Number(i.priceThreshold) * i.buyQty, 0);
+    const totalEl = document.getElementById('calcListTotal');
+    if (totalEl) totalEl.innerHTML = formatPrice(total);
+  };
+
+  window.removeCalcListItem = function(idx) {
+    window._calcList.splice(idx, 1);
+    updateCalcListCount();
+    modal.innerHTML = renderContent();
+  };
+};
