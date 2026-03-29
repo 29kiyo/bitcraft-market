@@ -521,6 +521,7 @@ window.selectItem = async function(itemId) {
   savedScrollPosition = window.scrollY;
   searchResults.classList.add('hidden');
   await loadItemDetail(item);
+  history.pushState({ page: 'detail', itemId: item.id }, '');
   window.scrollTo(0, 0);
 };
 
@@ -1479,3 +1480,12 @@ window.openCalcList = function() {
     modal.innerHTML = renderContent();
   };
 };
+
+
+window.addEventListener('popstate', e => {
+  if (resultSection && !resultSection.classList.contains('hidden')) {
+    resultSection.classList.add('hidden');
+    searchResults.classList.remove('hidden');
+    setTimeout(() => window.scrollTo(0, savedScrollPosition), 0);
+  }
+});
