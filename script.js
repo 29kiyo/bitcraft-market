@@ -1412,7 +1412,7 @@ window.openCalcList = function() {
                   <td style="color:#e0e0e0;font-size:12px;">${i.itemName}</td>
                   <td class="claim-name">
                     ${i.claimLocationX != null
-                      ? `<a href="https://map.bitjita.com/?x=${Math.round(i.claimLocationX)}&y=${Math.round(i.claimLocationZ)}&zoom=5" target="_blank" style="color:#00c896;text-decoration:none;">${i.claimName || '—'}</a>`
+                      ? `<a href="https://map.bitjita.com/?center=${Math.round(i.claimLocationZ/3)},${Math.round(i.claimLocationX/3)}&zoom=1.5" target="_blank" style="color:#00c896;text-decoration:none;">${i.claimName || '—'}</a>`
                       : (i.claimName || '—')}
                     ${i.claimLocationX != null ? `<div style="font-size:10px;color:#666;">N:${Math.round(i.claimLocationZ/3)}, E:${Math.round(i.claimLocationX/3)}</div>` : ''}
                   </td>
