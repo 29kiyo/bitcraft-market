@@ -986,9 +986,7 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
                 <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
                 <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
                 <td>${formatNum(o.quantity)}</td>
-                <td class="claim-name">${o.claimLocationX != null
-                  ? `<a href="#" onclick="event.preventDefault();openBitjitaMapModal(${Math.round(o.claimLocationX)}, ${Math.round(o.claimLocationZ)}, '${(o.claimName || '').replace(/'/g, "\\'")}', '${(o.regionName || '').replace(/'/g, "\\'")}', '${o.regionId || ''}')" style="color:#00c896;text-decoration:none;">${o.claimName || '—'}</a>`
-                  : (o.claimName || '—')}</td>
+                <td class="claim-name">${o.claimName || '—'}</td>
                 <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
                 <td class="coords">${formatCoords(o)}</td>
                 ${o.orderType === 'sell' ? `<td><button onclick="addToCalcList(${JSON.stringify(o).replace(/"/g, '&quot;')}, '${window._currentItem?.name || ''}')" style="background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:#00c896;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;">追加</button></td>` : '<td></td>'}
@@ -1414,7 +1412,7 @@ window.openCalcList = function() {
                   <td style="color:#e0e0e0;font-size:12px;">${i.itemName}</td>
                   <td class="claim-name">
                     ${i.claimLocationX != null
-                      ? `<a href="#" onclick="event.preventDefault();openBitjitaMapModal(${Math.round(i.claimLocationX)}, ${Math.round(i.claimLocationZ)}, '${(i.claimName || '').replace(/'/g, "\\'")}', '${(i.regionName || '').replace(/'/g, "\\'")}', '${i.regionId || ''}')" style="color:#00c896;text-decoration:none;">${i.claimName || '—'}</a>`
+                      ? `<a href="https://map.bitjita.com/?center=${Math.round(i.claimLocationZ/3)},${Math.round(i.claimLocationX/3)}&zoom=1.5" target="_blank" style="color:#00c896;text-decoration:none;">${i.claimName || '—'}</a>`
                       : (i.claimName || '—')}
                     ${i.claimLocationX != null ? `<div style="font-size:10px;color:#666;">N:${Math.round(i.claimLocationZ/3)}, E:${Math.round(i.claimLocationX/3)}</div>` : ''}
                   </td>
@@ -1480,55 +1478,4 @@ window.openCalcList = function() {
     updateCalcListCount();
     modal.innerHTML = renderContent();
   };
-};
-
-// ============================================
-// Bitjita Map モーダル
-// ============================================
-window.openBitjitaMapModal = function(x, z, claimName, regionName, regionId) {
-  // 座標をマップ座標に変換（/3する）
-  const mapX = Math.round(x / 3);
-  const mapZ = Math.round(z / 3);
-  
-  // map.bitjita.comのURL（centerパラメータ使用）
-  let mapUrl = `https://map.bitjita.com/?center=${mapX},${mapZ}&zoom=4`;
-  
-  // 領地名をパラメータとして追加してみる
-  if (claimName) {
-    // 複数のパラメータ名を試す
-    mapUrl += `&claim=${encodeURIComponent(claimName)}`;
-    mapUrl += `&name=${encodeURIComponent(claimName)}`;
-    mapUrl += `&territory=${encodeURIComponent(claimName)}`;
-  }
-  
-  const n = Math.round(z / 3);
-  const e = Math.round(x / 3);
-  
-  let mapModal = document.getElementById('bitjitaMapModal');
-  if (mapModal) mapModal.remove();
-  
-  mapModal = document.createElement('div');
-  mapModal.id = 'bitjitaMapModal';
-  mapModal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:flex;flex-direction:column;align-items:center;padding:20px;';
-  mapModal.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;width:100%;max-width:1200px;margin-bottom:12px;">
-      <div style="color:#e0e0e0;font-size:16px;">
-        <span style="color:#00c896;font-weight:600;">${claimName || '領地'}</span>
-        <span style="color:#666;margin-left:12px;font-size:13px;">N: ${n}, E: ${e}</span>
-        ${regionName ? `<span style="color:#666;margin-left:12px;font-size:13px;">${regionName} (R${regionId || ''})</span>` : ''}
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button onclick="document.getElementById('bitjitaMapModal').remove()" style="background:none;border:none;color:#aaa;font-size:24px;cursor:pointer;padding:4px 8px;">✕</button>
-      </div>
-    </div>
-    <div style="width:100%;max-width:1200px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-      <iframe src="${mapUrl}" style="width:100%;height:100%;min-height:500px;border:1px solid #2a4f72;border-radius:12px;background:#0d1520;" allowfullscreen></iframe>
-      <div style="margin-top:12px;color:#666;font-size:12px;text-align:center;">
-        マップ上で領地をクリックすると詳細が表示されます
-      </div>
-    </div>
-  `;
-  
-  mapModal.addEventListener('click', e => { if (e.target === mapModal) mapModal.remove(); });
-  document.body.appendChild(mapModal);
 };
