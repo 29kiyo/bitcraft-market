@@ -3,7 +3,7 @@
 BitCraftのマーケット情報をリアルタイムで検索・確認できるWebアプリです。
 
 ## 🔗 サイト
-[https://29kiyo.github.io/bitcraft-marketvv2/](https://29kiyo.github.io/bitcraft-market_vv2/)
+[https://29kiyo.github.io/bitcraft-market_vv2/](https://29kiyo.github.io/bitcraft-market_vv2/)
 
 ## ✨ 機能
 - アイテム名検索（日本語・英語対応、あいまい検索）
@@ -13,6 +13,7 @@ BitCraftのマーケット情報をリアルタイムで検索・確認できる
 - 注文一覧のリージョン・領地名絞り込み
 - 注文一覧から「追加」ボタンで集計リストに追加可能
 - 🛒 集計リスト（複数アイテム・複数注文の購入金額を合計計算、個数調整対応）
+- 領地名クリックでマップ表示（bitjita map をモーダル内に表示、別タブで開くことも可能）
 - 価格情報・需要と供給のリージョン別表示
 - 価格推移グラフ（24H・7D・30D切り替え）
 - 取引量グラフ
@@ -28,11 +29,13 @@ BitCraftのマーケット情報をリアルタイムで検索・確認できる
 - APIプロキシ: Cloudflare Workers
 - データ提供: [Bitjita API](https://bitjita.com)
 - グラフ: [Chart.js](https://www.chartjs.org/)
+- マップ: [bitjita map](https://map.bitjita.com)（iframe埋め込み）
 
 ## 🌐 外部通信
 本ツールは以下の外部サービスと通信を行います。
 - **Bitjita API**: マーケットデータの取得 → [https://bitjita.com/docs/api](https://bitjita.com/docs/api)
 - **Cloudflare Workers**: CORSプロキシ経由でAPIにアクセス → [https://bitcraft-proxy.29kiyo.workers.dev](https://bitcraft-proxy.29kiyo.workers.dev)
+- **bitjita map**: 領地名クリック時にマップを表示 → [https://map.bitjita.com](https://map.bitjita.com)
 
 収集・保存する個人情報はありません。
 
@@ -98,7 +101,7 @@ function corsHeaders(origin) {
 
 ### アクセス制限
 Cloudflare WorkersはOriginヘッダーによるアクセス制限を行っています。
-`https://29kiyo.github.io`
+`https://29kiyo.github.io` 
 
 ## 🤖 開発について
 このプロジェクトはClaude (Anthropic)を活用して開発しました。
