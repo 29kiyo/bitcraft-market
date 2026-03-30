@@ -3,7 +3,7 @@
 BitCraftのマーケット情報をリアルタイムで検索・確認できるWebアプリです。
 
 ## 🔗 サイト
-[https://29kiyo.github.io/bitcraft-market_vv2/](https://29kiyo.github.io/bitcraft-market_vv2/)
+[https://29kiyo.github.io/bitcraft-market](https://29kiyo.github.io/bitcraft-market/)
 
 ## ✨ 機能
 - アイテム名検索（日本語・英語対応、あいまい検索）
