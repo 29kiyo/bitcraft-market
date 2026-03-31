@@ -11,12 +11,28 @@ const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 const iconCache = new Map();
 function getCachedIcon(iconAssetName) {
   if (!iconAssetName) return '';
-  if (!iconCache.has(iconAssetName)) {
-    iconCache.set(iconAssetName, `https://bitjita.com/${iconAssetName}.webp`);
-  }
-  return iconCache.get(iconAssetName);
-}
+  if (iconCache.has(iconAssetName)) return iconCache.get(iconAssetName);
 
+  let path = iconAssetName;
+
+  // 二重パス修正: GeneratedIcons/Other/GeneratedIcons/ → GeneratedIcons/
+  path = path.replace('GeneratedIcons/Other/GeneratedIcons/', 'GeneratedIcons/');
+
+  // Items/ や Resources/ で始まる場合は GeneratedIcons/ を付与
+  if (path.startsWith('Items/') || path.startsWith('Resources/') || path.startsWith('PremiumIcons/')) {
+    // PremiumIconsはそのまま
+    if (!path.startsWith('PremiumIcons/')) {
+      path = 'GeneratedIcons/' + path;
+    }
+  }
+
+  // スペースをアンダースコアまたは%20に変換
+  path = path.replace(/ /g, '%20');
+
+  const url = `https://bitjita.com/${path}.webp`;
+  iconCache.set(iconAssetName, url);
+  return url;
+}
 // ============================================
 // マーケットデータキャッシュ（1時間）
 // ============================================
