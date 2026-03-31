@@ -898,9 +898,7 @@ window.filterTradeLog = function() {
   const trades = window._tradeLogs || [];
   const filtered = region ? trades.filter(t => t.regionName === region) : trades;
   currentLogPage = 1;
-  const pageItems = filtered.slice(0, LOG_PER_PAGE * LOG_MAX_PAGES).slice(0, LOG_PER_PAGE);
-  const tbody = document.querySelector('#tradeLog tbody');
-  if (tbody) tbody.innerHTML = renderLogRows(pageItems);
+  renderLogTable(filtered, 1);
 };
 
 // ============================================
