@@ -971,7 +971,6 @@ const EN_ITEM_BASE = {
   "エレンヴァール鉱石": "Elenvar Ore Chunk",
   "エマリウム鉱石": "Emarium Ore Chunk",
   "ラシウム鉱石": "Rathium Ore Chunk",
-  "アウルマイト鉱石":"Aurumite Ore Chunk",
 
   // ===== 素材・繊維 =====
   "Amber Resin": "琥珀樹脂",
