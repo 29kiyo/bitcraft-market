@@ -343,21 +343,31 @@ async function doSearch() {
     if (tiers.length > 0) filtered = filtered.filter(item => tiers.includes(String(item.tier)));
     if (rarities.length > 0) filtered = filtered.filter(item => rarities.includes(String(item.rarity)));
     if (categories.length > 0) {
-      const allTags = new Set();
-      categories.forEach(cat => {
-        if (cat.startsWith('__group__')) {
-          const options = [...document.querySelectorAll('#categoryDropdown input[type=checkbox]')];
-          const groupIdx = options.findIndex(o => o.value === cat);
-          for (let i = groupIdx + 1; i < options.length; i++) {
-            if (options[i].value.startsWith('__group__')) break;
-            allTags.add(options[i].value);
-          }
-        } else {
-          allTags.add(cat);
-        }
-      });
-      filtered = filtered.filter(item => allTags.has(item.tag));
+  const allTags = new Set();
+  const kwFilters = []; // { tag, keyword }
+
+  categories.forEach(cat => {
+    if (cat.startsWith('__kw__')) {
+      const parts = cat.split('__').filter(Boolean);
+      // parts: ['kw', 'Weapon', 'Claymore']
+      kwFilters.push({ tag: parts[1], keyword: parts[2] });
+    } else if (cat.startsWith('__group__')) {
+      const options = [...document.querySelectorAll('#categoryDropdown input[type=checkbox]')];
+      const groupIdx = options.findIndex(o => o.value === cat);
+      for (let i = groupIdx + 1; i < options.length; i++) {
+        if (options[i].value.startsWith('__group__')) break;
+        if (!options[i].value.startsWith('__kw__')) allTags.add(options[i].value);
+      }
+    } else {
+      allTags.add(cat);
     }
+  });
+
+  filtered = filtered.filter(item => {
+    if (allTags.has(item.tag)) return true;
+    return kwFilters.some(f => f.tag === item.tag && item.name.toLowerCase().includes(f.keyword.toLowerCase()));
+  });
+}
 
     currentItems = filtered;
     if (currentItems.length === 0) {
@@ -994,15 +1004,6 @@ function updateCalcListCount() {
 }
 
 window.addToCalcList = function(order, itemName) {
-  const existing = window._calcList.find(i => i.id === order.id);
-  if (existing) {
-    const toast = document.createElement('div');
-    toast.textContent = `「${itemName}」はすでにリストに追加されています`;
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #f0a500;color:#f0a500;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2000);
-    return;
-  }
   window._calcList.push({ ...order, itemName, buyQty: 0 });
   updateCalcListCount();
   const toast = document.createElement('div');
@@ -1113,7 +1114,7 @@ window.openMapModal = function(n, e, claimName) {
     <div style="background:#0d1827;border:1px solid #2a4f72;border-radius:14px;width:100%;max-width:900px;height:80vh;display:flex;flex-direction:column;overflow:hidden;">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #1e3048;flex-shrink:0;">
         <div>
-          <span style="font-weight:700;color:#fff;font-size:15px;">🗺 ${claimName || 'マップ'}</span>
+          <span style="font-weight:700;color:#fff;font-size:15px;"> ${claimName || 'マップ'}</span>
           <span style="font-size:11px;color:#666;margin-left:8px;">N:${n}, E:${e}</span>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
