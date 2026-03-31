@@ -378,7 +378,6 @@ const ITEM_TRANSLATIONS = {
   "ペット卵": "Pet Egg",
   "ペット": "Pet",
   "卵":"Egg",
-  "クロアクリン: "Croaklin",
   "ジュエリー": "Jewelry",
   "ジャーナル": "Journal",
   "淡水魚": "Lake Fish",
