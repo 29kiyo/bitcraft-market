@@ -1004,6 +1004,15 @@ function updateCalcListCount() {
 }
 
 window.addToCalcList = function(order, itemName) {
+  const existing = window._calcList.find(i => i.itemName === itemName && i.claimName === order.claimName);
+  if (existing) {
+    const toast = document.createElement('div');
+    toast.textContent = `「${itemName}」はすでに同じ領地でリストに追加されています`;
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #f0a500;color:#f0a500;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2000);
+    return;
+  }
   window._calcList.push({ ...order, itemName, buyQty: 0 });
   updateCalcListCount();
   const toast = document.createElement('div');
