@@ -1151,3 +1151,254 @@ window.openMapModal = function(n, e, claimName) {
   modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
   document.body.appendChild(modal);
 };
+
+// ============================================
+// クラフト計算機
+// ============================================
+
+window.openCraftModal = function() {
+  document.getElementById('craftModal').classList.remove('hidden');
+  document.getElementById('craftSearchInput').focus();
+};
+
+window.closeCraftModal = function() {
+  document.getElementById('craftModal').classList.add('hidden');
+  document.getElementById('craftResult').innerHTML = '';
+  document.getElementById('craftSearchInput').value = '';
+  document.getElementById('craftSuggestions').classList.add('hidden');
+};
+
+// ESCで閉じる
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') window.closeCraftModal();
+});
+
+// オーバーレイクリックで閉じる
+document.getElementById('craftModal').addEventListener('click', e => {
+  if (e.target.id === 'craftModal') window.closeCraftModal();
+});
+
+// サジェスト
+document.getElementById('craftSearchInput').addEventListener('input', async function() {
+  const q = this.value.trim();
+  if (q.length < 2) {
+    document.getElementById('craftSuggestions').classList.add('hidden');
+    return;
+  }
+  try {
+    const allItems = await fetchAllMarketItems();
+    const hasJa = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
+    let filtered;
+    if (hasJa) {
+      const matchedEn = new Set();
+      const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+      for (const [ja, en] of sorted) {
+        if (q.includes(ja) || ja.includes(q)) matchedEn.add(en.toLowerCase());
+      }
+      filtered = allItems.filter(item => {
+        const name = item.name.toLowerCase();
+        for (const en of matchedEn) { if (name.includes(en)) return true; }
+        return false;
+      });
+    } else {
+      filtered = allItems.filter(i => i.name.toLowerCase().includes(q.toLowerCase()));
+    }
+    const top = filtered.slice(0, 8);
+    const sugg = document.getElementById('craftSuggestions');
+    if (top.length === 0) { sugg.classList.add('hidden'); return; }
+    sugg.innerHTML = top.map(item => {
+      const ja = getJaName(item.name);
+      const icon = `https://bitjita.com/${item.iconAssetName}.webp`;
+      return `<div class="craft-suggest-item" onclick="selectCraftItem('${item.id}','${item.name.replace(/'/g,"\\'")}')">
+        <img src="${icon}" width="28" height="28" style="border-radius:4px;background:var(--bg2)" onerror="this.style.display='none'">
+        <div>
+          <div style="font-size:13px;font-weight:500">${ja || item.name}</div>
+          ${ja ? `<div style="font-size:11px;color:var(--text3)">${item.name}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    sugg.classList.remove('hidden');
+  } catch(e) {}
+});
+
+document.getElementById('craftSearchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doCraftSearch();
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.craft-search-wrap') && !e.target.closest('.craft-suggestions')) {
+    document.getElementById('craftSuggestions').classList.add('hidden');
+  }
+});
+
+window.doCraftSearch = async function() {
+  const q = document.getElementById('craftSearchInput').value.trim();
+  if (!q) return;
+  document.getElementById('craftSuggestions').classList.add('hidden');
+  const allItems = await fetchAllMarketItems();
+  const hasJa = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
+  let found;
+  if (hasJa) {
+    const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+    for (const [ja, en] of sorted) {
+      if (q.includes(ja) || ja.includes(q)) {
+        found = allItems.find(i => i.name.toLowerCase().includes(en.toLowerCase()));
+        if (found) break;
+      }
+    }
+  } else {
+    found = allItems.find(i => i.name.toLowerCase() === q.toLowerCase())
+      || allItems.find(i => i.name.toLowerCase().includes(q.toLowerCase()));
+  }
+  if (found) selectCraftItem(found.id, found.name);
+  else document.getElementById('craftResult').innerHTML =
+    `<div class="craft-no-recipe">「${q}」は見つかりませんでした</div>`;
+};
+
+window.selectCraftItem = async function(itemId, itemName) {
+  document.getElementById('craftSuggestions').classList.add('hidden');
+  document.getElementById('craftSearchInput').value = itemName;
+  document.getElementById('craftResult').innerHTML =
+    '<div class="craft-loading"><div class="spinner" style="margin:0 auto 12px"></div>レシピ取得中...</div>';
+  try {
+    const tree = await buildCraftTree(itemId, 1);
+    renderCraftTree(tree);
+  } catch(e) {
+    document.getElementById('craftResult').innerHTML =
+      `<div class="craft-no-recipe">エラー: ${e.message}</div>`;
+  }
+};
+
+// レシピキャッシュ
+const recipeCache = {};
+
+async function fetchItemData(itemId) {
+  if (recipeCache[itemId]) return recipeCache[itemId];
+  const res = await fetch(`${API_BASE}/items/${itemId}`, { headers: HEADERS });
+  if (!res.ok) return null;
+  const data = await res.json();
+  recipeCache[itemId] = data;
+  return data;
+}
+
+async function fetchMarketData(itemId) {
+  const res = await fetch(`${API_BASE}/market/item/${itemId}`, { headers: HEADERS });
+  if (!res.ok) return null;
+  return await res.json();
+}
+
+// クラフトツリー再帰構築
+async function buildCraftTree(itemId, quantity, depth = 0) {
+  const data = await fetchItemData(itemId);
+  if (!data) return null;
+
+  const item = data.item;
+  const recipes = data.craftingRecipes || [];
+  const marketData = await fetchMarketData(itemId);
+  const sells = (marketData?.sellOrders || []).sort((a, b) =>
+    Number(a.priceThreshold) - Number(b.priceThreshold));
+  const lowestSell = sells[0] ? {
+    price: Math.floor(Number(sells[0].priceThreshold)),
+    claimName: sells[0].claimName || '—',
+    regionName: sells[0].regionName || '—',
+    regionId: sells[0].regionId || '',
+  } : null;
+
+  const node = {
+    itemId, quantity,
+    name: item.name,
+    jaName: getJaName(item.name),
+    icon: item.iconAssetName || '',
+    lowestSell,
+    recipes: [],
+  };
+
+  if (recipes.length > 0 && depth < 3) {
+    const recipe = recipes[0];
+    const ingredients = [];
+    for (const stack of (recipe.consumedItemStacks || [])) {
+      const child = await buildCraftTree(stack.item_id, stack.quantity * quantity, depth + 1);
+      if (child) ingredients.push(child);
+    }
+    node.recipes.push({
+      craftedQty: recipe.craftedItemStacks?.[0]?.quantity || 1,
+      ingredients,
+    });
+  }
+
+  return node;
+}
+
+function calcTotalCost(node) {
+  if (!node) return 0;
+  if (node.recipes.length === 0 || !node.recipes[0].ingredients.length) {
+    return node.lowestSell ? node.lowestSell.price * node.quantity : 0;
+  }
+  return node.recipes[0].ingredients.reduce((sum, child) => sum + calcTotalCost(child), 0);
+}
+
+function renderCraftTree(tree) {
+  if (!tree) {
+    document.getElementById('craftResult').innerHTML =
+      '<div class="craft-no-recipe">データが取得できませんでした</div>';
+    return;
+  }
+  const totalCost = calcTotalCost(tree);
+  const html = `
+    <div class="craft-item-header">
+      <img src="https://bitjita.com/${tree.icon}.webp" width="48" height="48"
+        style="border-radius:6px;background:var(--bg2)" onerror="this.style.display='none'">
+      <div>
+        <div class="craft-item-name">${tree.jaName || tree.name}</div>
+        ${tree.jaName ? `<div class="craft-item-sub">${tree.name}</div>` : ''}
+      </div>
+    </div>
+    ${tree.recipes.length === 0
+      ? '<div class="craft-no-recipe">このアイテムのクラフトレシピはありません</div>'
+      : renderIngredients(tree.recipes[0].ingredients)
+    }
+    ${tree.recipes.length > 0 ? `
+    <div class="craft-total">
+      <span class="craft-total-label">素材合計コスト（推定）</span>
+      <span class="craft-total-value">${totalCost.toLocaleString('ja-JP')} 🪙</span>
+    </div>` : ''}
+  `;
+  document.getElementById('craftResult').innerHTML = html;
+}
+
+function renderIngredients(ingredients, depth = 0) {
+  return `
+    <div class="craft-recipe${depth > 0 ? ' craft-sub-recipe' : ''}">
+      ${depth === 0 ? '<div class="craft-recipe-title">必要素材</div>' : ''}
+      ${ingredients.map(ing => {
+        const hasCraft = ing.recipes.length > 0 && ing.recipes[0].ingredients.length > 0;
+        const craftCost = calcTotalCost(ing);
+        const buyCost = ing.lowestSell ? ing.lowestSell.price * ing.quantity : null;
+        const cheaper = hasCraft && buyCost !== null
+          ? (craftCost < buyCost ? 'craft' : 'buy') : null;
+        return `
+          <div class="craft-ingredient">
+            <img src="https://bitjita.com/${ing.icon}.webp" class="craft-ingredient-icon"
+              onerror="this.style.display='none'">
+            <div class="craft-ingredient-info">
+              <div class="craft-ingredient-name">${ing.jaName || ing.name}</div>
+              ${ing.jaName ? `<div style="font-size:11px;color:var(--text3)">${ing.name}</div>` : ''}
+              <div class="craft-ingredient-qty">× ${ing.quantity}</div>
+              ${cheaper === 'craft' ? `<span style="font-size:11px;color:#f0a500">⚒ クラフトの方が安い (${craftCost.toLocaleString('ja-JP')} 🪙)</span>` : ''}
+              ${cheaper === 'buy' ? `<span style="font-size:11px;color:var(--accent)">🛒 購入の方が安い</span>` : ''}
+            </div>
+            <div class="craft-ingredient-price">
+              ${ing.lowestSell
+                ? `<div class="craft-ingredient-sell">${(ing.lowestSell.price * ing.quantity).toLocaleString('ja-JP')} 🪙</div>
+                   <div class="craft-ingredient-claim">${ing.lowestSell.claimName} / ${ing.lowestSell.regionName}${ing.lowestSell.regionId ? ` (R${ing.lowestSell.regionId})` : ''}</div>
+                   <div class="craft-ingredient-claim">${ing.lowestSell.price.toLocaleString('ja-JP')} 🪙 × ${ing.quantity}</div>`
+                : '<div style="font-size:12px;color:var(--text3)">売り注文なし</div>'
+              }
+            </div>
+          </div>
+          ${hasCraft ? renderIngredients(ing.recipes[0].ingredients, depth + 1) : ''}
+        `;
+      }).join('')}
+    </div>
+  `;
+}
