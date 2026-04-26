@@ -787,6 +787,8 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
     : Number(b.priceThreshold) - Number(a.priceThreshold));
 
   const totalPages = Math.ceil(filtered.length / ORDERS_PER_PAGE);
+  // 各注文に固有UIDを付与（未設定のもののみ）
+  filtered.forEach(o => { if (!o._uid) o._uid = `${o.sellerUsername||""}_${o.priceThreshold}_${o.claimName||""}_${o.quantity}_${Math.random()}`; });
   const pageOrders = filtered.slice((page - 1) * ORDERS_PER_PAGE, page * ORDERS_PER_PAGE);
   const sellCount = filtered.filter(o => o.orderType === 'sell').length;
   const buyCount = filtered.filter(o => o.orderType === 'buy').length;
@@ -830,7 +832,17 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
                 <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
                 <td class="coords">${formatCoords(o)}</td>
                 ${o.orderType === 'sell'
-                  ? `<td><button onclick="addToCalcList(${JSON.stringify(o).replace(/"/g, '&quot;')}, '${window._currentItem?.name || ''}')" style="background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:#00c896;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;">追加</button></td>`
+                  ? (() => {
+                      const uid = o._uid;
+                      const added = window._addedOrderUids?.has(uid);
+                      return `<td><button
+                        onclick="if(!this.disabled){addToCalcList(${JSON.stringify({...o,_uid:uid}).replace(/"/g,'&quot;')},'${(window._currentItem?.name||'').replace(/'/g,"\'")}',this)}"
+                        ${added ? 'disabled' : ''}
+                        style="${added
+                          ? 'background:rgba(255,255,255,0.05);border:1px solid #444;color:#666;padding:2px 8px;border-radius:4px;cursor:default;font-size:12px;'
+                          : 'background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:#00c896;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;'}"
+                      >${added ? '追加済み' : '追加'}</button></td>`;
+                    })()
                   : '<td></td>'}
               </tr>`).join('')}
           </tbody>
@@ -1051,23 +1063,20 @@ function updateCalcListCount() {
   if (el) el.textContent = window._calcList.length > 0 ? `(${window._calcList.length})` : '';
 }
 
-window.addToCalcList = function(order, itemName) {
-  // 同一アイテム・同一出品者・同一価格のみ重複とする
-  const existing = window._calcList.find(i =>
-    i.itemName === itemName &&
-    i.sellerUsername === order.sellerUsername &&
-    i.priceThreshold === order.priceThreshold
-  );
-  if (existing) {
-    const toast = document.createElement('div');
-    toast.textContent = `「${itemName}」はすでに同じ出品者・同じ価格でリストに追加されています`;
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #f0a500;color:#f0a500;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2000);
-    return;
-  }
+// 追加済み注文のUID管理
+window._addedOrderUids = window._addedOrderUids || new Set();
+
+window.addToCalcList = function(order, itemName, btnEl) {
+  const uid = order._uid;
   window._calcList.push({ ...order, itemName, buyQty: 0 });
+  window._addedOrderUids.add(uid);
   updateCalcListCount();
+  // ボタンを押された状態に変更
+  if (btnEl) {
+    btnEl.textContent = '追加済み';
+    btnEl.disabled = true;
+    btnEl.style.cssText = 'background:rgba(255,255,255,0.05);border:1px solid #444;color:#666;padding:2px 8px;border-radius:4px;cursor:default;font-size:12px;';
+  }
   const toast = document.createElement('div');
   toast.textContent = `「${itemName}」を集計リストに追加しました`;
   toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #00c896;color:#00c896;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
@@ -1156,9 +1165,13 @@ window.openCalcList = function() {
   };
 
   window.removeCalcListItem = function(idx) {
+    const removed = window._calcList[idx];
+    if (removed?._uid) window._addedOrderUids?.delete(removed._uid);
     window._calcList.splice(idx, 1);
     updateCalcListCount();
     modal.innerHTML = renderContent();
+    // 注文一覧のボタンを再描画
+    renderOrders(currentOrders, currentOrderType, currentOrderPage, currentOrderSort, currentOrderRegion, currentOrderClaim);
   };
 };
 
