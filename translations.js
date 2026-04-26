@@ -45,7 +45,7 @@ const ITEM_TRANSLATIONS = {
   "銀鉱石": "Argent Ore",
   "銀粒": "Argent Nugget",
   "銀インゴット": "Argent Ingot",
-  "溶融パイライト": "Molten Ferralith",
+  "溶融フェラリス": "Molten Ferralith",
   "溶融パイライト": "Molten Pyrelite",
   "溶融ルミナイト": "Molten Luminite",
   "溶融エレンヴァール": "Molten Elenvar",
