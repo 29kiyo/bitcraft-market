@@ -1,4 +1,4 @@
-# BitCraft Market Search
+# BitCraft Market
 
 BitCraftのマーケット情報をリアルタイムで検索・確認できるWebアプリです。
 
