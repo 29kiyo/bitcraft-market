@@ -1215,7 +1215,7 @@ window.openCraftModal = function() {
     }
   } else {
     const craftSearchInput = document.getElementById('craftSearchInput');
-    if (craftSearchInput) craftSearchInput.focus();
+    if (craftSearchInput) setTimeout(() => craftSearchInput.focus(), 100);
   }
 };
 
@@ -2341,10 +2341,8 @@ function buildTreeFromCache(itemId, quantity, depth = 0) {
   if (!data) return null;
 
   const item = data.item;
-  // Ancient Metal Fragmentsはレシピなし扱い（APIのレシピは誤り）
-  const isAncientMetal = String(itemId) === '1718148009';
-  const craftingRecipes = isAncientMetal ? [] : (data.craftingRecipes || []);
-  const recipesUsingItem = isAncientMetal ? [] : (data.recipesUsingItem || []);
+  const craftingRecipes = data.craftingRecipes || [];
+  const recipesUsingItem = data.recipesUsingItem || [];
   
   // 全レシピを収集（重複去除）
   let allRecipes = [];
@@ -2552,73 +2550,12 @@ function renderCraftTree(tree) {
       : renderIngredients(tree.recipes[0].ingredients)
     }
     ${tree.recipes.length > 0 ? `
-    ${renderMaterialSummary(tree)}
     <div class="craft-total">
       <span class="craft-total-label">素材合計コスト（推定）</span>
       <span class="craft-total-value">${totalCost.toLocaleString('ja-JP')} 🪙</span>
     </div>` : ''}
   `;
   craftResultEl.innerHTML = html;
-}
-
-
-// 全素材をフラットに集計してコンパクト表示
-// prev系（前Tierアイテムのみ）は末端として扱う
-// 素材まとめ：直接の素材を集計（prev系は末端扱い、それ以外は再帰）
-function collectSummaryMaterials(node, map = {}) {
-  if (!node) return map;
-  const hasCraft = node.recipes.length > 0 && node.recipes[0].ingredients.length > 0;
-  if (!hasCraft) {
-    // レシピなし → そのまま末端
-    const key = String(node.itemId);
-    if (!map[key]) map[key] = { name: node.jaName || node.name, quantity: 0, lowestSell: node.lowestSell };
-    map[key].quantity += node.quantity;
-    return map;
-  }
-  // レシピあり → 各素材について判定
-  for (const child of node.recipes[0].ingredients) {
-    const childHasCraft = child.recipes.length > 0 && child.recipes[0].ingredients.length > 0;
-    // 素材が1個だけのレシピ（prev系）は末端として追加
-    const isPrev = childHasCraft && child.recipes[0].ingredients.length === 1 &&
-      (() => {
-        const grandchild = child.recipes[0].ingredients[0];
-        const tiers = ['Aurumite','Celestium','Umbracite','Astralite','Rathium','Luminite','Elenvar','Emarium','Pyrelite','Ferralith'];
-        const stripTier = n => tiers.reduce((s,t) => s.replace(t+' ',''), n);
-        return stripTier(child.name) === stripTier(grandchild.name);
-      })();
-    if (!childHasCraft || isPrev) {
-      // 末端素材として集計
-      const key = String(child.itemId);
-      if (!map[key]) map[key] = { name: child.jaName || child.name, quantity: 0, lowestSell: child.lowestSell };
-      map[key].quantity += child.quantity;
-    } else {
-      // レシピあり → さらに再帰
-      collectSummaryMaterials(child, map);
-    }
-  }
-  return map;
-}
-
-function renderMaterialSummary(tree) {
-  const map = collectSummaryMaterials(tree);
-  const items = Object.values(map);
-  if (items.length === 0) return '';
-  return `
-    <div class="craft-summary">
-      <div class="craft-summary-title">📦 素材まとめ</div>
-      <div class="craft-summary-list">
-        ${items.map(i => {
-          const unitPrice = i.lowestSell ? i.lowestSell.price : null;
-          const totalPrice = unitPrice !== null ? unitPrice * i.quantity : null;
-          return `<div class="craft-summary-item">
-            <span class="craft-summary-name">${i.name}</span>
-            <span class="craft-summary-price">${unitPrice !== null
-              ? `${unitPrice.toLocaleString('ja-JP')} 🪙 × ${i.quantity} = ${totalPrice.toLocaleString('ja-JP')} 🪙`
-              : '—'}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
 }
 
 function renderIngredients(ingredients, depth = 0) {
