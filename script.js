@@ -109,6 +109,8 @@ let craftSelectedItem = null;
 let craftSelectedItems = []; // 複数選択用
 let craftMultiSelectMode = false; // 複数選択モードフラグ
 const craftRecipeIndex = {};
+// APIタグ→チェックボックスvalue の正規化マップ
+const TAG_NORMALIZE = { 'PreciousMetalConcentrate': 'Ore Concentrate' };
 let selectedRegion = '';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
@@ -425,8 +427,9 @@ async function doSearch() {
   });
 
   filtered = filtered.filter(item => {
-    if (allTags.has(item.tag)) return true;
-    return kwFilters.some(f => f.tag === item.tag && item.name.toLowerCase().includes(f.keyword.toLowerCase()));
+    const tag = TAG_NORMALIZE[item.tag] || item.tag;
+    if (allTags.has(tag)) return true;
+    return kwFilters.some(f => f.tag === tag && item.name.toLowerCase().includes(f.keyword.toLowerCase()));
   });
 }
 
@@ -1467,8 +1470,6 @@ function applyCraftFilters(items) {
     }
     // カテゴリーフィルター
     if (categoryValues.length > 0) {
-      // APIタグをチェックボックスのvalueに正規化
-      const TAG_NORMALIZE = { 'PreciousMetalConcentrate': 'Ore Concentrate' };
       const itemTag = TAG_NORMALIZE[item.tag] || item.tag || '';
       const itemCategory = parentCategoryMap[itemTag] || parentCategoryMap[item.tag] || '';
       const jaItemCategory = getJaName(itemCategory) || itemCategory;
