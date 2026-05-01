@@ -43,10 +43,9 @@ const ITEM_TRANSLATIONS = {
   "鉱石パック":"ore chunk",
   "銀": "Argent",
   "銀鉱石": "Argent Ore",
-  "銀粒": "Argent Nugget",
   "銀のインゴット": "Argent Ingot",
   "銀鉱石精鉱":" Argent Ore Concentrate",
-  "金の粒":"Auric Nugget",
+  "金のナゲット":"Auric Nugget",
   "金":"Auric",
   "金鉱石":"Auric ore",
   "金のインゴット":"Auric Ingot",
@@ -1764,6 +1763,19 @@ const AUTO_PARTS = [
   ['Scrap',             'スクラップ'],
   ['Solvent',           '溶剤'],
   ['Package',           'パッケージ'],
+  // 指輪
+  ["Hunter's ","ハンターの"],
+  ["Forager's","採集者の"],
+  ["Carpenter's","大工の"],
+  ["smith's","鍛冶屋の"],
+  ["Leatherworker's","革職人の"],
+  ["Farmer's","農夫の"],
+  ["Masan's","石工の"],
+  ["Miner's","採掘師の"],
+  ["Forester's","フォレスター"],
+  ["Taillor's","仕立て屋の"],
+  ["scholar's","学者の"],
+  ["Fisher's","漁師の"],
 ];
 
 function autoTranslate(enName) {
