@@ -257,14 +257,37 @@ window.changeOrderRegion = function(region) {
 // ============================================
 function getMatchedEnglishNames(q) {
   const matchedEn = new Set();
+  const qH = toHiragana(q);
+
+  // 1. 読み仮名検索
   searchByYomi(q).forEach(en => matchedEn.add(en));
+
+  // 2. ITEM_TRANSLATIONS（日本語→英語）部分一致
   const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
   for (const [ja, en] of sorted) {
     if (ja.includes(q) || q.includes(ja) ||
-      toHiragana(ja).includes(toHiragana(q)) || toHiragana(q).includes(toHiragana(ja))) {
+      toHiragana(ja).includes(qH) || qH.includes(toHiragana(ja))) {
       matchedEn.add(en.toLowerCase());
     }
   }
+
+  // 3. AUTO_PARTSの逆引き（日本語訳→英語キーワード）
+  // 例: "指輪"→"Ring", "リング"→"Ring"
+  if (typeof AUTO_PARTS !== 'undefined') {
+    for (const [en, ja] of AUTO_PARTS) {
+      if (ja.includes(q) || q.includes(ja) ||
+        toHiragana(ja).includes(qH) || qH.includes(toHiragana(ja))) {
+        // このenキーワードを含む英語名を全てマッチ対象に
+        matchedEn.add(en.toLowerCase());
+      }
+    }
+  }
+
+  // 4. 英語での直接部分一致（例: "ring", "argent"）
+  if (/^[a-zA-Z\s'&]+$/.test(q) && q.length >= 2) {
+    matchedEn.add(q.toLowerCase());
+  }
+
   return matchedEn;
 }
 
