@@ -110,7 +110,7 @@ let craftSelectedItems = []; // 複数選択用
 let craftMultiSelectMode = false; // 複数選択モードフラグ
 const craftRecipeIndex = {};
 // APIタグ→チェックボックスvalue の正規化マップ
-const TAG_NORMALIZE = { 'PreciousMetalConcentrate': 'Ore Concentrate' };
+const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate' };
 let selectedRegion = '';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
