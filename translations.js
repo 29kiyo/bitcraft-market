@@ -1777,7 +1777,7 @@ const AUTO_PARTS = [
   ["Taillor's","仕立て屋の"],
   ["scholar's","学者の"],
   ["Fisher's","漁師の"],
-  ["Stonesmith's","石工の],
+  ["Stonesmith's","石工の"],
   ["Auric","金の"],
   ["argent","銀の"],
 ];
