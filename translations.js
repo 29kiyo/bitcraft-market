@@ -1777,6 +1777,7 @@ const AUTO_PARTS = [
   ["Taillor's","仕立て屋の"],
   ["scholar's","学者の"],
   ["Fisher's","漁師の"],
+  ["Auric","金の"],
 ];
 
 function autoTranslate(enName) {
