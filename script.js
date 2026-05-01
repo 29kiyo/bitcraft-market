@@ -1467,8 +1467,10 @@ function applyCraftFilters(items) {
     }
     // カテゴリーフィルター
     if (categoryValues.length > 0) {
-      const itemTag = item.tag || '';
-      const itemCategory = parentCategoryMap[itemTag] || '';
+      // APIタグをチェックボックスのvalueに正規化
+      const TAG_NORMALIZE = { 'PreciousMetalConcentrate': 'Ore Concentrate' };
+      const itemTag = TAG_NORMALIZE[item.tag] || item.tag || '';
+      const itemCategory = parentCategoryMap[itemTag] || parentCategoryMap[item.tag] || '';
       const jaItemCategory = getJaName(itemCategory) || itemCategory;
       
       // グループ値をチェック
