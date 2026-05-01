@@ -518,6 +518,9 @@ const ITEM_TRANSLATIONS = {
 "桃の木の種": "Peach tree Seed",
 "高品質な桃コブラー": "Hitg-Quality Peach Cobbler",
 "桃ジャム": "Peach Jam",
+"エモート":"EmoteDeed",
+"プレミアム":"Premium",
+"花びら":"Blossom",
 
   
 };
@@ -1284,6 +1287,9 @@ const EN_EXACT = {
   "Vibrant Janus Scale": "バイブラントヤヌス鱗",
   "Vibrant Nano": "バイブラントナノ",
   "Yagi": "ヤギ",
+  "EmoteDeed":"エモート",
+  "Premium":"プレミアム",
+  "Blossom":"花びら",
   "Argent Bowl": "銀のボウル",
   "Argent Mug": "銀のマグ",
   "Argent Pan": "銀のパン",
@@ -1779,7 +1785,7 @@ const AUTO_PARTS = [
   ["Fisher's","漁師の"],
   ["Stonesmith's","石工の"],
   ["Auric","金の"],
-  ["argent","銀の"],
+  ["Argent","銀の"],
 ];
 
 function autoTranslate(enName) {
