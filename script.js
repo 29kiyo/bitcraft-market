@@ -18,15 +18,20 @@ function getCachedIcon(iconAssetName) {
   // 二重パス修正: GeneratedIcons/Other/GeneratedIcons/ → GeneratedIcons/
   path = path.replace('GeneratedIcons/Other/GeneratedIcons/', 'GeneratedIcons/');
 
-  // Items/ や Resources/ で始まる場合は GeneratedIcons/ を付与
-  if (path.startsWith('Items/') || path.startsWith('Resources/') || path.startsWith('PremiumIcons/')) {
-    // PremiumIconsはそのまま
-    if (!path.startsWith('PremiumIcons/')) {
-      path = 'GeneratedIcons/' + path;
-    }
+  // プレフィックスに応じてパスを正規化
+  if (path.startsWith('Items/') || path.startsWith('Resources/')) {
+    // Items/ Resources/ → GeneratedIcons/ を付与
+    path = 'GeneratedIcons/' + path;
+  } else if (path.startsWith('PremiumItems/')) {
+    // PremiumItems/ → GeneratedIcons/ を付与
+    path = 'GeneratedIcons/' + path;
+  } else if (path.startsWith('Emotes/')) {
+    // Emotes/ → GeneratedIcons/ を付与
+    path = 'GeneratedIcons/' + path;
   }
+  // GeneratedIcons/ PremiumIcons/ はそのまま
 
-  // スペースをアンダースコアまたは%20に変換
+  // スペースを%20に変換
   path = path.replace(/ /g, '%20');
 
   const url = `https://bitjita.com/${path}.webp`;
