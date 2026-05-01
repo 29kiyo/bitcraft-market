@@ -47,7 +47,7 @@ const ITEM_TRANSLATIONS = {
   "銀鉱石精鉱":" Argent Ore Concentrate",
   "金のナゲット":"Auric Nugget",
   "金":"Auric",
-  "金鉱石":"Auric ore",
+  "金鉱石":"Auric Ore",
   "金のインゴット":"Auric Ingot",
   "金鉱石精鉱":" Auric Ore Concentrate",
   "溶融フェラリス": "Molten Ferralith",
@@ -382,7 +382,6 @@ const ITEM_TRANSLATIONS = {
   "海水魚鱗": "Oceanfish Scale",
   "鉱石": "Ore",
   "鉱石塊": "Ore Chunk",
-  "精鉱": "Ore Concentrate",
   "前哨地研究": "Outpost Research",
   "パッケージ": "Package",
   "ペット卵": "Pet Egg",
@@ -406,7 +405,7 @@ const ITEM_TRANSLATIONS = {
   "海水魚鱗": "Oceanfish Scale",
   "鉱石": "Ore",
   "鉱石塊": "Ore Chunk",
-  "精鉱": "Ore Concentrate",
+  "鉱石精鉱": "Ore Concentrate",
   "前哨地研究": "Outpost Research",
   "パッケージ": "Package",
   "ペット卵": "Pet Egg",
@@ -979,7 +978,7 @@ const EN_ITEM_BASE = {
   "Duelist Legguards": "デュエリストレッグガード",
 
   // ===== 鉱石・インゴット =====
-  "Ore Concentrate": "精鉱",
+  "Ore Concentrate": "鉱石精鉱",
   "Ore Package": "鉱石パック",
   "Ore Piece": "鉱石の欠片",
   "Ingot Package": "インゴットパック",
@@ -1764,7 +1763,7 @@ const AUTO_PARTS = [
   ['Solvent',           '溶剤'],
   ['Package',           'パッケージ'],
   // 指輪
-  ["Hunter's ","ハンターの"],
+  ["Hunter's","ハンターの"],
   ["Forager's","採集者の"],
   ["Carpenter's","大工の"],
   ["smith's","鍛冶屋の"],
@@ -1776,8 +1775,6 @@ const AUTO_PARTS = [
   ["Taillor's","仕立て屋の"],
   ["scholar's","学者の"],
   ["Fisher's","漁師の"],
-  ["Argent","銀の"],
-  ["Auric","金の"],
 ];
 
 function autoTranslate(enName) {
