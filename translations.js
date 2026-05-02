@@ -518,6 +518,7 @@ const ITEM_TRANSLATIONS = {
 "桃の木の種": "Peach tree Seed",
 "高品質な桃コブラー": "Hitg-Quality Peach Cobbler",
 "桃ジャム": "Peach Jam",
+"ジャム": "Jam",
 "エモート":"EmoteDeed",
 "プレミアム":"Premium",
 "花びら":"Blossom",
