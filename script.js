@@ -119,6 +119,8 @@ const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'uggo':'ugo',
                         'Profession Dungeon Loot':'Dungeon Loot',
                       };
+// タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
+const TAG_ALIAS = { 'Ugo': ['Uggo'] };
 let selectedRegion = '';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
@@ -434,11 +436,14 @@ async function doSearch() {
     }
   });
 
-  filtered = filtered.filter(item => {
-    const tag = TAG_NORMALIZE[item.tag] || item.tag;
-    if (allTags.has(tag)) return true;
-    return kwFilters.some(f => f.tag === tag && item.name.toLowerCase().includes(f.keyword.toLowerCase()));
-  });
+  // TAG_ALIASを展開してallTagsに追加
+const expandedTags = new Set(allTags);
+allTags.forEach(t => { if (TAG_ALIAS[t]) TAG_ALIAS[t].forEach(a => expandedTags.add(a)); });
+filtered = filtered.filter(item => {
+  const tag = TAG_NORMALIZE[item.tag] || item.tag;
+  if (expandedTags.has(tag)) return true;
+  return kwFilters.some(f => (f.tag === tag || (TAG_ALIAS[f.tag]||[]).includes(tag)) && item.name.toLowerCase().includes(f.keyword.toLowerCase()));
+});
 }
 
     currentItems = filtered;
