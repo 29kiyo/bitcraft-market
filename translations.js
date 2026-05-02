@@ -310,7 +310,7 @@ const ITEM_TRANSLATIONS = {
 // ===== 未登録タグ追加 =====
   "研究":"research",
   "女王バチ":"Queen Bee",
-  "シンプル革のバッグ":"Simple Leather Bag",
+  "シンプルなレザーバッグ":"Simple Leather Bag",
   "洗練":"Refined",
   "手袋":"Gloves",
   "布":"Cloth",
