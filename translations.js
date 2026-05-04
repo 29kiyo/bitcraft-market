@@ -1753,6 +1753,7 @@ const EN_EXACT = {
 // バウチャー
 "Heimlich Business Voucher": "ハイムリックビジネスバウチャー",
 "Twin's Business Voucher": "ツインズビジネスバウチャー",
+  "Potted Birch Sapling":"鉢植えのブナの苗木",
 };
 
 function getJaName(enName) {
