@@ -1824,6 +1824,6 @@ function autoTranslate(enName) {
       i++;
     }
   }
-  result = out.join('');
+  result = out.join(' ').replace(/\s+/g, ' ').trim();
   return result !== enName ? result : null;
 }
