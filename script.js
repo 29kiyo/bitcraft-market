@@ -115,12 +115,7 @@ let craftSelectedItems = []; // 複数選択用
 let craftMultiSelectMode = false; // 複数選択モードフラグ
 const craftRecipeIndex = {};
 // APIタグ→チェックボックスvalue の正規化マップ
-const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
-                        'uggo':'ugo',
-                        'Profession Dungeon Loot':'Dungeon Loot',
-                      };
-// タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
-const TAG_ALIAS = { 'Ugo': ['Uggo'] };
+
 let selectedRegion = '';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
