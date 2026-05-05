@@ -1219,6 +1219,7 @@ const EN_EQUIPMENT_BASES = new Set([
 ]);
 
 const EN_EXACT = {
+  "Paper Lanterns": "提灯",
   "Peach": "桃",
   "Simple Leather Bag": "シンプルな革のバッグ",
   "Queen Bee":"女王バチ",
