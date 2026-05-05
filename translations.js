@@ -1154,8 +1154,7 @@ const EN_ITEM_BASE = {
   "Roasted Meat": "焼き肉",
   "Roasted Ocean Fish": "焼き海水魚",
   "Skewered Baitfish": "ベイトフィッシュ串焼き",
-  "sugar": "砂糖",
-  "salt": "塩",
+
 
   // ===== 研究・コーデックス =====
   "Cloth Research": "布研究",
@@ -1939,6 +1938,9 @@ const AUTO_PARTS = [
   ["Stonesmith's","石工の"],
   ["Auric","金の"],
   ["Argent","銀の"],
+  //その他
+  ["Salt","塩"],
+  ["Sugar","砂糖"],
 ];
 
 function autoTranslate(enName) {
