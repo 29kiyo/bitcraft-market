@@ -1,6 +1,8 @@
 const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'uggo':'ugo',
                         'Profession Dungeon Loot':'Dungeon Loot',
+                        'Animal Food':'Animal Feed',
+                        'Monster':'Animal',
                       };
 // タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
 const TAG_ALIAS = { 'Ugo': ['Uggo'] };
@@ -1721,6 +1723,8 @@ const EN_EXACT = {
 "Mossy Amia Scale": "モッシーアミアのウロコ",
 "Mossy Synan": "モッシーシナン",
 "Mossy Synan Filet": "モッシーシナンフィレ",
+"Mossy Nano":"モッシーナノ",
+"Murky Chub":"マーキーチャブ",
 "Mote of Wind": "風の粒子",
 "Murky Nemato Filet": "濁ったネマトフィレ",
 "Nubi Berry Mash": "ヌービベリーマッシュ",
@@ -1949,6 +1953,43 @@ const AUTO_PARTS = [
   //その他
   ["Salt","塩"],
   ["Sugar","砂糖"],
+  //動物
+  ["Animal Hair","動物の毛"],
+  ["Sagi Bird Food","サギ鳥の餌"],
+  ["Animal Food","動物の餌"],
+  ["Animal Swill","動物の残飯"],
+  ["Sagi Bird Trap","サギ鳥の罠"],  
+  ["Domesticated Animal Materials","家畜由来の素材"],
+  ["Animal Trap","動物用罠"],
+  ["Sagi Bird Down Feather","サギ鳥の羽毛"],
+  ["Sagi Bird Egg","サギ鳥の卵"],
+  ["Monster","獣"],
+  ["Tamed Anima","テイムされた動物"],
+  ["Captured Sagi Bird","捕獲されたサギ鳥"],
+  ["Domesticated Sagi Bird","飼育されているサギ鳥"],
+  ["Desert Terrorbird","デザート・テラバード"],  
+  ["Tundra Ox","ツンドラオックス"],
+  
+  ["",""],
+  ["",""],
+  ["",""],
+  ["",""],
+  ["",""],
+  ["",""],
+  ["",""],
+  
+  //衣類
+  ["Clothing","衣類"],
+  ["Survivalist's Down Feather Gloves","サバイバリストのダウンフェザー手袋"],
+  ["Party Hat","パーティーハット（ピンク）"],
+  ["Wrangler Darling's Hat","ラングラーダーリンの"],
+  ["Wrangler Sweetheart's","ラングラースウィートハートの"],
+  ["Wrangler's Cleancut","ラングラークリーンカットの"],
+  ["Hat","帽子"],
+  ["Pants","パンツ"],
+  ["Shirt","シャツ"],
+  ["Gloves","手袋"],
+  ["Boots","ブーツ"],
 ];
 
 function autoTranslate(enName) {
