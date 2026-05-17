@@ -6,7 +6,11 @@ const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'Monster':'Animal',
                       };
 // タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
-const TAG_ALIAS = { 'Ugo': ['Uggo'] };
+const TAG_ALIAS = { 'Ugo': ['Uggo'],
+                    'Animal':['Monster'],
+                    'Animal Feed':['Animal Swill'],
+                    'Animal Feed':['Animal Food'],
+                  };
 
 // BitCraft アイテム名 日本語⇔英語 変換テーブル（BitCraft準拠）
 const ITEM_TRANSLATIONS = {
