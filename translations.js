@@ -2,6 +2,7 @@ const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'uggo':'ugo',
                         'Profession Dungeon Loot':'Dungeon Loot',
                         'Animal Food':'Animal Feed',
+                        'Animal Swill':'Animal Feed',
                         'Monster':'Animal',
                       };
 // タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
