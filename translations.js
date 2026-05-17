@@ -1969,9 +1969,8 @@ const AUTO_PARTS = [
   ["Captured Sagi Bird","捕獲されたサギ鳥"],
   ["Domesticated Sagi Bird","飼育されているサギ鳥"],
   ["Desert Terrorbird","デザート・テラバード"],  
-  ["Tundra Ox","ツンドラオックス"],
-  
-  ["",""],
+  ["Tundra Ox","ツンドラオックス"],  
+  ["Tamed Animal","テイムした動物"],
   ["",""],
   ["",""],
   ["",""],
