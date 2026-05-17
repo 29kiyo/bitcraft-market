@@ -465,9 +465,13 @@ function renderSearchResults(items, page = 1) {
   const pageItems = items.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
   const paginationHtml = totalPages > 1 ? `
     <div class="pagination">
-      <button class="page-btn" onclick="changePage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
-      <span class="page-info">${page} / ${totalPages}</span>
-      <button class="page-btn" onclick="changePage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+      <button class="page-btn" onclick="changePage(1)" ${page <= 1 ? 'disabled' : ''}>«</button>
+      <button class="page-btn" onclick="changePage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>‹</button>
+      <input type="number" class="page-input" value="${page}" min="1" max="${totalPages}"
+        onchange="changePage(Math.min(Math.max(1,parseInt(this.value)||1),${totalPages}))">
+      <span class="page-info">/ ${totalPages}</span>
+      <button class="page-btn" onclick="changePage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}">›</button>
+      <button class="page-btn" onclick="changePage(${totalPages})" ${page >= totalPages ? 'disabled' : ''}>»</button>
     </div>` : '';
 
   searchResultsList.innerHTML = `
@@ -835,9 +839,13 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
 
   const pagination = totalPages > 1 ? `
     <div class="pagination">
-      <button class="page-btn" onclick="changeOrderPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
-      <span class="page-info">${page} / ${totalPages}</span>
-      <button class="page-btn" onclick="changeOrderPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+      <button class="page-btn" onclick="changeOrderPage(1)" ${page <= 1 ? 'disabled' : ''}>«</button>
+      <button class="page-btn" onclick="changeOrderPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>‹</button>
+      <input type="number" class="page-input" value="${page}" min="1" max="${totalPages}"
+        onchange="changeOrderPage(Math.min(Math.max(1,parseInt(this.value)||1),${totalPages}))">
+      <span class="page-info">/ ${totalPages}</span>
+      <button class="page-btn" onclick="changeOrderPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>›</button>
+      <button class="page-btn" onclick="changeOrderPage(${totalPages})" ${page >= totalPages ? 'disabled' : ''}>»</button>
     </div>` : '';
 
   const html = filtered.length === 0
@@ -926,9 +934,13 @@ function renderLogTable(trades, page) {
   const pageItems = limited.slice((page - 1) * LOG_PER_PAGE, page * LOG_PER_PAGE);
   const pagination = totalPages > 1 ? `
     <div class="pagination">
-      <button class="page-btn" onclick="changeLogPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
-      <span class="page-info">${page} / ${totalPages}</span>
-      <button class="page-btn" onclick="changeLogPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+      <button class="page-btn" onclick="changeLogPage(1)" ${page <= 1 ? 'disabled' : ''}>«</button>
+      <button class="page-btn" onclick="changeLogPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>‹</button>
+      <input type="number" class="page-input" value="${page}" min="1" max="${totalPages}"
+        onchange="changeLogPage(Math.min(Math.max(1,parseInt(this.value)||1),${totalPages}))">
+      <span class="page-info">/ ${totalPages}</span>
+      <button class="page-btn" onclick="changeLogPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>›</button>
+      <button class="page-btn" onclick="changeLogPage(${totalPages})" ${page >= totalPages ? 'disabled' : ''}>»</button>
     </div>` : '';
 
   const regions = [...new Set(trades.map(t => t.regionName).filter(Boolean))].sort();
