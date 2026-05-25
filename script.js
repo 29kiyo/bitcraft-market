@@ -5,6 +5,401 @@
 const API_BASE = 'https://bitcraft-proxy.29kiyo.workers.dev/api';
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
+// ============================================================
+// localStorage ユーティリティ
+// ============================================================
+const LS = {
+  get(key, fallback) {
+    try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
+    catch { return fallback; }
+  },
+  set(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} },
+};
+
+// ============================================================
+// ブックマーク
+// ============================================================
+const BM_KEY = 'bookmarks';
+
+function bmGet()      { return LS.get(BM_KEY, []); }
+function bmSet(list)  { LS.set(BM_KEY, list); _updateNavBadges(); }
+function bmHas(name)  { return bmGet().includes(name); }
+
+window.toggleBookmark = function(name) {
+  let list = bmGet();
+  list = list.includes(name) ? list.filter(n => n !== name) : [name, ...list];
+  bmSet(list);
+  // 全ページの同名ボタンを更新
+  document.querySelectorAll(`[data-bm="${CSS.escape(name)}"]`).forEach(btn => _applyBmBtn(btn, name));
+  // 詳細ヘッダーのボタン更新
+  const hdr = document.getElementById('headerBmBtn');
+  if (hdr && hdr.dataset.name === name) _applyBmBtn(hdr, name);
+};
+
+window.removeBookmark = function(name) {
+  bmSet(bmGet().filter(n => n !== name));
+  renderBookmarksPanel();
+  document.querySelectorAll(`[data-bm="${CSS.escape(name)}"]`).forEach(btn => _applyBmBtn(btn, name));
+};
+
+function _applyBmBtn(btn, name) {
+  const on = bmHas(name);
+  btn.classList.toggle('is-bookmarked', on);
+  if (btn.classList.contains('card-bookmark-btn')) {
+    btn.textContent = on ? '★' : '☆';
+    btn.title = on ? 'ブックマーク解除' : 'ブックマーク追加';
+  } else {
+    btn.textContent = on ? '★ 解除' : '☆ ブックマーク';
+  }
+}
+
+window.exportBookmarks = function() {
+  const blob = new Blob([JSON.stringify({ version: 1, bookmarks: bmGet() }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bitcraft-bookmarks.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+window.importBookmarks = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data || !Array.isArray(data.bookmarks)) throw new Error();
+      bmSet([...new Set([...bmGet(), ...data.bookmarks])]);
+      renderBookmarksPanel();
+      _showToast(`✅ ${data.bookmarks.length}件インポートしました`);
+    } catch { _showToast('❌ 正しいJSONファイルを選択してください', true); }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+};
+
+window.clearAllBookmarks = function() {
+  if (!confirm('ブックマークを全削除しますか？')) return;
+  LS.set(BM_KEY, []);
+  renderBookmarksPanel();
+  _updateNavBadges();
+};
+
+async function renderBookmarksPanel() {
+  const list = bmGet();
+  const el = document.getElementById('bookmarksList');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="panel-empty"><div class="panel-empty-icon">🔖</div>ブックマークはありません<br><small style="color:var(--text3);margin-top:6px;display:block">アイテム詳細の ☆ ボタンで追加できます</small></div>';
+    _updateNavBadges(); return;
+  }
+  let allItems = [];
+  try { allItems = await fetchAllMarketItems(); } catch {}
+  el.innerHTML = '';
+  list.forEach(name => {
+    const item = allItems.find(i => i.name === name);
+    el.appendChild(_makePanelItem(name, item, () => window.removeBookmark(name)));
+  });
+  // パネル内アイテムクリックで詳細へ
+  el.querySelectorAll('.panel-item').forEach((row, i) => {
+    const name = list[i];
+    const item = allItems.find(it => it.name === name);
+    row.addEventListener('click', () => { if (item) _openFromPanel(item); });
+  });
+  _updateNavBadges();
+}
+
+// ============================================================
+// 閲覧履歴
+// ============================================================
+const RV_KEY = 'recentlyViewed';
+const RV_MAX = 50;
+
+function rvAdd(name) {
+  let list = LS.get(RV_KEY, []).filter(n => n !== name);
+  list.unshift(name);
+  LS.set(RV_KEY, list.slice(0, RV_MAX));
+  _updateNavBadges();
+}
+
+window.removeRecentlyViewed = function(name) {
+  LS.set(RV_KEY, LS.get(RV_KEY, []).filter(n => n !== name));
+  renderRecentlyViewedPanel();
+  _updateNavBadges();
+};
+
+window.clearAllRecentlyViewed = function() {
+  if (!confirm('閲覧履歴を全削除しますか？')) return;
+  LS.set(RV_KEY, []);
+  renderRecentlyViewedPanel();
+  _updateNavBadges();
+};
+
+async function renderRecentlyViewedPanel() {
+  const list = LS.get(RV_KEY, []);
+  const el = document.getElementById('recentlyViewedList');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="panel-empty"><div class="panel-empty-icon">🕒</div>閲覧履歴はありません</div>';
+    _updateNavBadges(); return;
+  }
+  let allItems = [];
+  try { allItems = await fetchAllMarketItems(); } catch {}
+  el.innerHTML = '';
+  list.forEach(name => {
+    const item = allItems.find(i => i.name === name);
+    el.appendChild(_makePanelItem(name, item, () => window.removeRecentlyViewed(name)));
+  });
+  el.querySelectorAll('.panel-item').forEach((row, i) => {
+    const name = list[i];
+    const item = allItems.find(it => it.name === name);
+    row.addEventListener('click', () => { if (item) _openFromPanel(item); });
+  });
+  _updateNavBadges();
+}
+
+// ============================================================
+// 検索履歴
+// ============================================================
+const SH_KEY = 'searchHistory';
+const SH_MAX = 20;
+
+function shAdd(q) {
+  if (!q || !q.trim()) return;
+  const term = q.trim();
+  let list = LS.get(SH_KEY, []).filter(n => n !== term);
+  list.unshift(term);
+  LS.set(SH_KEY, list.slice(0, SH_MAX));
+  _updateNavBadges();
+}
+
+window.deleteSearchHistoryItem = function(term) {
+
+  const next =
+    LS.get(SH_KEY, []).filter(n => n !== term);
+
+  LS.set(SH_KEY, next);
+
+  _updateNavBadges();
+
+  if (next.length) {
+
+    _shShowDropdown();
+
+  } else {
+
+    _shHideDropdown();
+
+  }
+};
+
+window.clearAllSearchHistory = function() {
+  if (!confirm('検索履歴を全削除しますか？')) return;
+  LS.set(SH_KEY, []);
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (dd) dd.classList.add('hidden');
+  renderSearchHistoryPanel();
+  _updateNavBadges();
+};
+
+function _shRefreshDropdown() {
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (!dd || dd.classList.contains('hidden')) return;
+  _shShowDropdown();
+}
+
+function _shShowDropdown() {
+  const list = LS.get(SH_KEY, []);
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (!dd || !list.length) return;
+  dd.innerHTML = `
+    <div class="sh-header">
+      <span class="sh-label">🕒 検索履歴</span>
+      <button class="sh-clear-btn" onclick="clearAllSearchHistory()">全削除</button>
+    </div>
+    ${list.map(t => `
+      <div class="sh-item" onclick='_applyHistory(${JSON.stringify(t)})'>
+        <span class="sh-item-icon">🔍</span>
+        <span class="sh-item-text">${_esc(t)}</span>
+        <button class="sh-item-del"
+onmousedown="event.preventDefault()"
+onclick='event.stopPropagation();deleteSearchHistoryItem(${JSON.stringify(t)})'>✕</button>
+      </div>`).join('')}`;
+  dd.classList.remove('hidden');
+}
+
+function _shHideDropdown() {
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (dd) dd.classList.add('hidden');
+}
+
+window._applyHistory = function(term) {
+  document.getElementById('searchInput').value = term;
+  _shHideDropdown();
+  doSearch();
+};
+
+function renderSearchHistoryPanel() {
+  const list = LS.get(SH_KEY, []);
+  const el = document.getElementById('searchHistoryList');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="panel-empty"><div class="panel-empty-icon">🔍</div>検索履歴はありません</div>';
+    _updateNavBadges(); return;
+  }
+  el.innerHTML = '';
+  list.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'sh-panel-item';
+    row.innerHTML = `
+      <span class="sh-item-icon">🔍</span>
+      <span class="sh-panel-item-text">${_esc(t)}</span>
+      <button class="sh-panel-item-del" title="削除">✕</button>`;
+    row.querySelector('span.sh-panel-item-text').addEventListener('click', () => {
+      navGoHome();
+      document.getElementById('searchInput').value = t;
+      doSearch();
+    });
+   row.addEventListener('click', () => {
+
+  navGoHome();
+
+  setTimeout(() => {
+
+    document.getElementById('searchInput').value = t;
+
+    doSearch();
+
+  }, 50);
+
+});
+    row.querySelector('.sh-panel-item-del').addEventListener('click', e => {
+      e.stopPropagation();
+      LS.set(SH_KEY, LS.get(SH_KEY, []).filter(n => n !== t));
+      renderSearchHistoryPanel();
+      _updateNavBadges();
+    });
+    el.appendChild(row);
+  });
+  _updateNavBadges();
+}
+
+// ============================================================
+// ナビゲーション制御
+// ============================================================
+function toggleNav() {
+  const nav = document.getElementById('sideNav');
+  nav.classList.contains('open') ? closeNav() : _openNav();
+}
+
+function _openNav() {
+  document.getElementById('sideNav').classList.add('open');
+  document.getElementById('navOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNav() {
+  document.getElementById('sideNav').classList.remove('open');
+  document.getElementById('navOverlay').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function _hideAllPanels() {
+  ['bookmarksPanel','recentlyViewedPanel','searchHistoryPanel'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+}
+
+window.navGoHome = function() {
+  closeNav();
+  _hideAllPanels();
+  // 検索結果/詳細が出ていなければ emptyState を表示
+  const rs = document.getElementById('resultSection');
+  const sr = document.getElementById('searchResults');
+  const es = document.getElementById('emptyState');
+  if (rs?.classList.contains('hidden') && sr?.classList.contains('hidden')) {
+    if (es) es.classList.remove('hidden');
+  }
+  document.getElementById('navHome')?.classList.add('active');
+};
+
+window.navGoSection = function(section) {
+  closeNav();
+  _hideAllPanels();
+  // メインコンテンツを隠す
+  ['resultSection','searchResults','emptyState'].forEach(id => {
+    document.getElementById(id)?.classList.add('hidden');
+  });
+  const panelMap = { bookmarks:'bookmarksPanel', recentlyViewed:'recentlyViewedPanel', searchHistory:'searchHistoryPanel' };
+  const navMap   = { bookmarks:'navBookmarks',   recentlyViewed:'navRecent',            searchHistory:'navHistory' };
+  document.getElementById(panelMap[section])?.classList.remove('hidden');
+  document.getElementById(navMap[section])?.classList.add('active');
+  if (section === 'bookmarks')      renderBookmarksPanel();
+  if (section === 'recentlyViewed') renderRecentlyViewedPanel();
+  if (section === 'searchHistory')  renderSearchHistoryPanel();
+  window.scrollTo(0, 0);
+};
+
+// ============================================================
+// 共通ユーティリティ
+// ============================================================
+function _updateNavBadges() {
+  const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n || ''; };
+  set('navBookmarkCount', bmGet().length || '');
+  set('navRecentCount',   LS.get(RV_KEY, []).length || '');
+  set('navHistoryCount',  LS.get(SH_KEY, []).length || '');
+}
+
+function _esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1827;border:1px solid #00c896;color:#00c896;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;pointer-events:none;transition:opacity 0.5s;';
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2500);
+}
+
+function _makePanelItem(name, item, onDel) {
+  const jaName  = item ? getJaName(item.name) : '';
+  const useJa   = jaName && jaName.length > 2 && jaName.toLowerCase() !== name.toLowerCase();
+  const iconUrl  = item ? getCachedIcon(item.iconAssetName) : '';
+  const row = document.createElement('div');
+  row.className = 'panel-item';
+  row.innerHTML = `
+    ${iconUrl ? `<img class="panel-item-icon" src="${iconUrl}" alt="${_esc(name)}" onerror="this.style.display='none'">` : '<div class="panel-item-icon"></div>'}
+    <div class="panel-item-text">
+      <div class="panel-item-ja">${useJa ? _esc(jaName) : _esc(name)}</div>
+      ${useJa ? `<div class="panel-item-en">${_esc(name)}</div>` : ''}
+    </div>
+    <button class="panel-item-del" title="削除">✕</button>`;
+  row.querySelector('.panel-item-del').addEventListener('click', e => { e.stopPropagation(); onDel(); });
+  return row;
+}
+
+async function _openFromPanel(item) {
+  closeNav();
+  _hideAllPanels();
+  ['resultSection','searchResults','emptyState'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+  currentItems = [item];
+  savedScrollPosition = 0;
+  await loadItemDetail(item);
+  history.pushState({ page: 'detail', itemId: item.id }, '');
+  window.scrollTo(0, 0);
+}
+
+// SH_KEY / LS をグローバルに公開（inline onclick から参照するため）
+window.LS = LS;
+window.SH_KEY = SH_KEY;
+window.renderSearchHistoryPanel = renderSearchHistoryPanel;
+window._updateNavBadges = _updateNavBadges;
+
+
 // ============================================
 // アイコンキャッシュ
 // ============================================
@@ -64,6 +459,7 @@ window.addEventListener('pagehide', clearCaches);
 
 // アプリ起動時にバックグラウンドでマーケットデータを取得
 window.addEventListener('load', () => {
+  _updateNavBadges();
   // 少し遅延させて、ページの表示を優先
   setTimeout(() => {
     fetchAllMarketItems().catch(() => {});
@@ -146,11 +542,24 @@ document.getElementById('refreshBtn').addEventListener('click', async () => {
 searchBtn.addEventListener('click', doSearch);
 searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 searchInput.addEventListener('input', onSearchInput);
-searchInput.addEventListener('blur', () => setTimeout(hideSuggestions, 200));
+searchInput.addEventListener('focus', () => {
+  if (!searchInput.value.trim()) _shShowDropdown();
+});
+searchInput.addEventListener('blur', () =>
+  setTimeout(() => {
+    hideSuggestions();
+    const active =
+      document.activeElement;
+    if (active && active.closest('#searchHistoryDropdown')) {
+      return;
+    }
+    _shHideDropdown();
+  }, 200)
+);
 
 // クリックイベント（統合）
 document.addEventListener('click', e => {
-  if (!e.target.closest('.search-box')) hideSuggestions();
+  if (!e.target.closest('.search-box')) { hideSuggestions(); _shHideDropdown(); }
   if (!e.target.closest('.multi-select-wrap')) {
     document.querySelectorAll('.multi-select-dropdown').forEach(d => d.classList.add('hidden'));
   }
@@ -263,34 +672,50 @@ window.changeOrderRegion = function(region) {
 // 日本語検索ユーティリティ（共通化）
 // ============================================
 function getMatchedEnglishNames(q) {
+
   const matchedEn = new Set();
-  const qH = toHiragana(q);
 
-  // 1. 読み仮名検索
-  searchByYomi(q).forEach(en => matchedEn.add(en));
+  const qNorm = toHiragana((q || "").toLowerCase());
 
-  // 2. ITEM_TRANSLATIONS（日本語→英語）部分一致
-  const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
-  for (const [ja, en] of sorted) {
-    if (ja.includes(q) || q.includes(ja) ||
-      toHiragana(ja).includes(qH) || qH.includes(toHiragana(ja))) {
+  // 読み検索
+  searchByYomi(q).forEach(en => {
+    matchedEn.add(en);
+  });
+
+  // ITEM_TRANSLATIONS
+  const sorted = Object.entries(ITEM_TRANSLATIONS)
+    .sort((a, b) => b[1].length - a[1].length);
+
+  for (const [en, ja] of sorted) {
+
+    const jaNorm = toHiragana((ja || "").toLowerCase());
+
+    let score = 0;
+
+    // 完全一致
+    if (jaNorm === qNorm) {
+      score += 1000;
+    }
+
+    // 前方一致
+    else if (jaNorm.startsWith(qNorm)) {
+      score += 500;
+    }
+
+    // 部分一致
+    else if (
+      qNorm.length >= 3 &&
+      jaNorm.includes(qNorm)
+    ) {
+      score += 100;
+    }
+
+    if (score > 0) {
       matchedEn.add(en.toLowerCase());
     }
   }
 
-  // 3. AUTO_PARTSの逆引き（日本語訳→英語キーワード）
-  // 例: "指輪"→"Ring", "リング"→"Ring"
-  if (typeof AUTO_PARTS !== 'undefined') {
-    for (const [en, ja] of AUTO_PARTS) {
-      if (ja.includes(q) || q.includes(ja) ||
-        toHiragana(ja).includes(qH) || qH.includes(toHiragana(ja))) {
-        // このenキーワードを含む英語名を全てマッチ対象に
-        matchedEn.add(en.toLowerCase());
-      }
-    }
-  }
-
-  // 4. 英語での直接部分一致（例: "ring", "argent"）
+  // 英語検索
   if (/^[a-zA-Z\s'&]+$/.test(q) && q.length >= 2) {
     matchedEn.add(q.toLowerCase());
   }
@@ -300,12 +725,38 @@ function getMatchedEnglishNames(q) {
 
 function filterByJapanese(items, q) {
   const matchedEn = getMatchedEnglishNames(q);
-  if (matchedEn.size === 0) return [];
+  const qH = toHiragana(q);
+
   return items.filter(item => {
+    // 既存の英語キーワードマッチ
     const name = item.name.toLowerCase();
     for (const en of matchedEn) {
       if (name.includes(en)) return true;
     }
+
+    // getJaNameで変換した日本語名と照合
+    const ja = getJaName(item.name);
+    if (ja) {
+      // 漢字・カタカナ直接マッチ
+      if (ja.includes(q)) return true;
+      // カタカナ→ひらがな変換してマッチ
+      if (toHiragana(ja).includes(qH)) return true;
+      // ITEM_YOMIを使った読みマッチ
+      for (const [kanji, yomi] of Object.entries(ITEM_YOMI)) {
+        if (
+  ja.includes(kanji) &&
+  (
+    yomi === qH ||
+    yomi.startsWith(qH) ||
+    (
+      qH.length >= 3 &&
+      yomi.includes(qH)
+    )
+  )
+) return true;
+      }
+    }
+
     return false;
   });
 }
@@ -315,7 +766,12 @@ function filterByJapanese(items, q) {
 // ============================================
 async function onSearchInput() {
   const q = searchInput.value.trim();
-  if (q.length < 2) { hideSuggestions(); return; }
+  if (q.length < 2) {
+    hideSuggestions();
+    if (!q) _shShowDropdown(); else _shHideDropdown();
+    return;
+  }
+  _shHideDropdown();
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => fetchSuggestions(searchInput.value.trim()), 500);
 }
@@ -379,7 +835,30 @@ function hideSuggestions() {
 // メイン検索
 // ============================================
 async function doSearch() {
+  
+  document.getElementById('bookmarksPanel')?.classList.add('hidden');
+document.getElementById('searchHistoryPanel')?.classList.add('hidden');
+document.getElementById('recentlyViewedPanel')?.classList.add('hidden');
+  
   const q = searchInput.value.trim();
+  
+  // 特殊キーワード：全アイテム表示
+  if (q === 'ALL_ITEM') {
+    showLoading();
+    clearError();
+    try {
+      const allItems = await fetchAllMarketItems();
+      currentItems = allItems;
+      currentPage = 1;
+      renderSearchResults(currentItems, currentPage);
+    } catch(err) {
+      showError(`エラーが発生しました: ${err.message}`);
+    } finally {
+      hideLoading();
+    }
+    return;
+  }
+
   if (q !== window._lastSearchQuery) {
     ['tier', 'rarity', 'category'].forEach(type => {
       document.querySelectorAll(`#${type}Dropdown input[type=checkbox]`).forEach(cb => cb.checked = false);
@@ -394,6 +873,8 @@ async function doSearch() {
   if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
 
   hideSuggestions();
+  _shHideDropdown();
+  if (q) shAdd(q);
   showLoading();
   clearError();
 
@@ -481,8 +962,13 @@ function renderSearchResults(items, page = 1) {
       ${pageItems.map(item => {
         const jaName = getJaName(item.name);
         const useJaName = jaName && jaName.length > 2;
+        const bm = bmHas(item.name);
+        const nameEsc = item.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
         return `
           <div class="result-card" onclick="selectItem('${item.id}')">
+            <button class="card-bookmark-btn ${bm?'is-bookmarked':''}" data-bm="${item.name.replace(/"/g,'&quot;')}"
+              title="${bm?'ブックマーク解除':'ブックマーク追加'}"
+              onclick="event.stopPropagation();toggleBookmark('${nameEsc}')">${bm?'★':'☆'}</button>
             <div class="s-top">
               <img class="s-icon" src="${getCachedIcon(item.iconAssetName)}" alt="${item.name}" onerror="this.style.display='none'">
               <div class="s-text">
@@ -529,6 +1015,7 @@ window.changePage = function(page) {
 // アイテム詳細取得
 // ============================================
 async function loadItemDetail(item) {
+  rvAdd(item.name);
   showLoading();
   try {
     const itemOrCargo = item.itemType === 1 ? 'cargo' : 'item';
@@ -605,23 +1092,32 @@ function renderResult(item, priceData, orders, orderType) {
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
   const useJaName = jaName && jaName.length > 2;
+  const bm = bmHas(item.name);
+  const nameEsc = item.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
   document.getElementById('itemHeader').innerHTML = `
-    <div class="item-title">
-      <img class="item-icon" src="${getCachedIcon(item.iconAssetName)}" alt="${item.name}" onerror="this.style.display='none'">
-      <div class="item-title-text">
-        <div class="item-name-row">
-          <h2 class="item-ja-name">${useJaName ? jaName : item.name}</h2>
-          ${useJaName ? `<span class="item-en-name">/ ${item.name}</span>` : ''}
-        </div>
-        <div class="item-badges">
-          ${item.tier && item.tier > 0 ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
-          <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
-          ${item.tag ? `
-            ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
-            <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
-          ` : ''}
+    <div class="item-title" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;">
+        <img class="item-icon" src="${getCachedIcon(item.iconAssetName)}" alt="${item.name}" onerror="this.style.display='none'">
+        <div class="item-title-text" style="min-width:0;">
+          <div class="item-name-row">
+            <h2 class="item-ja-name">${useJaName ? jaName : item.name}</h2>
+            ${useJaName ? `<span class="item-en-name">/ ${item.name}</span>` : ''}
+          </div>
+          <div class="item-badges">
+            ${item.tier && item.tier > 0 ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
+            <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+            ${item.tag ? `
+              ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
+              <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
+            ` : ''}
+          </div>
         </div>
       </div>
+      <button id="headerBmBtn" data-name="${item.name}"
+        class="header-bookmark-btn ${bm?'is-bookmarked':''}"
+        onclick="toggleBookmark('${nameEsc}')">
+        ${bm ? '★ 解除' : '☆ ブックマーク'}
+      </button>
     </div>
   `;
 }
@@ -2223,3 +2719,4 @@ function renderIngredients(ingredients, depth = 0) {
     </div>
   `;
 }
+console.log("script end");

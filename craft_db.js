@@ -471,3 +471,4 @@ function getManualRecipe(itemId, itemName, tier) {
   };
 }
 
+console.log("craft end");

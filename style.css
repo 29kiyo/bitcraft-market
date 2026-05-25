@@ -51,12 +51,15 @@ body {
 
 /* ---- ヘッダー ---- */
 header {
-  position: relative; z-index: 10;
+  position: relative;
+  z-index: 10;
   border-bottom: 1px solid var(--border);
   background: rgba(7,13,23,0.95);
   backdrop-filter: blur(12px);
 }
 .header-inner {
+  position: relative;
+  z-index: 10;
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px 24px;
@@ -778,6 +781,7 @@ footer a:hover { color: var(--accent); }
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  padding-right: 48px;
   padding: 8px 12px;
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.08);
@@ -1876,7 +1880,7 @@ text-overflow: ellipsis;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
-  z-index: 1000;
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2091,43 +2095,67 @@ text-overflow: ellipsis;
 }
 .craft-ingredient {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: flex-start; /* 上揃え */
+  gap: 12px;               /* アイコンとテキストの間隔 */
   padding: 10px 0;
   border-bottom: 1px solid var(--border);
+  width: 100%;             /* 横幅いっぱいに広げる */
+  box-sizing: border-box;
 }
-.craft-ingredient:last-child { border-bottom: none; }
+
+.craft-ingredient:last-child { 
+  border-bottom: none; 
+}
+
 .craft-ingredient-icon {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  flex-shrink: 0;
+  flex-shrink: 0;          /* アイコンが潰れないように固定 */
   background: var(--bg2);
   border-radius: 4px;
 }
-.craft-ingredient-info { flex: 1; min-width: 0; }
+
+/* ★ここがポイント：右側のテキスト全体を包むコンテナ */
+.craft-ingredient-info {
+  flex: 1;                 /* 残りの横幅をすべて使う */
+  min-width: 0;            /* flexの子要素の文字折り返しバグを防ぐ */
+  display: flex;
+  flex-direction: column;  /* 上から下に順番に並べる */
+  gap: 4px;                /* 各行の隙間（お好みで調整） */
+}
+
+/* 各テキスト要素が縦に潰れないように width: 100% や white-space を意識 */
 .craft-ingredient-name {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text);
+  line-height: 1.3;
+  word-break: break-all;   /* 長すぎる英語などの対策 */
 }
+
 .craft-ingredient-qty {
   font-family: 'Rajdhani', sans-serif;
   font-size: 0.85rem;
   color: var(--text);
 }
-.craft-ingredient-price {
-  text-align: right;
-  font-family: 'Rajdhani', sans-serif;
+
+.craft-ingredient-claim {
+  font-size: 0.75rem;
+  color: var(--text);
 }
+
 .craft-ingredient-sell {
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--text);
 }
-.craft-ingredient-claim {
-  font-size: 0.75rem;
-  color: var(--text);
+
+/* もし「460」などの価格を右上に絶対配置、または別枠にしたい場合の参考 */
+.craft-ingredient-price {
+  text-align: right;
+  font-family: 'Rajdhani', sans-serif;
+  /* 必要に応じて、infoの横に並べるか、infoの中に含めるかで調整してください */
 }
 .craft-total {
   background: rgba(0,200,150,0.1);
@@ -2239,4 +2267,477 @@ text-overflow: ellipsis;
   color: var(--accent);
   min-width: 100px;
   text-align: right;
+}
+
+/* ============================================================
+   NEW FEATURES: Nav / Bookmarks / History  (追記 - 既存変更なし)
+   ============================================================ */
+
+/* ---- ハンバーガーボタン ---- */
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px 7px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-right: 14px;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.hamburger-btn:hover {
+  border-color: var(--accent);
+  background: rgba(0,200,150,0.07);
+}
+.hamburger-btn span {
+  display: block;
+  height: 2px;
+  background: var(--text2);
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.hamburger-btn:hover span { background: var(--accent); }
+
+/* header-inner に flex-gap を追加（既存は display:flex;align-items:center なのでそのまま機能する） */
+.header-inner {
+  gap: 0;   /* gap は既存で未指定なのでここで 0 を明示 */
+}
+
+/* ---- ナビオーバーレイ ---- */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 490;
+  backdrop-filter: blur(2px);
+}
+
+/* ---- サイドナビ ---- */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 270px;
+  max-width: 85vw;
+  background: var(--bg2);
+  border-right: 1px solid var(--border2);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.26s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+}
+.side-nav.open { transform: translateX(0); }
+
+.side-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.side-nav-logo {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.side-nav-close {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  line-height: 1;
+  transition: color 0.2s, background 0.2s;
+}
+.side-nav-close:hover { color: var(--danger); background: rgba(255,77,109,0.1); }
+
+.side-nav-list {
+  list-style: none;
+  padding: 10px 0;
+  flex: 1;
+  overflow-y: auto;
+}
+.side-nav-list li { margin: 2px 8px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.93rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-item:hover { background: rgba(0,200,150,0.1); color: var(--accent); }
+.nav-item.active { background: rgba(0,200,150,0.13); color: var(--accent); font-weight: 600; }
+
+.nav-badge {
+  margin-left: auto;
+  background: rgba(0,200,150,0.15);
+  color: var(--accent);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+.nav-badge:empty { display: none; }
+
+/* ---- パネルセクション ---- */
+.panel-section { margin-top: 8px; }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.panel-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  flex: 1;
+  margin: 0;
+}
+.panel-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+.panel-action-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.panel-action-btn:hover { background: rgba(0,200,150,0.1); border-color: var(--accent); color: var(--accent); }
+.panel-action-danger:hover { background: rgba(255,77,109,0.1); border-color: var(--danger); color: var(--danger); }
+
+.panel-list { display: flex; flex-direction: column; }
+
+.panel-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text3);
+  font-size: 0.92rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+}
+.panel-empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+/* パネルアイテム行 */
+.panel-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  background: var(--card-bg);
+}
+.panel-item:first-child { border-top: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+.panel-item:last-child  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: 1px solid var(--border); }
+.panel-item:only-child  { border-radius: var(--radius); }
+.panel-item:hover { background: rgba(0,200,150,0.07); }
+
+.panel-item-icon {
+  width: 38px; height: 38px;
+  border-radius: 6px;
+  background: var(--bg2);
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.panel-item-text { flex: 1; min-width: 0; }
+.panel-item-ja {
+  font-size: 0.93rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel-item-en {
+  font-size: 0.76rem;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel-item-del {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.panel-item-del:hover { color: var(--danger); background: rgba(255,77,109,0.1); }
+
+/* ---- ブックマークボタン（検索カード内）---- */
+.result-card { position: relative; }
+.card-bookmark-btn {
+  position: absolute;
+  top: 0.5px; right: 0.5px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  z-index: 5;
+  color: var(--text3);
+  transition: color 0.15s, transform 0.15s;
+}
+.card-bookmark-btn:hover           { color: var(--accent-gold); transform: scale(1.2); }
+.card-bookmark-btn.is-bookmarked   { color: var(--accent-gold); }
+
+/* ---- ブックマークボタン（詳細ヘッダー）---- */
+.header-bookmark-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-size: 0.88rem;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.header-bookmark-btn:hover          { color: var(--accent-gold); border-color: rgba(240,165,0,0.5); background: rgba(240,165,0,0.08); }
+.header-bookmark-btn.is-bookmarked  { color: var(--accent-gold); border-color: rgba(240,165,0,0.5); background: rgba(240,165,0,0.08); }
+
+
+
+/* ---- 検索履歴ドロップダウン ---- */
+.search-history-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  z-index: 101;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.sh-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 14px 5px;
+  border-bottom: 1px solid var(--border);
+}
+.sh-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+}
+.sh-clear-btn {
+  background: none;
+  border: none;
+  font-size: 0.72rem;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.sh-clear-btn:hover { color: var(--danger); }
+
+.sh-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.sh-item:last-child { border-bottom: none; }
+.sh-item:hover { background: rgba(0,200,150,0.08); }
+.sh-item-icon { color: var(--text3); font-size: 0.82rem; flex-shrink: 0; }
+.sh-item-text { flex: 1; font-size: 0.9rem; color: var(--text); }
+.sh-item-del {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.sh-item-del:hover {
+  color: var(--danger) !important;
+}
+
+/* 検索履歴パネル内の行 */
+.sh-panel-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  background: var(--card-bg);
+  transition: background 0.15s;
+}
+.sh-panel-item:first-child { border-top: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+.sh-panel-item:last-child  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: 1px solid var(--border); }
+.sh-panel-item:only-child  { border-radius: var(--radius); }
+.sh-panel-item:hover { background: rgba(0,200,150,0.07); }
+.sh-panel-item-text { flex: 1; font-size: 0.92rem; color: var(--text); }
+.sh-panel-item-del {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+}
+.sh-panel-item-del:hover { color: var(--danger); background: rgba(255,77,109,0.1); }
+
+/* モバイル対応 */
+@media (max-width: 600px) {
+  .side-nav { width: 80vw; }
+  .panel-header { gap: 8px; }
+}
+
+@media (max-width: 768px) {
+
+  .craft-item-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .craft-quantity-selector {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+   .item-header {
+    display: flex;
+    flex-direction: column;
+    /* 必要に応じて、中身の要素間の隙間を調整してください */
+    gap: 16px; 
+   }
+      
+
+  .header-bookmark-btn {
+    /* orderの初期値は0なので、1以上にすると一番下に落ちます */
+    order: 99; 
+    
+    /* スマホでボタンを横幅いっぱいに広げたい場合は以下を追加 */
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+ /* 1. 一番外側の枠：中身を完全に「縦並び」の1列にする */
+  .craft-ingredient {
+    display: flex !important;
+    flex-direction: column !important; /* 横並びをやめて上から下へ */
+    align-items: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 2. アイコン：単体で左上にちょこんと置く */
+  .craft-ingredient-icon {
+    display: block !important;
+    width: 32px !important;
+    height: 32px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* 3. 中にあるすべての「部屋（divなど）」の横幅制限を完全に破壊する */
+  .craft-ingredient-info,
+  .craft-ingredient-price,
+  .craft-ingredient-wrap,
+  .craft-ingredient > div {
+    display: block !important;
+    width: 100% !important;        /* 横幅を100%にして文字が広がるスペースを作る */
+    max-width: 100% !important;
+    min-width: 0 !important;
+    float: none !important;        /* 横並びの要因を排除 */
+    position: static !important;   /* 右上に固定されるのを解除 */
+    text-align: left !important;   /* すべて左揃えに */
+    box-sizing: border-box !important;
+  }
+
+  /* 4. 文字要素単体もすべて横幅いっぱいに広げる */
+  .craft-ingredient-name,
+  .craft-ingredient-qty,
+  .craft-ingredient-claim,
+  .craft-ingredient-sell {
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    white-space: normal !important;  /* 改行を許可 */
+    word-break: break-word !important; /* 英語の突っ張りを解消 */
+  }
+
+}
+
+/* --- スマホ特有の「親要素の潰れ」を直すための調整 --- */
+@media (max-width: 480px) {
+  /* モーダル全体の横幅が狭く固定されている場合は画面いっぱいに広げる */
+  .craft-modal {
+    width: 90% !important;     /* 画面の左右に少し余白を持たせる */
+    max-width: 380px !important;
+    margin: 20px auto !important;
+    padding: 10px !important;  /* 内側の余白が広すぎて中身が潰れるのを防ぐ */
+  }
+
+  /* リストを包むコンテナ（もしあれば）も幅100%にする */
+  .craft-ingredient-wrap, 
+  .craft-modal-content {
+    width: 100% !important;
+  }
 }

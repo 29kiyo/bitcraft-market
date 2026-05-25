@@ -15,9 +15,29 @@
   <div class="bg-grid"></div>
   <div class="bg-glow"></div>
 
+  <!-- ナビ：オーバーレイ -->
+  <div id="navOverlay" class="nav-overlay hidden" onclick="closeNav()"></div>
+
+  <!-- ナビ：サイドパネル -->
+  <nav id="sideNav" class="side-nav">
+    <div class="side-nav-header">
+      <span class="side-nav-logo">☰ Menu</span>
+      <button class="side-nav-close" onclick="closeNav()">✕</button>
+    </div>
+    <ul class="side-nav-list">
+      <li><button class="nav-item" id="navHome"      onclick="navGoHome()">🏠 Home</button></li>
+      <li><button class="nav-item" id="navBookmarks" onclick="navGoSection('bookmarks')">🔖 Bookmarks <span class="nav-badge" id="navBookmarkCount"></span></button></li>
+      <li><button class="nav-item" id="navRecent"    onclick="navGoSection('recentlyViewed')">🕒 Recently Viewed <span class="nav-badge" id="navRecentCount"></span></button></li>
+      <li><button class="nav-item" id="navHistory"   onclick="navGoSection('searchHistory')">🔍 Search History <span class="nav-badge" id="navHistoryCount"></span></button></li>
+    </ul>
+  </nav>
+
   <header>
     <div class="header-inner">
-      <div class="logo" onclick="location.reload()" style="cursor:pointer">
+      <button class="hamburger-btn" onclick="toggleNav()" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="logo" onclick="navGoHome()" style="cursor:pointer">
   <span class="logo-icon">🛒</span>
   <div>
     <h1>BitCraft<span class="accent"> Market</span></h1>
@@ -43,6 +63,7 @@
           <button id="searchBtn">検索</button>
         </div>
         <div id="suggestions" class="suggestions hidden"></div>
+        <div id="searchHistoryDropdown" class="search-history-dropdown hidden"></div>
       </div>
 
       <!-- フィルター -->
@@ -515,6 +536,44 @@
 
       </div>
     </section>
+    <!-- ブックマークパネル -->
+    <section id="bookmarksPanel" class="panel-section hidden">
+      <div class="panel-header">
+        <h2 class="panel-title">🔖 Bookmarks</h2>
+        <div class="panel-actions">
+  <button class="panel-action-btn panel-action-danger" onclick="clearAllBookmarks()">🗑 全削除</button>
+  <button class="panel-action-btn" onclick="exportBookmarks()">📤 Export</button>
+  <label class="panel-action-btn">
+    📥 Import
+    <input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none">
+  </label>
+</div>
+      </div>
+      <div id="bookmarksList" class="panel-list"></div>
+    </section>
+
+    <!-- 閲覧履歴パネル -->
+    <section id="recentlyViewedPanel" class="panel-section hidden">
+      <div class="panel-header">
+        <h2 class="panel-title">🕒 Recently Viewed</h2>
+        <div class="panel-actions">
+          <button class="panel-action-btn panel-action-danger" onclick="clearAllRecentlyViewed()">🗑 全削除</button>
+        </div>
+      </div>
+      <div id="recentlyViewedList" class="panel-list"></div>
+    </section>
+
+    <!-- 検索履歴パネル -->
+    <section id="searchHistoryPanel" class="panel-section hidden">
+      <div class="panel-header">
+        <h2 class="panel-title">🔍 Search History</h2>
+        <div class="panel-actions">
+          <button class="panel-action-btn panel-action-danger" onclick="clearAllSearchHistory()">🗑 全削除</button>
+        </div>
+      </div>
+      <div id="searchHistoryList" class="panel-list"></div>
+    </section>
+
     <!-- 初期表示 -->
 <!-- 初期表示 -->
 <section id="emptyState" class="empty-state">
@@ -978,7 +1037,22 @@
 </footer>
 
   <script src="translations.js"></script>
+
+<script>
+console.log("translations loaded");
+</script>
+  
   <script src="craft_db.js"></script>
+
+<script>
+console.log("craft_db loaded");
+</script>
+  
   <script src="script.js"></script>
+
+<script>
+console.log("script loaded");
+</script>
+  
 </body>
 </html>
