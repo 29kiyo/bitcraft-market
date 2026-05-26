@@ -2441,6 +2441,7 @@ const EN_EXACT = {
 "Homespun Dreamer's Hat": "ホームスパン夢想家ハット",
 "Homespun Dreamer's Shirt": "ホームスパン夢想家シャツ",
 "Homespun Dreamer's Shoes": "ホームスパン夢想家シューズ",
+"Homespun Dreamer's Dress": "ホームスパン夢想家ドレス",
 // Deed系
 "Deed: Firefly Lantern": "証書：ホタルランタン",
 "Deed: Mask - Demon Horn Mask": "証書：マスク - デーモンホーンマスク",
