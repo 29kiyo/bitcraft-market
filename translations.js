@@ -2463,6 +2463,7 @@ const EN_EXACT = {
 "Deed: Pet Qitt (Light Gray)": "証書：ペット キット（ライトグレー）",
 "Deed: Pet Qitt (White)": "証書：ペット キット（ホワイト）",
 "Emote Deed: Two Step Dance": "エモート証書：ツーステップダンス",
+"Deed: Autumn Everwoods Cervus Appearance":"証書：秋のエバーウッズ・セルバスの外観",
 // 家具・置物
 "Cozy Cottage Bed": "コテージベッド",
 "Cozy Cottage Chair": "コテージチェア",
@@ -2791,6 +2792,7 @@ const AUTO_PARTS = [
   ["Buccaneer's","バッカニアの"],
   ["Swashbuckler's","剣豪の"],
   ["Greenthread","緑の糸の"],
+  ["Captain's","船長の"],
   ["Charm","チャーム"],
   ["Lucky","幸運の"],
   ["Tunic","チュニック"],
