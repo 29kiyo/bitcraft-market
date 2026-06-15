@@ -6,6 +6,9 @@ const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'Monster':'Animal',
                         'Autumn Everwoods Healer':'Premium Cosmetic',
                         'Autumn Everwoods Warrior':'Premium Cosmetic'
+                        'Wagon III Quest':'Wagon II Quest',
+                        'Hunting Trap':'Animal Trap',
+                        'Cosmetic Clothing':'Cosmetic',
                       };
 // タグのエイリアス（キーのタグが選ばれたら値のタグも検索対象に追加）
 const TAG_ALIAS = { 'Ugo': ['Uggo'],
