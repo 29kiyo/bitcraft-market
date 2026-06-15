@@ -15,7 +15,6 @@ const TAG_ALIAS = { 'Ugo': ['Uggo'],
                    'Animal':['Monster'],
                     'Animal Feed':['Animal Swill'],
                     'Animal Feed':['Animal Food'],
-                    
                   };
 
 // BitCraft アイテム名 日本語⇔英語 変換テーブル（BitCraft準拠）
