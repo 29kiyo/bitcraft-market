@@ -2406,6 +2406,7 @@ const EN_EXACT = {
 "Yellow Flower Tiara": "イエローフラワーティアラ",
 "Wildflower Tiara": "ワイルドフラワーティアラ",
 "Classic Soiree Dress Accessories": "クラシックソワレドレス アクセサリー",
+"Classic Soiree Dress Belt":"クラシックソワレドレス ベルト",
 "Classic Soiree Dress Bodice": "クラシックソワレドレス ボディス",
 "Classic Soiree Dress Gown": "クラシックソワレドレス ガウン",
 "Classic Soiree Dress Shoes": "クラシックソワレドレス シューズ",
