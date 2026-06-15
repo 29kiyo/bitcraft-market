@@ -5,7 +5,7 @@ const TAG_NORMALIZE = { 'Precious Metal Concentrate': 'Ore Concentrate',
                         'Animal Swill':'Animal Feed',
                         'Monster':'Animal',
                         'Autumn Everwoods Healer':'Premium Cosmetic',
-                        'Autumn Everwoods Warrior':'Premium Cosmetic'
+                        'Autumn Everwoods Warrior':'Premium Cosmetic',
                         'Wagon III Quest':'Wagon II Quest',
                         'Hunting Trap':'Animal Trap',
                         'Cosmetic Clothing':'Cosmetic',
