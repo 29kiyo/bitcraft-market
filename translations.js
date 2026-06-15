@@ -2557,6 +2557,8 @@ const EN_EXACT = {
 "Tier 8 Animal": "Tier8動物",
 "Lusul Burrow Materials":"ルスルの巣穴の材料",
 "Umbura": "アンブラ",
+"Nubi Goat Food":"ヌビヤギの餌",
+"Nubi Goat Vitamins":"ヌビヤギのビタミン",
 // バウチャー
 "Heimlich Business Voucher": "ハイムリックビジネスバウチャー",
 "Twin's Business Voucher": "ツインズビジネスバウチャー",
@@ -2807,6 +2809,7 @@ const AUTO_PARTS = [
   ["Shirt","シャツ"],
   ["Gloves","手袋"],
   ["Boots","ブーツ"],
+  ["Bracers","ブレイサー"],
   //家具
   ["Logcraft","ログクラフトの"],
   ["Rocking","ロッキング"],
